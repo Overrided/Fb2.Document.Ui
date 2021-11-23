@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "Fb2.Document.WinUI.Playground (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Fb2.Document.WinUI.Playground (Unpackaged)": {
+      "commandName": "Project"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "environmentVariables": {},
+      "distributionName": ""
+    }
+  }
+}
