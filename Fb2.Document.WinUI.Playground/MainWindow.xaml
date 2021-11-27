@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:rtv="using:RichTextView"
     mc:Ignorable="d">
 
-    <Grid>
+    <!--<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -42,5 +42,40 @@
 						  BookRendered="OnBookRendered">
         </rtv:RichTextView>
 
+    </Grid>-->
+
+    <Grid>
+        <NavigationView x:Name="NavView"
+					IsSettingsVisible="True"
+					PaneDisplayMode="LeftCompact"
+					AlwaysShowHeader="False"
+					IsPaneOpen="False"
+					IsBackButtonVisible="Auto"
+					IsBackEnabled="True">
+            <!--IsBackButtonVisible="{x:Bind MainPageViewModel.EnableBackButton, Converter={StaticResource BtNVBBV}, Mode=OneWay}"
+					IsBackEnabled="{x:Bind MainPageViewModel.EnableBackButton, Mode=OneWay}"-->
+            <!--PaneTitle="paneTitle"-->
+            <!--<NavigationView.PaneHeader>
+			<StackPanel>
+				<TextBlock Text="actions"
+						   FontSize="32"
+						   HorizontalTextAlignment="Left"
+						   Margin="8,-3,0,0"
+						   VerticalAlignment="Center" />
+			</StackPanel>
+		</NavigationView.PaneHeader>-->
+            <NavigationView.MenuItems>
+                <NavigationViewItem Icon="Home"
+                                    Content="Bookshelf"
+                                    Tag="Bookshelf"
+                                    IsSelected="True"
+                                    SelectsOnInvoked="True" />
+            </NavigationView.MenuItems>
+            <NavigationView.Content>
+                <Frame x:Name="ContentFrame" />
+            </NavigationView.Content>
+        </NavigationView>
     </Grid>
+
+
 </Window>

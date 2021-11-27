@@ -10,7 +10,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <!--<Grid.RowDefinitions>
+        <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -26,38 +26,15 @@
 						  VerticalScrollMode="Disabled"
 						  HorizontalAlignment="Stretch">
                 <StackPanel Orientation="Horizontal">
-                    <Button Margin="5"
-							Click="ToggleProgressIndicator_ButtonClick">
-                        Toggle progress
-                    </Button>
-                    <Button Margin="5"
-							Click="Leftoff20000_ButtonClick">
-                        Leftoff 20000
-                    </Button>
-                    <Button Margin="5"
-							Click="PageMarginPlus_ButtonClick">
-                        PageMargin +5
-                    </Button>
-                    <Button Margin="5"
-							Click="PageMarginMinus_ButtonClick">
-                        PageMargin -5
+                    <Button Margin="5">
+                        Add Book
                     </Button>
                 </StackPanel>
             </ScrollViewer>
-
-            <Border Grid.Column="1"
-					HorizontalAlignment="Right"
-					Width="40"
-					Height="40"
-					BorderBrush="Red"
-					BorderThickness="2">
-                <TextBlock Text="40px"
-						   HorizontalAlignment="Center"
-						   VerticalAlignment="Center" />
-            </Border>
-        </Grid>-->
+        </Grid>
 
         <rtv:RichTextView x:Name="viewPort"
+						  Grid.Row="1"
 						  PageMargin="{x:Bind ReadViewModel.PageMargin, Mode=OneWay}"
 						  ShowProgress="{x:Bind ReadViewModel.ShowBookProgress, Mode=OneWay}"
 						  RichTextContent="{x:Bind ReadViewModel.ChaptersContent, Mode=OneWay}"
@@ -65,8 +42,5 @@
 						  BookProgressChanged="RichTextView_OnProgress"
 						  BookRendered="OnBookRendered">
         </rtv:RichTextView>
-
-        <!--Grid.Row="1"-->
-
     </Grid>
 </Page>

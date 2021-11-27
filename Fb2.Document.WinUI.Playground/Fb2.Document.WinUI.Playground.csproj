@@ -16,6 +16,7 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
+		<None Remove="Pages\BookshelfPage.xaml" />
 		<None Remove="ReadPage.xaml" />
 	</ItemGroup>
 
@@ -51,5 +52,10 @@
 		<Page Update="ReadPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</Page>
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="Pages\BookshelfPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 </Project>

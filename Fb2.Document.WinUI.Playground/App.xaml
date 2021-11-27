@@ -5,6 +5,8 @@
     xmlns:local="using:Fb2.Document.WinUI.Playground">
     <Application.Resources>
         <ResourceDictionary>
+            <BitmapImage x:Key="DefaultBookImage"
+					 UriSource="Assets/BookNullTarget/book-open-page-variant-256x256.png" />
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
                 <!-- Other merged dictionaries here -->

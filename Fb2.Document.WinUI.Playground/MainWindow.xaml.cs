@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Fb2.Document.LoadingOptions;
 using Fb2.Document.WinUI.Entities;
 using Fb2.Document.WinUI.Playground.PageNavigation;
+using Fb2.Document.WinUI.Playground.Pages;
+using Fb2.Document.WinUI.Playground.Services;
 using Fb2.Document.WinUI.Playground.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -33,21 +35,21 @@ using WinRT;
 
 namespace Fb2.Document.WinUI.Playground
 {
-    [ComImport]
-    [Guid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IInitializeWithWindow
-    {
-        void Initialize(IntPtr hwnd);
-    }
+    //[ComImport]
+    //[Guid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")]
+    //[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    //public interface IInitializeWithWindow
+    //{
+    //    void Initialize(IntPtr hwnd);
+    //}
 
-    [ComImport]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    [Guid("EECDBF0E-BAE9-4CB6-A68E-9598E1CB57BB")]
-    internal interface IWindowNative
-    {
-        IntPtr WindowHandle { get; }
-    }
+    //[ComImport]
+    //[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    //[Guid("EECDBF0E-BAE9-4CB6-A68E-9598E1CB57BB")]
+    //internal interface IWindowNative
+    //{
+    //    IntPtr WindowHandle { get; }
+    //}
 
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
@@ -62,6 +64,7 @@ namespace Fb2.Document.WinUI.Playground
 
         public MainWindow()
         {
+            this.Activated += MainWindow_Activated;
             this.InitializeComponent();
 
             ReadViewModel = new()
@@ -71,41 +74,47 @@ namespace Fb2.Document.WinUI.Playground
             };
         }
 
-        //private void MainWindow_Activated(object sender, WindowActivatedEventArgs args)
-        //{
-        //}
-
-        private async void OpenBookClick(object sender, RoutedEventArgs e)
+        private void MainWindow_Activated(object sender, WindowActivatedEventArgs args)
         {
-            var picker = new FileOpenPicker { ViewMode = PickerViewMode.List };
+            if (!PopupInitializerService.Instance.IsServiceInitialized)
+                PopupInitializerService.Instance.Initialize(this);
 
-            //Get the Window's HWND
-            var hwnd = this.As<IWindowNative>().WindowHandle;
-
-            var initializeWithWindow = picker.As<IInitializeWithWindow>();
-            initializeWithWindow.Initialize(hwnd);
-
-            picker.FileTypeFilter.Add(".fb2");
-
-            StorageFile file = await picker.PickSingleFileAsync();
-            if (file != null)
-            {
-                // Application now has read/write access to the picked file
-                Debug.WriteLine("Picked file: " + file.Name);
-
-                var doc = await LoadDocument(file);
-
-                var actualViewHostSize = viewPort.GetViewHostSize();
-                var uiContent = fb2MappingService.MapDocument(doc, actualViewHostSize, defaultMappingConfig);
-
-                Debug.WriteLine($"UI Mapping done");
-
-                var contentPages = uiContent.Select(p => new RichContentPage(p));
-                var content = new ChaptersContent(contentPages);
-
-                ReadViewModel.ChaptersContent = content;
-            }
+            if (ContentFrame.Content == null || ContentFrame.Content?.GetType() != typeof(BookshelfPage))
+                ContentFrame.Navigate(typeof(BookshelfPage));
         }
+
+        //private async void OpenBookClick(object sender, RoutedEventArgs e)
+        //{
+        //    var picker = new FileOpenPicker { ViewMode = PickerViewMode.List };
+        //    var pickerTwo = new FolderPicker();
+
+        //    //Get the Window's HWND
+        //    var hwnd = this.As<IWindowNative>().WindowHandle;
+
+        //    var initializeWithWindow = picker.As<IInitializeWithWindow>();
+        //    initializeWithWindow.Initialize(hwnd);
+
+        //    picker.FileTypeFilter.Add(".fb2");
+
+        //    StorageFile file = await picker.PickSingleFileAsync();
+        //    if (file != null)
+        //    {
+        //        // Application now has read/write access to the picked file
+        //        Debug.WriteLine("Picked file: " + file.Name);
+
+        //        var doc = await LoadDocument(file);
+
+        //        var actualViewHostSize = viewPort.GetViewHostSize();
+        //        var uiContent = fb2MappingService.MapDocument(doc, actualViewHostSize, defaultMappingConfig);
+
+        //        Debug.WriteLine($"UI Mapping done");
+
+        //        var contentPages = uiContent.Select(p => new RichContentPage(p));
+        //        var content = new ChaptersContent(contentPages);
+
+        //        ReadViewModel.ChaptersContent = content;
+        //    }
+        //}
 
         private async Task<Fb2Document> LoadDocument(StorageFile storageFile)
         {

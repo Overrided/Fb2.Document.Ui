@@ -34,7 +34,7 @@ namespace Fb2.Document.WinUI.Playground
         /// </summary>
         public App()
         {
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.Maximized;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             this.InitializeComponent();

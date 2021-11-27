@@ -24,6 +24,9 @@ using Windows.Storage.Pickers;
 using Windows.UI.Popups;
 using Fb2.Document.WinUI.Playground.PageNavigation;
 using Fb2.Document.WinUI.Playground.ViewModels;
+using Windows.Storage;
+using System.Threading.Tasks;
+using Fb2.Document.LoadingOptions;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -60,99 +63,6 @@ namespace Fb2.Document.WinUI.Playground
 
             var prm = e.Parameter as ReadPageNavigationParams;
             var window = prm.BaseWindow;
-
-            //var picker = new FileOpenPicker();
-
-            ////Get the Window's HWND
-            //var hwnd = Window.Current.As<IWindowNative>().WindowHandle;
-
-            ////Make folder Picker work in Win32
-            //var initializeWithWindow = picker.As<IInitializeWithWindow>();
-            //initializeWithWindow.Initialize(hwnd);
-
-            //picker.ViewMode = PickerViewMode.Thumbnail;
-            //picker.SuggestedStartLocation = PickerLocationId.ComputerFolder;
-            //picker.FileTypeFilter.Add(".fb2");
-
-            //var selectedFile = await picker.PickSingleFileAsync();
-
-
-            //var fb2Doc = new Fb2Document();
-
-            //using (var dataStream = await selectedFile.OpenStreamForReadAsync())
-            //{
-            //    await fb2Doc.LoadAsync(dataStream);
-            //}
-
-            //selectedFb2Document = fb2Doc;
-            //var actualViewHostSize = viewPort.GetViewHostSize();
-
-            //var uiContent = fb2MappingService.MapDocument(selectedFb2Document, actualViewHostSize, defaultMappingConfig);
-            //var contentPages = uiContent.Select(p => new RichContentPage(p));
-            //var content = new ChaptersContent(contentPages);
-            ////var content = new ChaptersContent(contentPages, 71406.8);
-
-            //ReadViewModel.ChaptersContent = content;
-
-
-            //Get the Window's HWND
-            //var hwnd = window.As<IWindowNative>().WindowHandle;
-
-            //var filePicker = new FileOpenPicker();
-
-            ////Make folder Picker work in Win32
-            //var initializeWithWindow = filePicker.As<IInitializeWithWindow>();
-            //initializeWithWindow.Initialize(hwnd);
-
-            //filePicker.FileTypeFilter.Add("*");
-
-            //var folder = await filePicker.PickSingleFileAsync();
-            //var a = 1;
-
-
-
-            var picker = new Windows.Storage.Pickers.FileOpenPicker();
-
-            //Get the Window's HWND
-            var hwnd = window.As<IWindowNative>().WindowHandle;
-
-            //Make folder Picker work in Win32
-            var initializeWithWindow = picker.As<IInitializeWithWindow>();
-            initializeWithWindow.Initialize(hwnd);
-
-            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
-            picker.FileTypeFilter.Add(".jpg");
-            picker.FileTypeFilter.Add(".jpeg");
-            picker.FileTypeFilter.Add(".png");
-
-            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
-            if (file != null)
-            {
-                // Application now has read/write access to the picked file
-                Debug.WriteLine("Picked photo: " + file.Name);
-            }
-            else
-            {
-                Debug.WriteLine("Operation cancelled.");
-            }
-
-        }
-
-
-        [ComImport]
-        [Guid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IInitializeWithWindow
-        {
-            void Initialize(IntPtr hwnd);
-        }
-        [ComImport]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [Guid("EECDBF0E-BAE9-4CB6-A68E-9598E1CB57BB")]
-        internal interface IWindowNative
-        {
-            IntPtr WindowHandle { get; }
         }
 
         private void OnBookRendered(object sender, EventArgs e)
