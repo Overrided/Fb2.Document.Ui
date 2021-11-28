@@ -54,8 +54,8 @@ namespace RichTextView
         public RichTextViewModel RichTextViewModel { get; set; } = new RichTextViewModel();
 
         public event EventHandler<RichHyperlinkActivatedEventArgs> HyperlinkActivated;
-        public event EventHandler<BookProgressChangedEventArgs> BookProgressChanged;
-        public event EventHandler BookRendered;
+        public event EventHandler<BookProgressChangedEventArgs> ReadingProgressChanged;
+        public event EventHandler ContentRendered;
 
         private const string ItemsHostTemplateName = "itemsHost";
 
@@ -93,7 +93,6 @@ namespace RichTextView
                 {
                     var page = RichTextViewModel.Pages[i];
                     VisualTreeHelper.DisconnectChildrenRecursive(page);
-                    Marshal.FinalReleaseComObject(page);
                 }
 
                 RichTextViewModel.Pages.Clear();
@@ -278,7 +277,7 @@ namespace RichTextView
             var scrollComplete = !e.IsIntermediate;
             if (scrollComplete)
             {
-                BookProgressChanged?.Invoke(this, new BookProgressChangedEventArgs(scrollHost.VerticalOffset, scrollHost.ScrollableHeight));
+                ReadingProgressChanged?.Invoke(this, new BookProgressChangedEventArgs(scrollHost.VerticalOffset, scrollHost.ScrollableHeight));
                 Debug.WriteLine($"Vertical offset: {scrollHost.VerticalOffset}, scrollablaHeight: {scrollHost.ScrollableHeight}");
             }
 
@@ -510,7 +509,7 @@ namespace RichTextView
             await this.FinishLayoutAsync();
 
             RichTextViewModel.IsRendered = true;
-            BookRendered?.Invoke(this, null);
+            ContentRendered?.Invoke(this, null);
 
             Debug.WriteLine($"Rendering control time: {renderStopwatch.Elapsed}");
         }
@@ -573,12 +572,16 @@ namespace RichTextView
 
         private async Task GoToVisualStateAsync(string stateName)
         {
-            Func<Task> hideProgress = async () =>
+            Func<Task> goToStateAsync = async () =>
             {
-                VisualStateManager.GoToState(this, stateName, false);
+                VisualStateManager.GoToState(this, stateName, true);
                 await this.FinishLayoutAsync();
+                UpdateLayout();
             };
-            await hideProgress();
+            await goToStateAsync();
+
+            //VisualStateManager.GoToState(this, stateName, true);
+            //await this.FinishLayoutAsync();
         }
 
         //TODO : make public again?

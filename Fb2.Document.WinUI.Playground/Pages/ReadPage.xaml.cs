@@ -27,6 +27,7 @@ using Windows.Storage;
 using System.Threading.Tasks;
 using Fb2.Document.LoadingOptions;
 using Fb2.Document.WinUI.Playground.Models;
+using Fb2.Document.WinUI.Playground.Services;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -123,6 +124,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
                 throw new Exception("unexpected hyprlink btn");
 
             var messageDialog = new MessageDialog($"test inline hyperlink click: {testMessage}");
+            PopupInitializerService.Instance.InitializePopup(messageDialog);
 
             // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
             messageDialog.Commands.Add(new UICommand("Close"));

@@ -79,9 +79,9 @@
 				  IsSwipeEnabled="False"
 				  IsItemClickEnabled="True"
 				  ItemClick="Book_Click">
-            <GridView.Transitions>
+            <!--<GridView.Transitions>
                 <EntranceThemeTransition IsStaggeringEnabled="True" />
-            </GridView.Transitions>
+            </GridView.Transitions>-->
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapGrid Orientation="Horizontal"

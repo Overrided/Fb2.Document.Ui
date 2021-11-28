@@ -7,6 +7,7 @@ using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
 using Fb2.Document.WinUI.Entities;
 using Fb2.Document.WinUI.Playground.Models;
+using Fb2.Document.WinUI.Playground.Services;
 using Fb2.Document.WinUI.Playground.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -121,7 +122,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
         private void OnReadButton_Click(object sender, RoutedEventArgs e)
         {
-            var a = 1;
+            NavigationService.Instance.NavigateContentFrame(typeof(ReadPage), bookModel);
         }
     }
 }

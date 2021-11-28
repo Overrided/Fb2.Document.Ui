@@ -2,25 +2,25 @@
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:local="using:RichTextView">
 
-	<Style TargetType="local:RichTextView">
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="local:RichTextView">
-					<Border x:Name="outherBorder"
+    <Style TargetType="local:RichTextView">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:RichTextView">
+                    <Border x:Name="outherBorder"
 							Background="{TemplateBinding Background}"
 							BorderBrush="{TemplateBinding BorderBrush}"
 							BorderThickness="{TemplateBinding BorderThickness}">
-						<Border.Resources>
+                        <Border.Resources>
 
-							<ControlTemplate TargetType="ItemsControl"
+                            <ControlTemplate TargetType="ItemsControl"
 											 x:Key="ItemsHostTemplate">
-								<Grid x:Name="scrollContainer">
-									<Grid.RowDefinitions>
-										<RowDefinition Height="*" />
-										<RowDefinition Height="Auto" />
-									</Grid.RowDefinitions>
+                                <Grid x:Name="scrollContainer">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
 
-									<ScrollViewer x:Name="scrollHost"
+                                    <ScrollViewer x:Name="scrollHost"
 												  Grid.Row="0"
 												  VerticalScrollBarVisibility="Auto"
 												  VerticalScrollMode="Auto"
@@ -30,46 +30,52 @@
 												  HorizontalContentAlignment="Stretch"
 												  VerticalContentAlignment="Stretch"
 												  IsDeferredScrollingEnabled="False">
-										<ItemsPresenter />
-									</ScrollViewer>
-									<ProgressBar x:Name="progressIndicator"
+                                        <ItemsPresenter />
+                                    </ScrollViewer>
+                                    <ProgressBar x:Name="progressIndicator"
 												 Visibility="Collapsed"
 												 Grid.Row="1"
 												 Minimum="0"
 												 Maximum="{Binding ElementName=scrollHost,Path=ScrollableHeight}"
 												 Value="{Binding ElementName=scrollHost, Path=VerticalOffset}" />
-								</Grid>
-							</ControlTemplate>
+                                </Grid>
+                            </ControlTemplate>
 
-							<ItemsPanelTemplate x:Key="ItemsHostPanelTemplate">
-								<ItemsStackPanel Orientation="Vertical"
+                            <ItemsPanelTemplate x:Key="ItemsHostPanelTemplate">
+                                <ItemsStackPanel Orientation="Vertical"
 												 CacheMode="BitmapCache"
 												 CacheLength="2.0"
 												 VirtualizingStackPanel.VirtualizationMode="Recycling" />
-							</ItemsPanelTemplate>
+                            </ItemsPanelTemplate>
 
-						</Border.Resources>
+                        </Border.Resources>
 
-						<VisualStateManager.VisualStateGroups>
-							<!--todo: rename group & add states to control progress bar etc? -->
-							<VisualStateGroup x:Name="CommonStates">
-								<VisualState x:Name="Loading">
-									<VisualState.Setters>
-										<Setter Target="loadingIndicator.Visibility"
+                        <VisualStateManager.VisualStateGroups>
+                            <!--todo: rename group & add states to control progress bar etc? -->
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition To="Loading"
+                                                      GeneratedDuration="0:0:0.1"/>
+                                    <VisualTransition To="Rendered"
+                                                      GeneratedDuration="0:0:0.1"/>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Loading">
+                                    <VisualState.Setters>
+                                        <Setter Target="loadingIndicator.Visibility"
 												Value="Visible" />
-									</VisualState.Setters>
-								</VisualState>
-								<VisualState x:Name="Rendered">
-									<VisualState.Setters>
-										<Setter Target="loadingIndicator.Visibility"
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Rendered">
+                                    <VisualState.Setters>
+                                        <Setter Target="loadingIndicator.Visibility"
 												Value="Collapsed" />
-									</VisualState.Setters>
-								</VisualState>
-							</VisualStateGroup>
-						</VisualStateManager.VisualStateGroups>
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
 
-						<Grid x:Name="viewPortContainer">
-							<ItemsControl x:Name="itemsHost"
+                        <Grid x:Name="viewPortContainer">
+                            <ItemsControl x:Name="itemsHost"
 										  HorizontalAlignment="Stretch"
 										  VerticalAlignment="Stretch"
 										  HorizontalContentAlignment="Stretch"
@@ -77,25 +83,25 @@
 										  ItemsSource="{Binding RichTextViewModel.Pages, RelativeSource={RelativeSource TemplatedParent}}"
 										  Template="{StaticResource ItemsHostTemplate}"
 										  ItemsPanel="{StaticResource ItemsHostPanelTemplate}">
-								<ItemsControl.ItemContainerTransitions>
-									<EntranceThemeTransition IsStaggeringEnabled="True" />
-								</ItemsControl.ItemContainerTransitions>
-							</ItemsControl>
+                                <ItemsControl.ItemContainerTransitions>
+                                    <EntranceThemeTransition IsStaggeringEnabled="True" />
+                                </ItemsControl.ItemContainerTransitions>
+                            </ItemsControl>
 
-							<ProgressRing x:Name="loadingIndicator"
+                            <ProgressRing x:Name="loadingIndicator"
 										  Height="200"
 										  Width="200"
 										  IsActive="True"
 										  HorizontalAlignment="Center"
 										  VerticalAlignment="Center"
 										  Visibility="Collapsed" />
-							<!--check if switching opacity looks better -->
-						</Grid>
+                            <!--check if switching opacity looks better -->
+                        </Grid>
 
-					</Border>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

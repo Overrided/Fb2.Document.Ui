@@ -10,11 +10,11 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Grid.RowDefinitions>
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0"
+        </Grid.RowDefinitions>-->
+        <!--<Grid Grid.Row="0"
 			  Padding="40,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -31,16 +31,15 @@
                     </Button>
                 </StackPanel>
             </ScrollViewer>
-        </Grid>
+        </Grid>-->
 
         <rtv:RichTextView x:Name="viewPort"
-						  Grid.Row="1"
 						  PageMargin="{x:Bind ReadViewModel.PageMargin, Mode=OneWay}"
 						  ShowProgress="{x:Bind ReadViewModel.ShowBookProgress, Mode=OneWay}"
 						  RichTextContent="{x:Bind ReadViewModel.ChaptersContent, Mode=OneWay}"
 						  HyperlinkActivated="RichTextView_HyperlinkActivated"
-						  BookProgressChanged="RichTextView_OnProgress"
-						  BookRendered="OnBookRendered">
+						  ReadingProgressChanged="RichTextView_OnProgress"
+						  ContentRendered="OnBookRendered">
         </rtv:RichTextView>
     </Grid>
 </Page>
