@@ -46,9 +46,9 @@ namespace Fb2.Document.WinUI.NodeProcessors.Base
                 var parentCloneNode = Fb2NodeFactory.GetNodeByName(parent.Name) as Fb2Container;
 
                 if (i == 0) // first parent
-                    parentCloneNode.Content.AddRange(actualNodeContent);
+                    parentCloneNode.AddContent(actualNodeContent);
                 else
-                    parentCloneNode.Content.Add(actualNode);
+                    parentCloneNode.AddContent(actualNode);
 
                 actualNode = parentCloneNode;
             }
@@ -56,10 +56,10 @@ namespace Fb2.Document.WinUI.NodeProcessors.Base
             return actualNode;
         }
 
-        protected InlineUIContainer AddContainer(UIElement textBlock)
+        protected InlineUIContainer AddContainer(UIElement element)
         {
             // ContentPresenter prevents lines overlap
-            var contentPresenter = new ContentPresenter { Content = textBlock };
+            var contentPresenter = new ContentPresenter { Content = element };
             return new InlineUIContainer { Child = contentPresenter };
         }
 
