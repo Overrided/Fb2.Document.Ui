@@ -8,7 +8,6 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Fb2.Document.LoadingOptions;
 using Fb2.Document.WinUI.Entities;
-using Fb2.Document.WinUI.Playground.PageNavigation;
 using Fb2.Document.WinUI.Playground.Pages;
 using Fb2.Document.WinUI.Playground.Services;
 using Fb2.Document.WinUI.Playground.ViewModels;
@@ -35,22 +34,6 @@ using WinRT;
 
 namespace Fb2.Document.WinUI.Playground
 {
-    //[ComImport]
-    //[Guid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")]
-    //[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    //public interface IInitializeWithWindow
-    //{
-    //    void Initialize(IntPtr hwnd);
-    //}
-
-    //[ComImport]
-    //[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    //[Guid("EECDBF0E-BAE9-4CB6-A68E-9598E1CB57BB")]
-    //internal interface IWindowNative
-    //{
-    //    IntPtr WindowHandle { get; }
-    //}
-
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
@@ -79,8 +62,28 @@ namespace Fb2.Document.WinUI.Playground
             if (!PopupInitializerService.Instance.IsServiceInitialized)
                 PopupInitializerService.Instance.Initialize(this);
 
-            if (ContentFrame.Content == null || ContentFrame.Content?.GetType() != typeof(BookshelfPage))
-                ContentFrame.Navigate(typeof(BookshelfPage));
+            if (!NavigationService.Instance.IsInitialized)
+            {
+                NavView.BackRequested += NavView_BackRequested;
+                NavigationService.Instance.Init(ContentFrame);
+                NavigationService.Instance.ContentFrameNavigated += Instance_ContentFrameNavigated;
+                NavigationService.Instance.NavigateContentFrame(typeof(BookshelfPage));
+            }
+
+            //if (ContentFrame.Content == null || ContentFrame.Content?.GetType() != typeof(BookshelfPage))
+            //if (ContentFrame.Content == null)
+            //    ContentFrame.Navigate(typeof(BookshelfPage));
+        }
+
+        private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        {
+            NavigationService.Instance.TryGoBack();
+        }
+
+        private void Instance_ContentFrameNavigated(object? sender, bool e)
+        {
+            NavView.IsBackButtonVisible = e ? NavigationViewBackButtonVisible.Visible : NavigationViewBackButtonVisible.Collapsed;
+            NavView.IsBackEnabled = e;
         }
 
         //private async void OpenBookClick(object sender, RoutedEventArgs e)
@@ -116,53 +119,53 @@ namespace Fb2.Document.WinUI.Playground
         //    }
         //}
 
-        private async Task<Fb2Document> LoadDocument(StorageFile storageFile)
-        {
-            var fb2Doc = new Fb2Document();
-            using (var dataStream = await storageFile.OpenStreamForReadAsync())
-            {
-                await fb2Doc.LoadAsync(dataStream, new Fb2StreamLoadingOptions(true));
-            }
+        //private async Task<Fb2Document> LoadDocument(StorageFile storageFile)
+        //{
+        //    var fb2Doc = new Fb2Document();
+        //    using (var dataStream = await storageFile.OpenStreamForReadAsync())
+        //    {
+        //        await fb2Doc.LoadAsync(dataStream, new Fb2StreamLoadingOptions(true));
+        //    }
 
-            return fb2Doc;
-        }
+        //    return fb2Doc;
+        //}
 
-        private async void RichTextView_HyperlinkActivated(object sender, RichHyperlinkActivatedEventArgs e)
-        {
-            string testMessage;
+        //private async void RichTextView_HyperlinkActivated(object sender, RichHyperlinkActivatedEventArgs e)
+        //{
+        //    string testMessage;
 
-            if (e.OriginalSender is Hyperlink hyperlink)
-                testMessage = hyperlink.NavigateUri?.ToString() ?? "No Hyperlink";
-            else if (e.OriginalSender is HyperlinkButton hyperlinkButton)
-                testMessage = hyperlinkButton.Tag.ToString();
-            else
-                throw new Exception("unexpected hyprlink btn");
+        //    if (e.OriginalSender is Hyperlink hyperlink)
+        //        testMessage = hyperlink.NavigateUri?.ToString() ?? "No Hyperlink";
+        //    else if (e.OriginalSender is HyperlinkButton hyperlinkButton)
+        //        testMessage = hyperlinkButton.Tag.ToString();
+        //    else
+        //        throw new Exception("unexpected hyprlink btn");
 
-            MessageDialog messageDialog = new($"test inline hyperlink click: {testMessage}")
-            {
-                DefaultCommandIndex = 0,
-                CancelCommandIndex = 0
-            };
+        //    MessageDialog messageDialog = new($"test inline hyperlink click: {testMessage}")
+        //    {
+        //        DefaultCommandIndex = 0,
+        //        CancelCommandIndex = 0
+        //    };
 
-            // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
-            messageDialog.Commands.Add(new UICommand("Close"));
+        //    // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
+        //    messageDialog.Commands.Add(new UICommand("Close"));
 
-            var hwnd = this.As<IWindowNative>().WindowHandle;
+        //    var hwnd = this.As<IWindowNative>().WindowHandle;
 
-            var initializeWithWindow = messageDialog.As<IInitializeWithWindow>();
-            initializeWithWindow.Initialize(hwnd);
+        //    var initializeWithWindow = messageDialog.As<IInitializeWithWindow>();
+        //    initializeWithWindow.Initialize(hwnd);
 
-            await messageDialog.ShowAsync();
-        }
+        //    await messageDialog.ShowAsync();
+        //}
 
-        private void RichTextView_OnProgress(object sender, BookProgressChangedEventArgs e)
-        {
-            Debug.WriteLine($"Book current position: {e.VerticalOffset}, vOffset: {e.ScrollableOffset}");
-        }
+        //private void RichTextView_OnProgress(object sender, BookProgressChangedEventArgs e)
+        //{
+        //    Debug.WriteLine($"Book current position: {e.VerticalOffset}, vOffset: {e.ScrollableOffset}");
+        //}
 
-        private void OnBookRendered(object sender, EventArgs e)
-        {
-            Debug.WriteLine("Book rendered");
-        }
+        //private void OnBookRendered(object sender, EventArgs e)
+        //{
+        //    Debug.WriteLine("Book rendered");
+        //}
     }
 }

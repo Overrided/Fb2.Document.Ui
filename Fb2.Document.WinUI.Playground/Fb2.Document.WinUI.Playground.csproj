@@ -16,6 +16,7 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
+		<None Remove="Pages\BookInfoPage.xaml" />
 		<None Remove="Pages\BookshelfPage.xaml" />
 		<None Remove="ReadPage.xaml" />
 	</ItemGroup>
@@ -49,13 +50,16 @@
 		<ProjectReference Include="..\RichTextView\RichTextView.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<Page Update="ReadPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="Pages\BookshelfPage.xaml">
+	  <Page Update="Pages\BookInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </Page>
+	</ItemGroup>
+	<ItemGroup>
+		<Page Update="Pages\ReadPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Update="Pages\BookshelfPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
 	</ItemGroup>
 </Project>

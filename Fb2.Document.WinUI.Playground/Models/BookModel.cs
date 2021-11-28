@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fb2.Document.WinUI.Playground.ViewModels
+namespace Fb2.Document.WinUI.Playground.Models
 {
     public class BookModel
     {

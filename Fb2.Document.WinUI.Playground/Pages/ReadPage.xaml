@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="Fb2.Document.WinUI.Playground.ReadPage"
+    x:Class="Fb2.Document.WinUI.Playground.Pages.ReadPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Fb2.Document.WinUI.Playground"

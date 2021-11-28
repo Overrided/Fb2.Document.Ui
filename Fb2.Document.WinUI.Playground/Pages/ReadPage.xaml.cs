@@ -22,16 +22,16 @@ using Windows.Foundation.Collections;
 using WinRT;
 using Windows.Storage.Pickers;
 using Windows.UI.Popups;
-using Fb2.Document.WinUI.Playground.PageNavigation;
 using Fb2.Document.WinUI.Playground.ViewModels;
 using Windows.Storage;
 using System.Threading.Tasks;
 using Fb2.Document.LoadingOptions;
+using Fb2.Document.WinUI.Playground.Models;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace Fb2.Document.WinUI.Playground
+namespace Fb2.Document.WinUI.Playground.Pages
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -44,10 +44,11 @@ namespace Fb2.Document.WinUI.Playground
 
         public ReadViewModel ReadViewModel { get; }
 
-
         public ReadPage()
         {
             this.InitializeComponent();
+            viewPort.Loaded += ViewPort_Loaded;
+
             fb2MappingService = new Fb2Mapper();
 
             ReadViewModel = new ReadViewModel
@@ -57,12 +58,47 @@ namespace Fb2.Document.WinUI.Playground
             };
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        private void ViewPort_Loaded(object sender, RoutedEventArgs e)
+        {
+            var stop = Stopwatch.StartNew();
+
+            var actualViewHostSize = viewPort.GetViewHostSize();
+            //var smallFontConfig = new Fb2MappingConfig(14);
+            //var unsafeMappingConfig = new Fb2MappingConfig(highlightUnsafe: true);
+            var uiContent = fb2MappingService.MapDocument(selectedFb2Document, actualViewHostSize, defaultMappingConfig);
+
+            stop.Stop();
+
+            Debug.WriteLine($"UI Mapping elapsed: {stop.Elapsed}");
+
+            //var content = new ChaptersContent(UiContent, pagePadding: defaultMappingConfig.PagePadding);
+            var contentPages = uiContent.Select(p => new RichContentPage(p));
+            var content = new ChaptersContent(contentPages);
+            //var content = new ChaptersContent(contentPages, 71406.8);
+
+            ReadViewModel.ChaptersContent = content;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            var prm = e.Parameter as ReadPageNavigationParams;
-            var window = prm.BaseWindow;
+            if (e.Parameter == null)
+                return;
+
+            var bookModel = e.Parameter as BookModel;
+            if (bookModel == null || bookModel.Fb2Document == null)
+                return;
+
+            //if(e.NavigationMode != NavigationMode.Back)
+
+            selectedFb2Document = bookModel.Fb2Document;
+        }
+
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            base.OnNavigatingFrom(e);
+            viewPort.Loaded -= ViewPort_Loaded;
         }
 
         private void OnBookRendered(object sender, EventArgs e)

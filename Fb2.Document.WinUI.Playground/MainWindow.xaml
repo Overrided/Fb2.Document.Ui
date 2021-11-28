@@ -49,9 +49,7 @@
 					IsSettingsVisible="True"
 					PaneDisplayMode="LeftCompact"
 					AlwaysShowHeader="False"
-					IsPaneOpen="False"
-					IsBackButtonVisible="Auto"
-					IsBackEnabled="True">
+					IsPaneOpen="False">
             <!--IsBackButtonVisible="{x:Bind MainPageViewModel.EnableBackButton, Converter={StaticResource BtNVBBV}, Mode=OneWay}"
 					IsBackEnabled="{x:Bind MainPageViewModel.EnableBackButton, Mode=OneWay}"-->
             <!--PaneTitle="paneTitle"-->
