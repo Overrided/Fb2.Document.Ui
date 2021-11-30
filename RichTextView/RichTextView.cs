@@ -420,8 +420,6 @@ namespace RichTextView
             }
         }
 
-        // TODO : FIX A BUG! When starting from small size and going bigger, it can break image sizing??????
-        // need to check image.Source BitmapHeight & BitmapWidth and try to restore image state as close at it could be????
         private void TryResizeNotInlineImages(RichTextBlock richTextBlock, Size actualSize)
         {
             var anyImages = richTextBlock.FindVisualChildren<Image>().Distinct();
@@ -505,7 +503,7 @@ namespace RichTextView
                 scrollHost.ChangeView(null, chaptersContent.LeftOffPosition, null);
 
             await GoToVisualStateAsync("Rendered");
-
+            //UpdateLayout();
             await this.FinishLayoutAsync();
 
             RichTextViewModel.IsRendered = true;

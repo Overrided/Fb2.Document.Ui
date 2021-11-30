@@ -23,7 +23,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
 
             var hyperlinkButton = new HyperlinkButton
             {
-                Margin = new Thickness(0, 2, 0, -4.5),
+                Margin = new Thickness(0, 2, 0, -5.5),
                 Padding = new Thickness(0),
                 FontSize = context.RenderingConfig.BaseFontSize,
                 Content = richContentWrapper

@@ -48,13 +48,15 @@
 							   TextWrapping="NoWrap"
 							   TextTrimming="Clip"
 							   VerticalAlignment="Center"
-							   HorizontalAlignment="Center" />
+							   HorizontalAlignment="Center" 
+                               ToolTipService.ToolTip="{Binding BookName}"/>
                     <TextBlock Grid.Row="1"
 							   Text="{Binding BookAuthor}"
 							   TextWrapping="NoWrap"
 							   TextTrimming="Clip"
 							   HorizontalAlignment="Center"
-							   Margin="6,0,6,0" />
+							   Margin="6,0,6,0"
+                               ToolTipService.ToolTip="{Binding BookAuthor}"/>
                 </Grid>
             </Grid>
         </DataTemplate>
@@ -79,9 +81,9 @@
 				  IsSwipeEnabled="False"
 				  IsItemClickEnabled="True"
 				  ItemClick="Book_Click">
-            <!--<GridView.Transitions>
+            <GridView.Transitions>
                 <EntranceThemeTransition IsStaggeringEnabled="True" />
-            </GridView.Transitions>-->
+            </GridView.Transitions>
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapGrid Orientation="Horizontal"

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Fb2.Document.Constants;
 using Fb2.Document.WinUI.Entities;
 using Fb2.Document.WinUI.NodeProcessors.Base;
 using Microsoft.UI.Xaml.Documents;
@@ -10,8 +11,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
     {
         public override List<TextElement> Process(IRenderingContext context)
         {
-            // TODO : use AttributeNames.InfoType once new lib version is there with fixed typo
-            if (context.Node.TryGetAttribute("info-type", out var infoTypeKvp, true))
+            if (context.Node.TryGetAttribute(AttributeNames.InfoType, out var infoTypeKvp, true))
             {
                 var attributeRun = new Run { Text = infoTypeKvp.Value };
                 var baseInlines = base.Process(context);

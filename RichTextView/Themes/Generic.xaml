@@ -43,9 +43,7 @@
 
                             <ItemsPanelTemplate x:Key="ItemsHostPanelTemplate">
                                 <ItemsStackPanel Orientation="Vertical"
-												 CacheMode="BitmapCache"
-												 CacheLength="2.0"
-												 VirtualizingStackPanel.VirtualizationMode="Recycling" />
+                                                 VirtualizingStackPanel.VirtualizationMode="Recycling" />
                             </ItemsPanelTemplate>
 
                         </Border.Resources>
@@ -54,9 +52,10 @@
                             <!--todo: rename group & add states to control progress bar etc? -->
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualStateGroup.Transitions>
-                                    <VisualTransition To="Loading"
-                                                      GeneratedDuration="0:0:0.1"/>
-                                    <VisualTransition To="Rendered"
+                                    <!--<VisualTransition To="Loading"
+                                                      GeneratedDuration="0:0:0.1"/>-->
+                                    <VisualTransition From="Loading" 
+                                                      To="Rendered"
                                                       GeneratedDuration="0:0:0.1"/>
                                 </VisualStateGroup.Transitions>
                                 <VisualState x:Name="Loading">
@@ -89,8 +88,8 @@
                             </ItemsControl>
 
                             <ProgressRing x:Name="loadingIndicator"
-										  Height="200"
-										  Width="200"
+										  Height="150"
+										  Width="150"
 										  IsActive="True"
 										  HorizontalAlignment="Center"
 										  VerticalAlignment="Center"

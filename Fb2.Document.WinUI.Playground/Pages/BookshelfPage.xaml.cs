@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Fb2.Document.Constants;
+using Fb2.Document.LoadingOptions;
 using Fb2.Document.Models;
 using Fb2.Document.WinUI.Playground.Models;
 using Fb2.Document.WinUI.Playground.Services;
@@ -57,7 +58,6 @@ namespace Fb2.Document.WinUI.Playground.Pages
                 SelectedBooks.Add(model);
             }
 
-
             //foreach (var file in files)
             //{
             //    var model = await ParseFile(file);
@@ -73,7 +73,9 @@ namespace Fb2.Document.WinUI.Playground.Pages
             using (var dataStream = await storageFile.OpenStreamForReadAsync())
             {
                 fileSizeBytes = dataStream.Length;
-                await fb2Doc.LoadAsync(dataStream);
+                await fb2Doc.LoadAsync(dataStream, new Fb2StreamLoadingOptions { CloseInputStream = true });
+
+                dataStream.Close();
             }
 
             var result = new BookModel

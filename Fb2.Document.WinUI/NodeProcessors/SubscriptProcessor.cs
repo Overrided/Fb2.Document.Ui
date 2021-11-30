@@ -20,7 +20,8 @@ namespace Fb2.Document.WinUI.NodeProcessors
             var txtb = new RichTextBlock
             {
                 FontSize = context.RenderingConfig.BaseFontSize,
-                Margin = new Thickness(0, 9, 0, -9)
+                Margin = new Thickness(0, 1, 0, -10),
+                Padding = new Thickness(0, 0, 0, 1)
             };
             txtb.Blocks.AddRange(normalizedInlines);
 
