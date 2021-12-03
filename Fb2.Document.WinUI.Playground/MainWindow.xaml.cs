@@ -39,22 +39,10 @@ namespace Fb2.Document.WinUI.Playground
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-        //private Fb2Document selectedFb2Document = null;
-        private Fb2Mapper fb2MappingService = new();
-        private Fb2MappingConfig defaultMappingConfig = new();
-
-        public ReadViewModel ReadViewModel { get; }
-
         public MainWindow()
         {
             this.Activated += MainWindow_Activated;
             this.InitializeComponent();
-
-            ReadViewModel = new()
-            {
-                ShowBookProgress = true,
-                PageMargin = new Thickness(20)
-            };
         }
 
         private void MainWindow_Activated(object sender, WindowActivatedEventArgs args)
@@ -69,10 +57,6 @@ namespace Fb2.Document.WinUI.Playground
                 NavigationService.Instance.ContentFrameNavigated += Instance_ContentFrameNavigated;
                 NavigationService.Instance.NavigateContentFrame(typeof(BookshelfPage));
             }
-
-            //if (ContentFrame.Content == null || ContentFrame.Content?.GetType() != typeof(BookshelfPage))
-            //if (ContentFrame.Content == null)
-            //    ContentFrame.Navigate(typeof(BookshelfPage));
         }
 
         private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
@@ -85,87 +69,5 @@ namespace Fb2.Document.WinUI.Playground
             NavView.IsBackButtonVisible = e ? NavigationViewBackButtonVisible.Visible : NavigationViewBackButtonVisible.Collapsed;
             NavView.IsBackEnabled = e;
         }
-
-        //private async void OpenBookClick(object sender, RoutedEventArgs e)
-        //{
-        //    var picker = new FileOpenPicker { ViewMode = PickerViewMode.List };
-        //    var pickerTwo = new FolderPicker();
-
-        //    //Get the Window's HWND
-        //    var hwnd = this.As<IWindowNative>().WindowHandle;
-
-        //    var initializeWithWindow = picker.As<IInitializeWithWindow>();
-        //    initializeWithWindow.Initialize(hwnd);
-
-        //    picker.FileTypeFilter.Add(".fb2");
-
-        //    StorageFile file = await picker.PickSingleFileAsync();
-        //    if (file != null)
-        //    {
-        //        // Application now has read/write access to the picked file
-        //        Debug.WriteLine("Picked file: " + file.Name);
-
-        //        var doc = await LoadDocument(file);
-
-        //        var actualViewHostSize = viewPort.GetViewHostSize();
-        //        var uiContent = fb2MappingService.MapDocument(doc, actualViewHostSize, defaultMappingConfig);
-
-        //        Debug.WriteLine($"UI Mapping done");
-
-        //        var contentPages = uiContent.Select(p => new RichContentPage(p));
-        //        var content = new ChaptersContent(contentPages);
-
-        //        ReadViewModel.ChaptersContent = content;
-        //    }
-        //}
-
-        //private async Task<Fb2Document> LoadDocument(StorageFile storageFile)
-        //{
-        //    var fb2Doc = new Fb2Document();
-        //    using (var dataStream = await storageFile.OpenStreamForReadAsync())
-        //    {
-        //        await fb2Doc.LoadAsync(dataStream, new Fb2StreamLoadingOptions(true));
-        //    }
-
-        //    return fb2Doc;
-        //}
-
-        //private async void RichTextView_HyperlinkActivated(object sender, RichHyperlinkActivatedEventArgs e)
-        //{
-        //    string testMessage;
-
-        //    if (e.OriginalSender is Hyperlink hyperlink)
-        //        testMessage = hyperlink.NavigateUri?.ToString() ?? "No Hyperlink";
-        //    else if (e.OriginalSender is HyperlinkButton hyperlinkButton)
-        //        testMessage = hyperlinkButton.Tag.ToString();
-        //    else
-        //        throw new Exception("unexpected hyprlink btn");
-
-        //    MessageDialog messageDialog = new($"test inline hyperlink click: {testMessage}")
-        //    {
-        //        DefaultCommandIndex = 0,
-        //        CancelCommandIndex = 0
-        //    };
-
-        //    // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
-        //    messageDialog.Commands.Add(new UICommand("Close"));
-
-        //    var hwnd = this.As<IWindowNative>().WindowHandle;
-
-        //    var initializeWithWindow = messageDialog.As<IInitializeWithWindow>();
-        //    initializeWithWindow.Initialize(hwnd);
-
-        //    await messageDialog.ShowAsync();
-        //}
-
-        //private void RichTextView_OnProgress(object sender, BookProgressChangedEventArgs e)
-        //{
-        //    Debug.WriteLine($"Book current position: {e.VerticalOffset}, vOffset: {e.ScrollableOffset}");
-        //}
-
-        //private void OnBookRendered(object sender, EventArgs e)
-        //{
-        //    Debug.WriteLine("Book rendered");
-        //}
     }
 }

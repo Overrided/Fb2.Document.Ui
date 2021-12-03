@@ -18,13 +18,15 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
+using Windows.UI.Core;
+using Microsoft.UI.Dispatching;
 
 // The Templated Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234235
 
 namespace RichTextView
 {
     // TODO : move to separate file
-    public class RichTextViewModel
+    public class RichTextViewModel : ObservableObject
     {
         public ObservableCollection<RichTextBlock> Pages { get; } = new ObservableCollection<RichTextBlock>();
 
@@ -34,7 +36,6 @@ namespace RichTextView
 
         public int FirstVisiblePageIndex = 0;
         public int LastVisiblePageIndex = 0;
-        public Thickness ActualPageMargin = default;
     }
 
     // TODO : update Rendered event - raise Rendered false on reset? 
@@ -84,7 +85,6 @@ namespace RichTextView
             itemsHost.SizeChanged -= ItemsHost_SizeChanged;
 
             RichTextViewModel.PreviousWidths.Clear();
-            RichTextViewModel.ActualPageMargin = default;
 
             if (RichTextViewModel.Pages.Count > 0)
             {
@@ -163,24 +163,11 @@ namespace RichTextView
         private static void PageMargin_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = d as RichTextView;
+
             if (control == null || !control.RichTextViewModel.IsRendered)
                 return;
 
-            var newPageMargin = (Thickness)e.NewValue;
-
-            // TODO: or?
-            //if (newPageMargin.Bottom < 0 ||
-            //    newPageMargin.Left < 0 ||
-            //    newPageMargin.Top < 0 ||
-            //    newPageMargin.Right < 0)
-            //    return;
-
-            newPageMargin.Bottom = Math.Max(newPageMargin.Bottom, 0);
-            newPageMargin.Left = Math.Max(newPageMargin.Left, 0);
-            newPageMargin.Top = Math.Max(newPageMargin.Top, 0);
-            newPageMargin.Right = Math.Max(newPageMargin.Right, 0);
-
-            control.TryAdjustPagesMargin(newPageMargin);
+            control.TryAdjustPagesMargin();
         }
 
         public bool ShowProgress
@@ -209,6 +196,19 @@ namespace RichTextView
             var newVisibilityValue = (bool)e.NewValue ? Visibility.Visible : Visibility.Collapsed;
             control.ToggleProgressBarVisibility(newVisibilityValue);
         }
+
+        public bool ShowLoading
+        {
+            get { return (bool)GetValue(ShowLoadingProperty); }
+            set { SetValue(ShowLoadingProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowLoadingProperty =
+            DependencyProperty.Register(
+                nameof(ShowLoading),
+                typeof(bool),
+                typeof(RichTextView),
+                new PropertyMetadata(true));
 
         public Size GetViewHostSize()
         {
@@ -269,7 +269,7 @@ namespace RichTextView
         private void ScrollHost_ViewChanging(object sender, ScrollViewerViewChangingEventArgs e)
         {
             HandleHyperlinksChanged(false);
-            TryAdjustPagesMargin(PageMargin);
+            TryAdjustPagesMargin();
         }
 
         private void ScrollHost_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
@@ -283,7 +283,7 @@ namespace RichTextView
 
             HandleHyperlinksChanged(scrollComplete);
             TryAdjustImageSizes();
-            TryAdjustPagesMargin(PageMargin);
+            TryAdjustPagesMargin();
         }
 
         private void HyperText_Click(Hyperlink sender, HyperlinkClickEventArgs args)
@@ -468,7 +468,8 @@ namespace RichTextView
             if (shouldResetView)
                 ResetView();
 
-            await GoToVisualStateAsync("Loading");
+            if (ShowLoading)
+                await GoToVisualStateAsync("Loading");
 
             var renderStopwatch = Stopwatch.StartNew();
 
@@ -476,8 +477,6 @@ namespace RichTextView
             var contentPages = chaptersContent.RichContentPages;
 
             SaveScreenWidth(size);
-            // TODO : method to update state?
-            RichTextViewModel.ActualPageMargin = PageMargin;
 
             var result = contentPages.Select(section =>
             {
@@ -512,11 +511,8 @@ namespace RichTextView
             Debug.WriteLine($"Rendering control time: {renderStopwatch.Elapsed}");
         }
 
-        private void TryAdjustPagesMargin(Thickness newPageMargin)
+        private void TryAdjustPagesMargin()
         {
-            if (RichTextViewModel.ActualPageMargin == newPageMargin)
-                return;
-
             var actualSize = GetViewHostSize();
             (var fvi, var lvi) = GetVisiblePageIndexes();
 
@@ -525,15 +521,14 @@ namespace RichTextView
 
             for (int i = fvi; i <= lvi; i++)
             {
-                if (TryGetPageByIndex(i, out var rtb) && rtb.Margin != newPageMargin)
+                if (TryGetPageByIndex(i, out var rtb) && rtb.Margin != PageMargin)
                 {
-                    rtb.Margin = newPageMargin;
+                    rtb.Margin = PageMargin;
                     TryResizeNotInlineImages(rtb, actualSize);
                     rtb.UpdateLayout();
                 }
             }
 
-            RichTextViewModel.ActualPageMargin = newPageMargin;
             UpdateLayout();
         }
 
@@ -570,16 +565,9 @@ namespace RichTextView
 
         private async Task GoToVisualStateAsync(string stateName)
         {
-            Func<Task> goToStateAsync = async () =>
-            {
-                VisualStateManager.GoToState(this, stateName, true);
-                await this.FinishLayoutAsync();
-                UpdateLayout();
-            };
-            await goToStateAsync();
-
-            //VisualStateManager.GoToState(this, stateName, true);
-            //await this.FinishLayoutAsync();
+            VisualStateManager.GoToState(this, stateName, true);
+            await this.FinishLayoutAsync();
+            UpdateLayout();
         }
 
         //TODO : make public again?
@@ -591,7 +579,6 @@ namespace RichTextView
             RichTextViewModel.IsRendered = false;
             ToggleProgressBarVisibility(Visibility.Collapsed);
             RichTextViewModel.PreviousWidths.Clear();
-            RichTextViewModel.ActualPageMargin = default;
 
             if (RichTextViewModel.Pages.Any())
             {

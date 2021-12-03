@@ -52,11 +52,18 @@
                             <!--todo: rename group & add states to control progress bar etc? -->
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualStateGroup.Transitions>
-                                    <!--<VisualTransition To="Loading"
-                                                      GeneratedDuration="0:0:0.1"/>-->
                                     <VisualTransition From="Loading" 
-                                                      To="Rendered"
-                                                      GeneratedDuration="0:0:0.1"/>
+                                                      GeneratedDuration="0:0:0.35">
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity"
+                                                                           Storyboard.TargetName="loadingIndicator"
+                                                                           FillBehavior="HoldEnd">
+                                                <DoubleAnimationUsingKeyFrames.KeyFrames>
+                                                    <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.35" />
+                                                </DoubleAnimationUsingKeyFrames.KeyFrames>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualTransition>
                                 </VisualStateGroup.Transitions>
                                 <VisualState x:Name="Loading">
                                     <VisualState.Setters>
@@ -79,7 +86,8 @@
 										  VerticalAlignment="Stretch"
 										  HorizontalContentAlignment="Stretch"
 										  VerticalContentAlignment="Stretch"
-										  ItemsSource="{Binding RichTextViewModel.Pages, RelativeSource={RelativeSource TemplatedParent}}"
+                                          DataContext="{Binding RichTextViewModel, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+										  ItemsSource="{Binding Pages}"
 										  Template="{StaticResource ItemsHostTemplate}"
 										  ItemsPanel="{StaticResource ItemsHostPanelTemplate}">
                                 <ItemsControl.ItemContainerTransitions>

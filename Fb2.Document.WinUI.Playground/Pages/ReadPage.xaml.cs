@@ -55,7 +55,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
             ReadViewModel = new ReadViewModel
             {
                 ShowBookProgress = true,
-                PageMargin = new Thickness(20)
+                PageMargin = new Thickness(20, 40, 20, 40)
             };
         }
 
