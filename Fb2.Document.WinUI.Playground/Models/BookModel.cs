@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fb2.Document.WinUI.Playground.Models
 {
     public class BookModel
     {
+        private const string system = "book_model_system";
+
         public string FileName { get; set; }
         public string FilePath { get; set; }
         public long FileSizeInBytes { get; set; }
@@ -16,9 +14,35 @@ namespace Fb2.Document.WinUI.Playground.Models
         public string BookAuthor { get; set; }
         public Fb2Document? Fb2Document { get; set; }
 
-        //public BookModel(string fileName, string filePath, long FileSizeInBytes, string coverpage, string bookName, string bookAuthor, Fb2Document? doc = null)
-        //{
+        public static BookModel AddBookModel;
 
-        //}
+        static BookModel()
+        {
+            AddBookModel = new BookModel
+            {
+                FileName = system,
+                FilePath = system,
+                FileSizeInBytes = -1,
+                BookName = system,
+                BookAuthor = system
+            };
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is BookModel model &&
+                   FileName == model.FileName &&
+                   FilePath == model.FilePath &&
+                   FileSizeInBytes == model.FileSizeInBytes &&
+                   CoverpageBase64Image == model.CoverpageBase64Image &&
+                   BookName == model.BookName &&
+                   BookAuthor == model.BookAuthor &&
+                   (Fb2Document == null && model.Fb2Document == null || (Fb2Document?.Equals(model.Fb2Document) ?? false));
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(FileName, FilePath, FileSizeInBytes, CoverpageBase64Image, BookName, BookAuthor, Fb2Document);
+        }
     }
 }

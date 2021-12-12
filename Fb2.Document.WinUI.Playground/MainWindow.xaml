@@ -23,11 +23,17 @@
 			</StackPanel>
 		</NavigationView.PaneHeader>-->
             <NavigationView.MenuItems>
-                <NavigationViewItem Icon="Home"
-                                    Content="Bookshelf"
+                <NavigationViewItem Content="Bookshelf"
                                     Tag="Bookshelf"
                                     IsSelected="True"
-                                    SelectsOnInvoked="True" />
+                                    SelectsOnInvoked="True">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets"
+                                  Glyph="&#xE7BC;"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.Content>
                 <Frame x:Name="ContentFrame" />

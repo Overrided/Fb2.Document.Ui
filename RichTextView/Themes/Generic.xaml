@@ -90,9 +90,9 @@
 										  ItemsSource="{Binding Pages}"
 										  Template="{StaticResource ItemsHostTemplate}"
 										  ItemsPanel="{StaticResource ItemsHostPanelTemplate}">
-                                <ItemsControl.ItemContainerTransitions>
+                                <!--<ItemsControl.ItemContainerTransitions>
                                     <EntranceThemeTransition IsStaggeringEnabled="True" />
-                                </ItemsControl.ItemContainerTransitions>
+                                </ItemsControl.ItemContainerTransitions>-->
                             </ItemsControl>
 
                             <ProgressRing x:Name="loadingIndicator"
@@ -102,7 +102,6 @@
 										  HorizontalAlignment="Center"
 										  VerticalAlignment="Center"
 										  Visibility="Collapsed" />
-                            <!--check if switching opacity looks better -->
                         </Grid>
 
                     </Border>

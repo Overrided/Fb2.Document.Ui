@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Fb2.Document.WinUI.Playground.Pages;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
@@ -54,11 +55,16 @@ namespace Fb2.Document.WinUI.Playground.Services
             if (!IsInitialized)
                 return;
 
-            FrameNavigationOptions navOptions = new FrameNavigationOptions();
-            navOptions.TransitionInfoOverride = transitionInfo ?? new EntranceNavigationTransitionInfo();
-            navOptions.IsNavigationStackEnabled = true;
+            var dispatch = contentFrame.DispatcherQueue;
 
-            contentFrame.NavigateToType(pageType, param, navOptions);
+            dispatch.TryEnqueue(DispatcherQueuePriority.Normal, () =>
+            {
+                FrameNavigationOptions navOptions = new FrameNavigationOptions();
+                navOptions.TransitionInfoOverride = transitionInfo ?? new EntranceNavigationTransitionInfo();
+                navOptions.IsNavigationStackEnabled = true;
+
+                contentFrame.NavigateToType(pageType, param, navOptions);
+            });
         }
 
         public void TryGoBack()

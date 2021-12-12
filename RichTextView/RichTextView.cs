@@ -502,8 +502,6 @@ namespace RichTextView
                 scrollHost.ChangeView(null, chaptersContent.LeftOffPosition, null);
 
             await GoToVisualStateAsync("Rendered");
-            //UpdateLayout();
-            await this.FinishLayoutAsync();
 
             RichTextViewModel.IsRendered = true;
             ContentRendered?.Invoke(this, null);

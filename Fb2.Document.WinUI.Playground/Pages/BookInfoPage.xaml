@@ -16,7 +16,7 @@
 
     <Grid>
         <Grid ColumnSpacing="20"
-			  Margin="20, 40">
+			  Margin="20, 30">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -42,14 +42,15 @@
                 </rtv:RichTextView>
                 <Button Grid.Row="1"
 						CornerRadius="90"
-						Margin="0,5,0,0"
 						HorizontalAlignment="Right"
-						Width="45"
-						Height="45"
+						Width="54"
+						Height="54"
 						Click="OnReadButton_Click">
-                    <SymbolIcon Symbol="ShowResults"
-								HorizontalAlignment="Center"
-								VerticalAlignment="Center" />
+                    <FontIcon FontFamily="Segoe MDL2 Assets"
+                              Glyph="&#xE736;"
+                              FontSize="26"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"/>
                 </Button>
             </Grid>
         </Grid>

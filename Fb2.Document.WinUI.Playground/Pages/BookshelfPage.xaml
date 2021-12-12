@@ -5,7 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Fb2.Document.WinUI.Playground.Converters"
-    xmlns:models="using:Fb2.Document.WinUI.Playground.Models"
+    xmlns:templateSelectors="using:Fb2.Document.WinUI.Playground.TemplateSelectors"
+    xmlns:models="using:Fb2.Document.WinUI.Playground.Models" xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d"
     NavigationCacheMode="Required"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -13,29 +14,223 @@
     <Page.Resources>
         <converters:String64ToImageConverter x:Key="SToImage"
 											 x:Name="SToImage" />
-        <!--<converters:BoolToVisibilityConverter x:Key="BtVC"
-											  x:Name="BtVC" />-->
 
-        <DataTemplate x:Key="RecentBookTemplate"
-					  x:DataType="models:BookModel">
-            <Grid Height="266"
-				  Width="230"
+        <DataTemplate x:Key="AddBookTemplate"
+                      x:DataType="models:BookModel">
+            <Grid Height="230"
+				  Width="190"
 				  Margin="6"
 				  Padding="3"
 				  HorizontalAlignment="Stretch"
 				  VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <FontIcon Grid.Row="0"
+                          FontFamily="Segoe MDL2 Assets"
+                          Glyph="&#xE710;"
+                          FontSize="86"
+                          FontWeight="ExtraBlack"
+                          Opacity="0.6"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="1"
+                           Text="Add Book(s)"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Opacity="0.6"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="RecentBookTemplate"
+					  x:DataType="models:BookModel">
+            <Grid x:Name="outerContainer"
+                  Height="230"
+				  Width="190"
+				  Margin="6"
+                  HorizontalAlignment="Stretch"
+				  VerticalAlignment="Stretch"
+                  Background="Transparent"
+                  IsHitTestVisible="True">
+                <Interactivity:Interaction.Behaviors>
+                    <Core:EventTriggerBehavior EventName="PointerEntered" 
+                                               SourceObject="{Binding ElementName=coverpageContainer}">
+                        <Core:ChangePropertyAction PropertyName="Visibility" 
+                                                   TargetObject="{Binding ElementName=overlayContainer}"
+                                                   Value="Visible">
+                        </Core:ChangePropertyAction>
+                    </Core:EventTriggerBehavior>
+                    <Core:EventTriggerBehavior EventName="PointerExited"
+                                               SourceObject="{Binding ElementName=coverpageContainer}">
+                        <Core:ChangePropertyAction PropertyName="Visibility"
+                                                   TargetObject="{Binding ElementName=overlayContainer}"
+                                                   Value="Collapsed">
+                        </Core:ChangePropertyAction>
+                    </Core:EventTriggerBehavior>
+                </Interactivity:Interaction.Behaviors>
+
+                <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Border Height="210"
-                        Margin="0,0,0,6">
-                    <Image Source="{Binding CoverpageBase64Image, Converter={StaticResource SToImage}}"
-						   Stretch="Uniform"
-						   HorizontalAlignment="Stretch"
-						   VerticalAlignment="Stretch" />
+                <Border Grid.Row="0"
+                      Height="180"
+                      HorizontalAlignment="Stretch"
+                      Background="Transparent"
+                      IsHitTestVisible="True">
+                    <Grid x:Name="coverpageContainer"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Stretch">
+                        <Image x:Name="coverpageImage"
+                               Source="{Binding CoverpageBase64Image, Converter={StaticResource SToImage}}"
+						       Stretch="Uniform"
+						       HorizontalAlignment="Stretch"
+						       VerticalAlignment="Stretch" />
+                        <Grid x:Name="overlayContainer"
+                              HorizontalAlignment="Stretch"
+				              VerticalAlignment="Stretch"
+                              Visibility="Collapsed">
+                            <Grid.Background>
+                                <LinearGradientBrush MappingMode="RelativeToBoundingBox"
+                                                     StartPoint="0.5, 1"
+                                                     EndPoint="0.5, 0.0">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStop Color="Black" Offset="0.0" />
+                                        <GradientStop Color="Transparent" Offset="0.6" />
+                                        <GradientStop Color="Transparent" Offset="1" />
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>
+                            </Grid.Background>
+                            <Button HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    CornerRadius="90"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Width="70"
+                                    Height="70"
+                                    Click="OnBookReadButtonClick">
+                                <Button.Background>
+                                    <SolidColorBrush Color="Black"
+                                                     Opacity="0.55"/>
+                                </Button.Background>
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <ContentPresenter x:Name="ContentPresenter"
+                                                              Background="{TemplateBinding Background}"
+                                                              BackgroundSizing="{TemplateBinding BackgroundSizing}"
+                                                              BorderBrush="{TemplateBinding BorderBrush}"
+                                                              BorderThickness="{TemplateBinding BorderThickness}"
+                                                              Content="{TemplateBinding Content}"
+                                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                              ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                              CornerRadius="{TemplateBinding CornerRadius}"
+                                                              Padding="{TemplateBinding Padding}"
+                                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                              AutomationProperties.AccessibilityView="Raw">
+                                                        <VisualStateManager.VisualStateGroups>
+                                                            <VisualStateGroup x:Name="CommonStates">
+                                                                <VisualState x:Name="Normal">
+                                                                    <Storyboard>
+                                                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                                                    </Storyboard>
+                                                                </VisualState>
+
+                                                                <VisualState x:Name="PointerOver">
+                                                                    <Storyboard>
+
+                                                                        <!--<DiscreteObjectKeyFrame KeyTime="0"
+                                                                                                    Value="{Binding Background, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}">-->
+                                                                        <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
+                                                                                                       Storyboard.TargetProperty="Background.Opacity">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                                                    Value="0.85">
+                                                                            </DiscreteObjectKeyFrame>
+                                                                        </ObjectAnimationUsingKeyFrames>-->
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
+                                                                                                       Storyboard.TargetProperty="Background">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0">
+                                                                                <DiscreteObjectKeyFrame.Value>
+                                                                                    <SolidColorBrush Color="Black"
+                                                                                                     Opacity="0.75"/>
+                                                                                </DiscreteObjectKeyFrame.Value>
+                                                                            </DiscreteObjectKeyFrame>
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent" />
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPointerOver}" />
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                                                    </Storyboard>
+                                                                </VisualState>
+
+                                                                <VisualState x:Name="Pressed">
+
+                                                                    <Storyboard>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                                            <!--<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPressed}" />-->
+                                                                            <DiscreteObjectKeyFrame KeyTime="0">
+                                                                                <DiscreteObjectKeyFrame.Value>
+                                                                                    <SolidColorBrush Color="Black"
+                                                                                                     Opacity="0.45"/>
+                                                                                </DiscreteObjectKeyFrame.Value>
+                                                                            </DiscreteObjectKeyFrame>
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}" />
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPressed}" />
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                        <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                                                    </Storyboard>
+                                                                </VisualState>
+
+                                                                <VisualState x:Name="Disabled">
+
+                                                                    <Storyboard>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundDisabled}" />
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}" />
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundDisabled}" />
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                    </Storyboard>
+                                                                </VisualState>
+
+                                                            </VisualStateGroup>
+
+                                                        </VisualStateManager.VisualStateGroups>
+                                                    </ContentPresenter>
+
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                                <FontIcon FontFamily="Segoe MDL2 Assets"
+                                      Glyph="&#xE736;"
+                                      FontSize="36"
+                                      Foreground="White"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </Border>
                 <Grid Grid.Row="1"
+                      x:Name="bookNameContainer"
 					  HorizontalAlignment="Stretch"
 					  VerticalAlignment="Stretch">
                     <Grid.RowDefinitions>
@@ -55,11 +250,15 @@
 							   TextWrapping="NoWrap"
 							   TextTrimming="Clip"
 							   HorizontalAlignment="Center"
-							   Margin="6,0,6,0"
                                ToolTipService.ToolTip="{Binding BookAuthor}"/>
                 </Grid>
             </Grid>
         </DataTemplate>
+
+        <templateSelectors:BookTemplateSelector x:Key="BookTemplateSelector"
+                                                AddBookTemplate="{StaticResource AddBookTemplate}"
+                                                ViewBookTemplate="{StaticResource RecentBookTemplate}"/>
+
     </Page.Resources>
 
     <Grid>
@@ -76,11 +275,11 @@
 				  VerticalContentAlignment="Stretch"
 				  HorizontalContentAlignment="Stretch"
 				  ItemsSource="{x:Bind SelectedBooks}"
-				  ItemTemplate="{StaticResource RecentBookTemplate}"
+                  ItemTemplateSelector="{StaticResource BookTemplateSelector}"				  
 				  SelectionMode="None"
 				  IsSwipeEnabled="False"
 				  IsItemClickEnabled="True"
-				  ItemClick="Book_Click">
+                  ItemClick="Book_Click">
             <GridView.Transitions>
                 <EntranceThemeTransition IsStaggeringEnabled="True" />
             </GridView.Transitions>
@@ -94,15 +293,5 @@
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
         </GridView>
-        <!--TODO : fix hack once solution found? This should be in Page.BottomAppBar, but it overlaps nav view-->
-        <CommandBar Grid.Row="1"
-					ClosedDisplayMode="Minimal"
-					OverflowButtonVisibility="Auto">
-            <CommandBar.PrimaryCommands>
-                <AppBarButton Icon="Add"
-							  Label="Add Book(s)"
-							  Click="AddButton_Click" />
-            </CommandBar.PrimaryCommands>
-        </CommandBar>
     </Grid>
 </Page>

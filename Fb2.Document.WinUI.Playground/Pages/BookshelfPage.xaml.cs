@@ -12,8 +12,10 @@ using Fb2.Document.WinUI.Playground.Models;
 using Fb2.Document.WinUI.Playground.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.UI.Popups;
 using Fb2Image = Fb2.Document.Models.Image;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -28,7 +30,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
     {
         private const int EditingDistanceThreshold = 3;
 
-        public ObservableCollection<BookModel> selectedBooks = new ObservableCollection<BookModel>();
+        public ObservableCollection<BookModel> selectedBooks = new ObservableCollection<BookModel> { BookModel.AddBookModel };
 
         public ObservableCollection<BookModel> SelectedBooks { get { return selectedBooks; } }
 
@@ -36,35 +38,6 @@ namespace Fb2.Document.WinUI.Playground.Pages
         {
             this.InitializeComponent();
         }
-
-        private async void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            var picker = new FileOpenPicker();
-            PopupInitializerService.Instance.InitializePopup(picker);
-
-            picker.ViewMode = PickerViewMode.List;
-            picker.SuggestedStartLocation = PickerLocationId.Desktop;
-            picker.FileTypeFilter.Add(".fb2");
-
-            var files = await picker.PickMultipleFilesAsync();
-
-            if (files == null || !files.Any())
-                return;
-
-            var modelsTasks = files.Select(ParseFile);
-            foreach (var modelTask in modelsTasks)
-            {
-                var model = await modelTask;
-                SelectedBooks.Add(model);
-            }
-
-            //foreach (var file in files)
-            //{
-            //    var model = await ParseFile(file);
-            //    SelectedBooks.Add(model);
-            //}
-        }
-
 
         private async Task<BookModel> ParseFile(StorageFile storageFile)
         {
@@ -212,12 +185,19 @@ namespace Fb2.Document.WinUI.Playground.Pages
             return distance[sourceCharCount, targetCharCount];
         }
 
-        private void Book_Click(object sender, ItemClickEventArgs e)
+        private async void Book_Click(object sender, ItemClickEventArgs e)
         {
             try
             {
                 var bookModel = (BookModel)e.ClickedItem;
-                NavigationService.Instance.NavigateContentFrame(typeof(BookInfoPage), bookModel);
+
+                if (bookModel.Equals(BookModel.AddBookModel))
+                    await AddBooks();
+                else
+                {
+                    NavigationService.Instance.NavigateContentFrame(typeof(BookInfoPage), bookModel);
+                    UpdateLayout();
+                }
             }
             catch (Exception)
             {
@@ -227,6 +207,41 @@ namespace Fb2.Document.WinUI.Playground.Pages
             //{
             //VisualStateManager.GoToState(this, FreeStateName, false);
             //}
+        }
+
+        private async Task AddBooks()
+        {
+            var picker = new FileOpenPicker();
+            PopupInitializerService.Instance.InitializePopup(picker);
+
+            picker.ViewMode = PickerViewMode.List;
+            picker.SuggestedStartLocation = PickerLocationId.Desktop;
+            picker.FileTypeFilter.Add(".fb2");
+
+            var files = await picker.PickMultipleFilesAsync();
+
+            if (files == null || !files.Any())
+                return;
+
+            var modelsTasks = files.Select(ParseFile);
+            foreach (var modelTask in modelsTasks)
+            {
+                var model = await modelTask;
+                SelectedBooks.Add(model);
+            }
+        }
+
+        private async void OnBookReadButtonClick(object sender, RoutedEventArgs e)
+        {
+            var bookModel = ((sender as Button)?.DataContext as BookModel);
+            if (bookModel == null)
+                return;
+
+            // this fucking insanity works
+            await Task.Run(() =>
+            {
+                NavigationService.Instance.NavigateContentFrame(typeof(ReadPage), bookModel);
+            });
         }
     }
 }
