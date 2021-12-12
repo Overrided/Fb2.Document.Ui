@@ -6,7 +6,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Fb2.Document.WinUI.Playground.Converters"
     xmlns:templateSelectors="using:Fb2.Document.WinUI.Playground.TemplateSelectors"
-    xmlns:models="using:Fb2.Document.WinUI.Playground.Models" xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:models="using:Fb2.Document.WinUI.Playground.Models" 
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" 
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d"
     NavigationCacheMode="Required"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -175,7 +177,8 @@
                                                                 <VisualState x:Name="Pressed">
 
                                                                     <Storyboard>
-                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
+                                                                                                       Storyboard.TargetProperty="Background">
                                                                             <!--<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPressed}" />-->
                                                                             <DiscreteObjectKeyFrame KeyTime="0">
                                                                                 <DiscreteObjectKeyFrame.Value>
@@ -275,7 +278,7 @@
 				  VerticalContentAlignment="Stretch"
 				  HorizontalContentAlignment="Stretch"
 				  ItemsSource="{x:Bind SelectedBooks}"
-                  ItemTemplateSelector="{StaticResource BookTemplateSelector}"				  
+                  ItemTemplateSelector="{StaticResource BookTemplateSelector}"
 				  SelectionMode="None"
 				  IsSwipeEnabled="False"
 				  IsItemClickEnabled="True"
