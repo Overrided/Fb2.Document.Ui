@@ -223,11 +223,17 @@ namespace Fb2.Document.WinUI.Playground.Pages
             if (files == null || !files.Any())
                 return;
 
-            var modelsTasks = files.Select(ParseFile);
-            foreach (var modelTask in modelsTasks)
+            foreach (var file in files)
             {
-                var model = await modelTask;
-                SelectedBooks.Add(model);
+                try
+                {
+                    var model = await ParseFile(file);
+                    SelectedBooks.Add(model);
+                }
+                catch (Exception ex)
+                {
+                    //throw;
+                }
             }
         }
 
@@ -237,11 +243,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
             if (bookModel == null)
                 return;
 
-            // this fucking insanity works
-            await Task.Run(() =>
-            {
-                NavigationService.Instance.NavigateContentFrame(typeof(ReadPage), bookModel);
-            });
+            NavigationService.Instance.NavigateContentFrame(typeof(ReadPage), bookModel);
         }
     }
 }

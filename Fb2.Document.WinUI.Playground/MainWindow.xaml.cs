@@ -53,10 +53,44 @@ namespace Fb2.Document.WinUI.Playground
             if (!NavigationService.Instance.IsInitialized)
             {
                 NavView.BackRequested += NavView_BackRequested;
+                NavView.ItemInvoked += NavView_ItemInvoked;
                 NavigationService.Instance.Init(ContentFrame);
-                NavigationService.Instance.ContentFrameNavigated += Instance_ContentFrameNavigated;
+                NavigationService.Instance.ContentFrameNavigated += OnContentFrameNavigated;
                 NavigationService.Instance.NavigateContentFrame(typeof(BookshelfPage));
             }
+
+            if (!MainWindowsService.Instance.IsInitialized)
+            {
+                MainWindowsService.Instance.Init(this, ContentFrame);
+            }
+        }
+
+        private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        {
+            if (args.InvokedItemContainer == null)
+                return;
+
+            if (args.IsSettingsInvoked)
+            {
+                if (ContentFrame.CurrentSourcePageType != typeof(SettingsPage))
+                    NavigationService.Instance.NavigateContentFrame(typeof(SettingsPage), null, args.RecommendedNavigationTransitionInfo);
+
+                return;
+            }
+
+            var navItemTag = args.InvokedItemContainer.Tag.ToString();
+
+            Type pageType = null;
+
+            if (navItemTag == "Bookshelf")
+                pageType = typeof(BookshelfPage);
+            else
+                throw new NotSupportedException($"Not supported page type : {pageType.FullName}");
+
+            if (ContentFrame.CurrentSourcePageType == pageType)
+                return;
+
+            NavigationService.Instance.NavigateContentFrame(pageType, null, args.RecommendedNavigationTransitionInfo);
         }
 
         private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
@@ -64,10 +98,13 @@ namespace Fb2.Document.WinUI.Playground
             NavigationService.Instance.TryGoBack();
         }
 
-        private void Instance_ContentFrameNavigated(object? sender, bool e)
+        private void OnContentFrameNavigated(object? sender, bool e)
         {
             NavView.IsBackButtonVisible = e ? NavigationViewBackButtonVisible.Visible : NavigationViewBackButtonVisible.Collapsed;
             NavView.IsBackEnabled = e;
+
+            if (ContentFrame.SourcePageType != typeof(SettingsPage))
+                BookshelfPageViewItem.IsSelected = true;
         }
     }
 }

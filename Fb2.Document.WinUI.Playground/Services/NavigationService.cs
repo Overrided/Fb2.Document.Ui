@@ -17,7 +17,8 @@ namespace Fb2.Document.WinUI.Playground.Services
         private readonly HashSet<Type> pagesToGoBackFrom = new HashSet<Type>
         {
             typeof(ReadPage),
-            typeof(BookInfoPage)
+            typeof(BookInfoPage),
+            typeof(SettingsPage)
         };
 
         private static NavigationService instance = new NavigationService();
@@ -55,8 +56,8 @@ namespace Fb2.Document.WinUI.Playground.Services
             if (!IsInitialized)
                 return;
 
+            // due to some inner wierdness this is needed not to crash the whole app
             var dispatch = contentFrame.DispatcherQueue;
-
             dispatch.TryEnqueue(DispatcherQueuePriority.Normal, () =>
             {
                 FrameNavigationOptions navOptions = new FrameNavigationOptions();

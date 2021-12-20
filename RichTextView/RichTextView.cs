@@ -473,24 +473,26 @@ namespace RichTextView
 
             var renderStopwatch = Stopwatch.StartNew();
 
-            var size = GetViewHostSize();
-            var contentPages = chaptersContent.RichContentPages;
-
-            SaveScreenWidth(size);
-
-            var result = contentPages.Select(section =>
+            this.DispatcherQueue.TryEnqueue(async () =>
             {
-                Debug.WriteLine("instantiating rich text block");
-                return CreateRichTextBlock(section, size);
+                var size = GetViewHostSize();
+                var contentPages = chaptersContent.RichContentPages;
+
+                SaveScreenWidth(size);
+
+                var result = contentPages.Select(section =>
+                {
+                    Debug.WriteLine("instantiating rich text block");
+                    return CreateRichTextBlock(section, size);
+                });
+
+                foreach (var item in result)
+                    RichTextViewModel.Pages.Add(item);
+
+                await this.FinishLayoutAsync();
             });
 
-            foreach (var item in result)
-                RichTextViewModel.Pages.Add(item);
-
             renderStopwatch.Stop();
-
-            //UpdateLayout();
-            await this.FinishLayoutAsync();
 
             InitScrollViewer();
             InitProgressBar();

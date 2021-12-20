@@ -9,10 +9,10 @@
 
     <Grid>
         <NavigationView x:Name="NavView"
-					IsSettingsVisible="True"
-					PaneDisplayMode="LeftCompact"
-					AlwaysShowHeader="False"
-					IsPaneOpen="False">
+					    IsSettingsVisible="True"
+					    PaneDisplayMode="LeftCompact"
+					    AlwaysShowHeader="False"
+					    IsPaneOpen="False">
             <!--<NavigationView.PaneHeader>
 			<StackPanel>
 				<TextBlock Text="actions"
@@ -23,7 +23,8 @@
 			</StackPanel>
 		</NavigationView.PaneHeader>-->
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Bookshelf"
+                <NavigationViewItem x:Name="BookshelfPageViewItem"
+                                    Content="Bookshelf"
                                     Tag="Bookshelf"
                                     IsSelected="True"
                                     SelectsOnInvoked="True">

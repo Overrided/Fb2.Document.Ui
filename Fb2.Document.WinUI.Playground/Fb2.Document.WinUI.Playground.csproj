@@ -19,6 +19,7 @@
 	<ItemGroup>
 		<None Remove="Pages\BookInfoPage.xaml" />
 		<None Remove="Pages\BookshelfPage.xaml" />
+		<None Remove="Pages\SettingsPage.xaml" />
 		<None Remove="ReadPage.xaml" />
 	</ItemGroup>
 
@@ -67,5 +68,10 @@
 	<ItemGroup>
 	  <Folder Include="Controls\" />
 	  <Folder Include="Themes\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="Pages\SettingsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 </Project>
