@@ -38,7 +38,7 @@
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"/>
                 <TextBlock Grid.Row="1"
-                           Text="Add Book(s)"
+                           Text="add books"
                            FontSize="24"
                            FontWeight="Bold"
                            Opacity="0.6"
@@ -54,9 +54,7 @@
 				  Width="190"
 				  Margin="6"
                   HorizontalAlignment="Stretch"
-				  VerticalAlignment="Stretch"
-                  Background="Transparent"
-                  IsHitTestVisible="True">
+				  VerticalAlignment="Stretch">
                 <Interactivity:Interaction.Behaviors>
                     <Core:EventTriggerBehavior EventName="PointerEntered" 
                                                SourceObject="{Binding ElementName=coverpageContainer}">
@@ -80,14 +78,12 @@
                 </Grid.RowDefinitions>
                 <Border Grid.Row="0"
                       Height="180"
-                      HorizontalAlignment="Stretch"
-                      Background="Transparent"
-                      IsHitTestVisible="True">
+                      HorizontalAlignment="Stretch">
                     <Grid x:Name="coverpageContainer"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Stretch">
                         <Image x:Name="coverpageImage"
-                               Source="{Binding CoverpageBase64Image, Converter={StaticResource SToImage}}"
+                               Source="{x:Bind CoverpageBase64Image, Converter={StaticResource SToImage}}"
 						       Stretch="Uniform"
 						       HorizontalAlignment="Stretch"
 						       VerticalAlignment="Stretch" />
@@ -241,19 +237,19 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0"
-							   Text="{Binding BookName}"
+							   Text="{x:Bind BookName}"
 							   Style="{StaticResource SubtitleTextBlockStyle}"
 							   TextWrapping="NoWrap"
 							   TextTrimming="Clip"
 							   VerticalAlignment="Center"
 							   HorizontalAlignment="Center" 
-                               ToolTipService.ToolTip="{Binding BookName}"/>
+                               ToolTipService.ToolTip="{x:Bind BookName}"/>
                     <TextBlock Grid.Row="1"
-							   Text="{Binding BookAuthor}"
+							   Text="{x:Bind BookAuthor}"
 							   TextWrapping="NoWrap"
 							   TextTrimming="Clip"
 							   HorizontalAlignment="Center"
-                               ToolTipService.ToolTip="{Binding BookAuthor}"/>
+                               ToolTipService.ToolTip="{x:Bind BookAuthor}"/>
                 </Grid>
             </Grid>
         </DataTemplate>
@@ -277,7 +273,7 @@
 				  VerticalAlignment="Stretch"
 				  VerticalContentAlignment="Stretch"
 				  HorizontalContentAlignment="Stretch"
-				  ItemsSource="{x:Bind SelectedBooks}"
+				  ItemsSource="{x:Bind SelectedBooks, Mode=OneWay}"
                   ItemTemplateSelector="{StaticResource BookTemplateSelector}"
 				  SelectionMode="None"
 				  IsSwipeEnabled="False"

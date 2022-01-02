@@ -5,21 +5,19 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Documents;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using RichTextView.Common;
 using RichTextView.DTOs;
 using RichTextView.EventArguments;
 using RichTextView.Extensions;
 using RichTextView.Services;
 using Windows.Foundation;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Documents;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Windows.UI.Core;
-using Microsoft.UI.Dispatching;
 
 // The Templated Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234235
 
@@ -469,7 +467,10 @@ namespace RichTextView
                 ResetView();
 
             if (ShowLoading)
+            {
                 await GoToVisualStateAsync("Loading");
+                await Task.Delay(20); // lol yiiiis
+            }
 
             var renderStopwatch = Stopwatch.StartNew();
 
@@ -544,7 +545,59 @@ namespace RichTextView
             else
                 richTextBlock.Blocks.AddRange(content);
 
+            OverrideRichTextBlockContextMenu(richTextBlock);
+
             return richTextBlock;
+        }
+
+        private void OverrideRichTextBlockContextMenu(RichTextBlock richTextBlock)
+        {
+            var menu = new MenuFlyout();
+            var pageMarginFlyoutItem = new MenuFlyoutSubItem { Text = "Page Margin" };
+
+            var increasePageMarginSubitem = new MenuFlyoutItem { Text = "Increase" };
+            increasePageMarginSubitem.Click += IncreasePageMarginFlyoutItem_Click;
+
+            var decreasePageMarginSubitem = new MenuFlyoutItem { Text = "Decrease" };
+            decreasePageMarginSubitem.Click += DecreasePageMarginFlyoutItem_Click;
+
+            pageMarginFlyoutItem.Items.Add(increasePageMarginSubitem);
+            pageMarginFlyoutItem.Items.Add(decreasePageMarginSubitem);
+
+            var toggleProgressFlyoutItem = new MenuFlyoutItem { Text = "Toggle Progress" };
+            toggleProgressFlyoutItem.Click += ToggleProgressFlyoutItem_Click;
+
+            menu.Items.Add(pageMarginFlyoutItem);
+            menu.Items.Add(toggleProgressFlyoutItem);
+            richTextBlock.ContextFlyout = menu;
+
+            var inlineContainers = richTextBlock.GetAllTextElements<InlineUIContainer>();
+
+            foreach (var container in inlineContainers)
+                container.SetValue(FlyoutBase.AttachedFlyoutProperty, menu);
+        }
+
+        private void ToggleProgressFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            ShowProgress = !ShowProgress;
+        }
+
+        private void DecreasePageMarginFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            PageMargin = new Thickness(
+                Math.Max(PageMargin.Left - 10, 0),
+                Math.Max(PageMargin.Top - 10, 0),
+                Math.Max(PageMargin.Right - 10, 0),
+                Math.Max(PageMargin.Bottom - 10, 0));
+        }
+
+        private void IncreasePageMarginFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            PageMargin = new Thickness(
+                PageMargin.Left + 10,
+                PageMargin.Top + 10,
+                PageMargin.Right + 10,
+                PageMargin.Bottom + 10);
         }
 
         // miscellaneous
