@@ -268,7 +268,7 @@
 
         <GridView x:Name="itemGridView"
 				  Grid.Row="0"
-				  Margin="10"                  
+				  Margin="10"
 				  HorizontalAlignment="Stretch"
 				  VerticalAlignment="Stretch"
 				  VerticalContentAlignment="Stretch"

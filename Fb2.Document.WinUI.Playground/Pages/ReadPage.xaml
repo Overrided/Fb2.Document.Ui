@@ -10,29 +10,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>-->
-        <!--<Grid Grid.Row="0"
-			  Padding="40,0,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <ScrollViewer Grid.Column="0"
-						  HorizontalScrollMode="Enabled"
-						  HorizontalScrollBarVisibility="Auto"
-						  VerticalScrollMode="Disabled"
-						  HorizontalAlignment="Stretch">
-                <StackPanel Orientation="Horizontal">
-                    <Button Margin="5">
-                        Add Book
-                    </Button>
-                </StackPanel>
-            </ScrollViewer>
-        </Grid>-->
-
         <rtv:RichTextView x:Name="viewPort"
 						  PageMargin="{x:Bind ReadViewModel.PageMargin, Mode=OneWay}"
 						  ShowProgress="{x:Bind ReadViewModel.ShowBookProgress, Mode=OneWay}"
