@@ -30,8 +30,24 @@ namespace Fb2.Document.WinUI.NodeProcessors.Base
             ElementNames.BookBody
         };
 
+        public override List<TextElement> Process(IRenderingContext context)
+        {
+            var originalNode = context.Node;
+
+            var rewrappedNode = RewrapNode(context);
+            //if 'rewrappedNode' != null => backtrack in ElementSelector will go back 1 node too far, restore state later
+
+            var inlines = rewrappedNode != null ? ElementSelector(rewrappedNode, context) : base.Process(context);
+            var normalizedContent = context.Utils.Paragraphize(inlines);
+
+            context.UpdateNode(originalNode); // restoring current node state after what Rewrap could have done
+
+            return normalizedContent;
+        }
+
         protected Fb2Node RewrapNode(IRenderingContext context)
         {
+            // use node not context
             var affectiveParents = GetAffectingLayoutParents(context);
 
             if (affectiveParents == null || !affectiveParents.Any())
@@ -58,19 +74,21 @@ namespace Fb2.Document.WinUI.NodeProcessors.Base
 
         protected InlineUIContainer AddContainer(UIElement element)
         {
-            // ContentPresenter prevents lines overlap
-            var contentPresenter = new ContentPresenter { Content = element };
-            return new InlineUIContainer { Child = contentPresenter };
+            // prevents lines overlap
+            var innerContainer = new Border { Child = element };
+            return new InlineUIContainer { Child = innerContainer };
         }
 
-        private List<Fb2Node> GetAffectingLayoutParents(IRenderingContext context)
+        private List<Fb2Container> GetAffectingLayoutParents(IRenderingContext context)
         {
-            if (!context.ParentNodes.Any())
+            var ancestors = context.Node.GetAncestors();
+
+            if (!ancestors.Any())
                 return null;
 
-            var result = new List<Fb2Node>();
+            var result = new List<Fb2Container>();
 
-            foreach (var node in context.ParentNodes)
+            foreach (var node in ancestors)
             {
                 var nodeName = node.Name;
 

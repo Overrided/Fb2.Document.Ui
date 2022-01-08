@@ -575,6 +575,16 @@ namespace RichTextView
 
             foreach (var container in inlineContainers)
                 container.SetValue(FlyoutBase.AttachedFlyoutProperty, menu);
+
+            //var deps = inlineContainers
+            //    .SelectMany(inc => inc.Child.FindVisualChildren<UIElement>())
+            //    .ToList();
+
+            //foreach (var container in deps)
+            //{
+            //    container.SetValue(FlyoutBase.AttachedFlyoutProperty, menu);
+            //    //container.ContextFlyout = menu;
+            //}
         }
 
         private void ToggleProgressFlyoutItem_Click(object sender, RoutedEventArgs e)

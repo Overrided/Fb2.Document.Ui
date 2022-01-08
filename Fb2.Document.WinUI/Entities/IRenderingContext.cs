@@ -10,7 +10,6 @@ namespace Fb2.Document.WinUI.Entities
     {
         DependencyPropertyManager DependencyPropertyManager { get; }
         Fb2Node Node { get; }
-        Stack<Fb2Node> ParentNodes { get; }
         NodeProcessorFactory ProcessorFactory { get; }
         Fb2MappingConfig RenderingConfig { get; }
         ElementStyler Styler { get; }

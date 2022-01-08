@@ -47,9 +47,6 @@ namespace RichTextView.Extensions
             {
                 var child = VisualTreeHelper.GetChild(depObj, i);
 
-                if (child is T tChild)
-                    result.Add(tChild);
-
                 var subChildren = child.FindVisualChildren<T>();
 
                 if (subChildren != null && subChildren.Any())

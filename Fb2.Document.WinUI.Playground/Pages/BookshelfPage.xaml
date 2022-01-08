@@ -142,15 +142,6 @@
 
                                                                 <VisualState x:Name="PointerOver">
                                                                     <Storyboard>
-
-                                                                        <!--<DiscreteObjectKeyFrame KeyTime="0"
-                                                                                                    Value="{Binding Background, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}">-->
-                                                                        <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
-                                                                                                       Storyboard.TargetProperty="Background.Opacity">
-                                                                            <DiscreteObjectKeyFrame KeyTime="0"
-                                                                                                    Value="0.85">
-                                                                            </DiscreteObjectKeyFrame>
-                                                                        </ObjectAnimationUsingKeyFrames>-->
                                                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
                                                                                                        Storyboard.TargetProperty="Background">
                                                                             <DiscreteObjectKeyFrame KeyTime="0">

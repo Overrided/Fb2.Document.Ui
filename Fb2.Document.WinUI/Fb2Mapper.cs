@@ -6,8 +6,8 @@ using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
 using Fb2.Document.WinUI.Common;
 using Fb2.Document.WinUI.Entities;
-using Windows.Foundation;
 using Microsoft.UI.Xaml.Documents;
+using Windows.Foundation;
 
 namespace Fb2.Document.WinUI
 {

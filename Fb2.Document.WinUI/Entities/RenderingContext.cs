@@ -48,26 +48,14 @@ namespace Fb2.Document.WinUI.Entities
         //State
         public Fb2Node Node { get; private set; } = null;
 
-        public Stack<Fb2Node> ParentNodes { get; private set; } = new Stack<Fb2Node>();
-
-        #region State Methods
-
         public void UpdateNode(Fb2Node node)
         {
-            if (Node != null)
-                ParentNodes.Push(Node);
-
             Node = node;
         }
 
         public void Backtrack()
         {
-            if (ParentNodes.Any())
-                Node = ParentNodes.Pop();
-            else if (Node != null)
-                Node = null;
+            Node = Node?.Parent;
         }
-
-        #endregion
     }
 }

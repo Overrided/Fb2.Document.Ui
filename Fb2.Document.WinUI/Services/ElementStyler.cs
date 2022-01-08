@@ -57,11 +57,11 @@ namespace Fb2.Document.WinUI.Services
 
                 // well, fuck.
                 // hack to apply different styles in different circumstances
-                Fb2Node lastParent = null;
+                Fb2Node lastParent = context.Node.Parent;
 
-                var canPeek = (context.ParentNodes?.Count ?? 0) > 0;
-                if(canPeek)
-                    lastParent = context.ParentNodes.Peek();
+                //var canPeek = (context.ParentNodes?.Count ?? 0) > 0;
+                //if(canPeek)
+                //    lastParent = context.ParentNodes.Peek();
 
                 if(lastParent == null ||
                    lastParent.Name != ElementNames.PublishInfo)
@@ -86,11 +86,11 @@ namespace Fb2.Document.WinUI.Services
             {
                 // well, fuck.
                 // hack to apply different styles in different circumstances
-                Fb2Node lastParent = null;
+                var lastParent = context.Node.Parent;
 
-                var canPeek = (context.ParentNodes?.Count ?? 0) > 0;
-                if(canPeek)
-                    lastParent = context.ParentNodes.Peek();
+                //var canPeek = (context.ParentNodes?.Count ?? 0) > 0;
+                //if(canPeek)
+                //    lastParent = context.ParentNodes.Peek();
 
                 if(lastParent == null ||
                    lastParent.Name != ElementNames.PublishInfo)
@@ -260,7 +260,8 @@ namespace Fb2.Document.WinUI.Services
         public void ApplyStyle(IRenderingContext context, List<TextElement> elements)
         {
             var currentNode = context.Node;
-            var parent = context.ParentNodes.Any() ? context.ParentNodes.Peek() : null;
+            //var parent = context.ParentNodes.Any() ? context.ParentNodes.Peek() : null;
+            var parent = currentNode.Parent;
 
             if (parent != null && styles.ContainsKey($"{parent.Name}|{currentNode.Name}")) // TODO: can be extended to any parent up there
             {

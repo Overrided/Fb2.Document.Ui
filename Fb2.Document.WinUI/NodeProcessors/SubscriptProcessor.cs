@@ -12,10 +12,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
     {
         public override List<TextElement> Process(IRenderingContext context)
         {
-            var rewrappedNode = RewrapNode(context);
-
-            var inlines = rewrappedNode != null ? ElementSelector(rewrappedNode, context) : base.Process(context);
-            var normalizedInlines = context.Utils.Paragraphize(inlines);
+            var normalizedContent = base.Process(context);
 
             var txtb = new RichTextBlock
             {
@@ -23,7 +20,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
                 Margin = new Thickness(0, 1, 0, -10),
                 Padding = new Thickness(0, 0, 0, 1)
             };
-            txtb.Blocks.AddRange(normalizedInlines);
+            txtb.Blocks.AddRange(normalizedContent);
 
             var inlineContainer = AddContainer(txtb);
 

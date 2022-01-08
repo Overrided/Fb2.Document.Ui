@@ -12,17 +12,14 @@ namespace Fb2.Document.WinUI.NodeProcessors
     {
         public override List<TextElement> Process(IRenderingContext context)
         {
-            var rewrappedNode = RewrapNode(context);
-
-            var inlines = rewrappedNode != null ? ElementSelector(rewrappedNode, context) : base.Process(context);
-            var normalizedInlines = context.Utils.Paragraphize(inlines);
+            var normalizedContent = base.Process(context);
 
             var txtb = new RichTextBlock
             {
                 FontSize = context.RenderingConfig.BaseFontSize,
                 Margin = new Thickness(0, 0, 0, 4)
             };
-            txtb.Blocks.AddRange(normalizedInlines);
+            txtb.Blocks.AddRange(normalizedContent);
 
             var inlineContainer = AddContainer(txtb);
 

@@ -21,8 +21,8 @@ namespace Fb2.Document.WinUI.NodeProcessors.Base
                     .SelectMany(l => l)
                     .ToList();
             }
-            else if (currentNode is Fb2Element)// TODO : use .Content in new lib version, once .net6 comes to uwp (winUi 3.0)
-                return new List<TextElement>(1) { new Run { Text = currentNode.ToString() } };
+            else if (currentNode is Fb2Element elementNode)
+                return new List<TextElement>(1) { new Run { Text = elementNode.Content } };
             else
                 throw new Exception($"Unsupported node type. Expected Fb2Container or Fb2Element, got {currentNode.GetType()} instead.");
         }

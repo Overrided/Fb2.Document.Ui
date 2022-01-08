@@ -44,7 +44,7 @@
                             <ItemsPanelTemplate x:Key="ItemsHostPanelTemplate">
                                 <ItemsStackPanel Orientation="Vertical"
                                                  CacheMode="BitmapCache"
-												 CacheLength="1.0"
+												 CacheLength="2.0"
 												 VirtualizingStackPanel.VirtualizationMode="Recycling" />
                             </ItemsPanelTemplate>
 
