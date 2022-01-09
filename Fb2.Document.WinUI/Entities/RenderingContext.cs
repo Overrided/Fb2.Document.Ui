@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Fb2.Document.Models.Base;
+﻿using Fb2.Document.Models.Base;
 using Fb2.Document.WinUI.Common;
 using Fb2.Document.WinUI.Services;
 using Windows.Foundation;
@@ -26,7 +24,6 @@ namespace Fb2.Document.WinUI.Entities
 
             // test part begins here
             ProcessorFactory = new NodeProcessorFactory();
-            DependencyPropertyManager = new DependencyPropertyManager();
         }
 
         // Services, half of them should not be there)
@@ -36,8 +33,6 @@ namespace Fb2.Document.WinUI.Entities
 
         public NodeProcessorFactory ProcessorFactory { get; }
 
-        public DependencyPropertyManager DependencyPropertyManager { get; }
-
         //Data
         public Fb2MappingConfig RenderingConfig { get; }
 
@@ -46,16 +41,16 @@ namespace Fb2.Document.WinUI.Entities
         public Size ViewPortSize { get; } = Size.Empty;
 
         //State
-        public Fb2Node Node { get; private set; } = null;
+        public Fb2Node CurrentNode { get; private set; } = null;
 
         public void UpdateNode(Fb2Node node)
         {
-            Node = node;
+            CurrentNode = node;
         }
 
         public void Backtrack()
         {
-            Node = Node?.Parent;
+            CurrentNode = CurrentNode?.Parent;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace RichTextView.Services
             };
         }
 
-        private static double GetRichTextBlockMinHeight(Size viewPortSize) => viewPortSize.Height / 2.2;
+        private static double GetRichTextBlockMinHeight(Size viewPortSize) => viewPortSize.Height / 2.5;
 
         public static RichTextBlockOverflow BuildOverflow(Size viewPortSize, Thickness pageMargin)
             => new RichTextBlockOverflow

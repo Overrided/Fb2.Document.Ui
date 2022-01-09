@@ -32,7 +32,7 @@ namespace Fb2.Document.WinUI.NodeProcessors.Base
 
         public override List<TextElement> Process(IRenderingContext context)
         {
-            var originalNode = context.Node;
+            var originalNode = context.CurrentNode;
 
             var rewrappedNode = RewrapNode(context);
             //if 'rewrappedNode' != null => backtrack in ElementSelector will go back 1 node too far, restore state later
@@ -53,7 +53,7 @@ namespace Fb2.Document.WinUI.NodeProcessors.Base
             if (affectiveParents == null || !affectiveParents.Any())
                 return null;
 
-            var actualNode = context.Node;
+            var actualNode = context.CurrentNode;
             var actualNodeContent = (actualNode as Fb2Container).Content;
 
             for (int i = 0; i < affectiveParents.Count; i++)
@@ -81,7 +81,7 @@ namespace Fb2.Document.WinUI.NodeProcessors.Base
 
         private List<Fb2Container> GetAffectingLayoutParents(IRenderingContext context)
         {
-            var ancestors = context.Node.GetAncestors();
+            var ancestors = context.CurrentNode.GetAncestors();
 
             if (!ancestors.Any())
                 return null;

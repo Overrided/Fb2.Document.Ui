@@ -28,7 +28,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
 
         public override List<TextElement> Process(IRenderingContext context)
         {
-            var imageNode = context.Node;
+            var imageNode = context.CurrentNode;
 
             if (!imageNode.TryGetAttribute(AttributeNames.XHref, out var xHref, true)) // if value (linked image id) was String.Empty
                 return null;

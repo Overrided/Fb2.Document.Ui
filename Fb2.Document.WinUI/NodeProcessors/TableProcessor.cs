@@ -19,7 +19,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
     {
         public override List<TextElement> Process(IRenderingContext context)
         {
-            var table = context.Node as Table;
+            var table = context.CurrentNode as Table;
 
             var content = table.Content;
 

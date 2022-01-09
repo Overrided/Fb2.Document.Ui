@@ -10,7 +10,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
     {
         public override List<TextElement> Process(IRenderingContext context)
         {
-            var node = context.Node;
+            var node = context.CurrentNode;
 
             var result = node.TryGetAttribute(AttributeNames.Name, out var seqNameKvp, true) ?
                     seqNameKvp.Value :

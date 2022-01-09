@@ -11,7 +11,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
     {
         public override List<TextElement> Process(IRenderingContext context)
         {
-            var authorInfo = context.Node as Author;
+            var authorInfo = context.CurrentNode as Author;
             var sb = new StringBuilder();
 
             var fName = authorInfo.GetFirstChild<FirstName>();

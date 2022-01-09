@@ -92,7 +92,9 @@ namespace Fb2.Document.WinUI.Playground.Pages
                 nodes.Add(annotation);
 
             var size = descriptionViewPort.GetViewHostSize();
-            var descriptionText = fb2MappingService.MapNodes(nodes, size);
+            var descriptionText = new List<Fb2ContentPage>();
+
+            descriptionText.AddRange(fb2MappingService.MapNodes(nodes, size));
 
             // we have had sequence info mapped before
             // use Remove api once new lib is hooked

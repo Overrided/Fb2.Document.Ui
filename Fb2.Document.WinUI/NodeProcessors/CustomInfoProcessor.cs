@@ -11,7 +11,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
     {
         public override List<TextElement> Process(IRenderingContext context)
         {
-            if (context.Node.TryGetAttribute(AttributeNames.InfoType, out var infoTypeKvp, true))
+            if (context.CurrentNode.TryGetAttribute(AttributeNames.InfoType, out var infoTypeKvp, true))
             {
                 var attributeRun = new Run { Text = infoTypeKvp.Value };
                 var baseInlines = base.Process(context);

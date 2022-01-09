@@ -57,11 +57,7 @@ namespace Fb2.Document.WinUI.Services
 
                 // well, fuck.
                 // hack to apply different styles in different circumstances
-                Fb2Node lastParent = context.Node.Parent;
-
-                //var canPeek = (context.ParentNodes?.Count ?? 0) > 0;
-                //if(canPeek)
-                //    lastParent = context.ParentNodes.Peek();
+                Fb2Node lastParent = context.CurrentNode.Parent;
 
                 if(lastParent == null ||
                    lastParent.Name != ElementNames.PublishInfo)
@@ -84,13 +80,10 @@ namespace Fb2.Document.WinUI.Services
             }},
             { ElementNames.Sequence, (context, el) =>
             {
+                // TODO: fix
                 // well, fuck.
                 // hack to apply different styles in different circumstances
-                var lastParent = context.Node.Parent;
-
-                //var canPeek = (context.ParentNodes?.Count ?? 0) > 0;
-                //if(canPeek)
-                //    lastParent = context.ParentNodes.Peek();
+                var lastParent = context.CurrentNode.Parent;
 
                 if(lastParent == null ||
                    lastParent.Name != ElementNames.PublishInfo)
@@ -259,7 +252,7 @@ namespace Fb2.Document.WinUI.Services
 
         public void ApplyStyle(IRenderingContext context, List<TextElement> elements)
         {
-            var currentNode = context.Node;
+            var currentNode = context.CurrentNode;
             //var parent = context.ParentNodes.Any() ? context.ParentNodes.Peek() : null;
             var parent = currentNode.Parent;
 

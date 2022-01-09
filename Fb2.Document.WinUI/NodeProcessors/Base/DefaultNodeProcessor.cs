@@ -11,7 +11,7 @@ namespace Fb2.Document.WinUI.NodeProcessors.Base
     {
         public override List<TextElement> Process(IRenderingContext context)
         {
-            var currentNode = context.Node;
+            var currentNode = context.CurrentNode;
 
             if (currentNode is Fb2Container containerNode)
             {
@@ -24,7 +24,7 @@ namespace Fb2.Document.WinUI.NodeProcessors.Base
             else if (currentNode is Fb2Element elementNode)
                 return new List<TextElement>(1) { new Run { Text = elementNode.Content } };
             else
-                throw new Exception($"Unsupported node type. Expected Fb2Container or Fb2Element, got {currentNode.GetType()} instead.");
+                throw new Exception($"Unsupported node type. Expected {nameof(Fb2Container)} or {nameof(Fb2Element)}, got {currentNode.GetType()} instead.");
         }
     }
 }

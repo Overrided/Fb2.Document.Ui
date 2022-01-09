@@ -8,8 +8,7 @@ namespace Fb2.Document.WinUI.Entities
 {
     public interface IRenderingContext
     {
-        DependencyPropertyManager DependencyPropertyManager { get; }
-        Fb2Node Node { get; }
+        Fb2Node CurrentNode { get; }
         NodeProcessorFactory ProcessorFactory { get; }
         Fb2MappingConfig RenderingConfig { get; }
         ElementStyler Styler { get; }
