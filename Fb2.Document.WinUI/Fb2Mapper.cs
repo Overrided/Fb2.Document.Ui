@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
@@ -67,13 +66,10 @@ namespace Fb2.Document.WinUI
         {
             var renderableNodes = new List<Fb2Node>();
 
-            // TODO : use TryGetFirstDescendant once new version of lib is compatible
-            var coverpage = context.Data.Book.GetFirstDescendant<Coverpage>();
-            if (coverpage != null)
+            if (context.Data.Book.TryGetFirstDescendant<Coverpage>(out var coverpage))
                 renderableNodes.Add(coverpage);
 
             renderableNodes.AddRange(context.Data.Bodies);
-
             return renderableNodes;
         }
 

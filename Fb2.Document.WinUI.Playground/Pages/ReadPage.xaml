@@ -15,8 +15,8 @@
 						  ShowProgress="{x:Bind ReadViewModel.ShowBookProgress, Mode=OneWay}"
 						  RichTextContent="{x:Bind ReadViewModel.ChaptersContent, Mode=OneWay}"
 						  HyperlinkActivated="RichTextView_HyperlinkActivated"
-						  ReadingProgressChanged="RichTextView_OnProgress"
-						  ContentRendered="OnBookRendered">
+						  BookRendered="viewPort_BookRendered"
+                          BookProgressChanged="RichTextView_OnProgress">
         </rtv:RichTextView>
     </Grid>
 </Page>

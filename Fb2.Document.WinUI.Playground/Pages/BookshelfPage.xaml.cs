@@ -237,7 +237,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
             }
         }
 
-        private async void OnBookReadButtonClick(object sender, RoutedEventArgs e)
+        private void OnBookReadButtonClick(object sender, RoutedEventArgs e)
         {
             var bookModel = ((sender as Button)?.DataContext as BookModel);
             if (bookModel == null)

@@ -14,17 +14,16 @@ namespace Fb2.Document.WinUI.NodeProcessors.Base
             var currentNode = context.CurrentNode;
 
             if (currentNode is Fb2Container containerNode)
-            {
                 return containerNode.Content
                     .Select(n => ElementSelector(n, context))
                     .OfType<List<TextElement>>() //    .Where(n => n != null && n.Any())
                     .SelectMany(l => l)
                     .ToList();
-            }
-            else if (currentNode is Fb2Element elementNode)
+
+            if (currentNode is Fb2Element elementNode)
                 return new List<TextElement>(1) { new Run { Text = elementNode.Content } };
-            else
-                throw new Exception($"Unsupported node type. Expected {nameof(Fb2Container)} or {nameof(Fb2Element)}, got {currentNode.GetType()} instead.");
+
+            throw new Exception($"Unsupported node type. Expected {nameof(Fb2Container)} or {nameof(Fb2Element)}, got {currentNode.GetType()} instead.");
         }
     }
 }

@@ -2,14 +2,14 @@
 {
     public class BookProgressChangedEventArgs
     {
-        public double VerticalOffset { get; }
+        public double OldValue { get; }
 
-        public double ScrollableOffset { get; }
+        public double NewValue { get; }
 
-        public BookProgressChangedEventArgs(double verticalOffset, double scrollableOffset)
+        public BookProgressChangedEventArgs(double oldValue, double newValue)
         {
-            VerticalOffset = verticalOffset;
-            ScrollableOffset = scrollableOffset;
+            OldValue = oldValue;
+            NewValue = newValue;
         }
     }
 }

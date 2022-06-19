@@ -80,6 +80,38 @@ namespace RichTextView.Extensions
             return result;
         }
 
+        public static List<T> GetAllTextElements<T>(this TextElement textElement) where T : TextElement
+        {
+            var result = new List<T>();
+
+            if (textElement is T typeElement)
+                result.Add(typeElement);
+
+            if (textElement is Block blockElement)
+            {
+                var inlines = ((Paragraph)blockElement).Inlines;
+                foreach (var inline in inlines)
+                {
+                    var subNodes = inline.GetAllTextElements<T>();
+                    if (subNodes != null && subNodes.Count > 0)
+                        result.AddRange(subNodes);
+                }
+            }
+
+            if (textElement is Span spanElement)
+            {
+                var spanInlines = spanElement.Inlines;
+                foreach (var inline in spanInlines)
+                {
+                    var subNodes = inline.GetAllTextElements<T>();
+                    if (subNodes != null && subNodes.Count > 0)
+                        result.AddRange(subNodes);
+                }
+            }
+
+            return result;
+        }
+
         private static List<T> TraverseInline<T>(IEnumerable<Inline> inlines) where T : TextElement
         {
             var result = new List<T>();

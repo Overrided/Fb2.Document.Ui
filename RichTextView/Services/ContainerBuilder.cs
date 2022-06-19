@@ -6,7 +6,7 @@ namespace RichTextView.Services
 {
     public static class ContainerBuilder
     {
-        public static RichTextBlock BuildRichTextBlock(double baseFontSize, Size viewPortSize, Thickness pageMargin)
+        public static RichTextBlock BuildRichTextBlock(double baseFontSize, Size viewPortSize)
         {
             // todo: add validation
 
@@ -17,20 +17,18 @@ namespace RichTextView.Services
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 FontSize = baseFontSize,
-                Margin = pageMargin,
                 MinHeight = GetRichTextBlockMinHeight(viewPortSize) // TODO : define,
             };
         }
 
         private static double GetRichTextBlockMinHeight(Size viewPortSize) => viewPortSize.Height / 2.5;
 
-        public static RichTextBlockOverflow BuildOverflow(Size viewPortSize, Thickness pageMargin)
+        public static RichTextBlockOverflow BuildOverflow(Size viewPortSize)
             => new RichTextBlockOverflow
             {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
-                MinHeight = GetRichTextBlockMinHeight(viewPortSize),
-                Margin = pageMargin
+                MinHeight = GetRichTextBlockMinHeight(viewPortSize)
             };
     }
 }

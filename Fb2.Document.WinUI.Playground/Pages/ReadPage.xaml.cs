@@ -70,12 +70,22 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
             stop.Stop();
 
+            var resplitContent = uiContent
+                .SelectMany(uic => uic.Chunk(40))
+                .Select(rp => new RichContentPage(rp))
+                .ToList();
+            
             Debug.WriteLine($"UI Mapping elapsed: {stop.Elapsed}");
 
             //var content = new ChaptersContent(UiContent, pagePadding: defaultMappingConfig.PagePadding);
-            var contentPages = uiContent.Select(p => new RichContentPage(p));
-            var content = new ChaptersContent(contentPages);
+
+            //var contentPages = uiContent.Select(p => new RichContentPage(p));
+
+            //var contentPages = uiContent.Select(p => new RichContentPage(p));
+            //var content = new ChaptersContent(contentPages);
             //var content = new ChaptersContent(contentPages, 71406.8);
+
+            var content = new ChaptersContent(resplitContent);
 
             ReadViewModel.ChaptersContent = content;
         }
@@ -99,17 +109,11 @@ namespace Fb2.Document.WinUI.Playground.Pages
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
             base.OnNavigatingFrom(e);
-            viewPort.Loaded -= ViewPort_Loaded;
-        }
-
-        private void OnBookRendered(object sender, EventArgs e)
-        {
-            Debug.WriteLine("Book rendered");
         }
 
         private void RichTextView_OnProgress(object sender, RichTextView.EventArguments.BookProgressChangedEventArgs e)
         {
-            Debug.WriteLine($"Book current position: {e.VerticalOffset}, vOffset: {e.ScrollableOffset}");
+            Debug.WriteLine($"Book current position: {e.OldValue}, vOffset: {e.NewValue}");
         }
 
         private async void RichTextView_HyperlinkActivated(object sender, RichTextView.EventArguments.RichHyperlinkActivatedEventArgs e)
@@ -135,6 +139,11 @@ namespace Fb2.Document.WinUI.Playground.Pages
             messageDialog.CancelCommandIndex = 0;
 
             await messageDialog.ShowAsync();
+        }
+
+        private void viewPort_BookRendered(object sender, bool e)
+        {
+            Debug.WriteLine("Book rendered");
         }
     }
 }
