@@ -12,11 +12,11 @@ namespace Fb2.Document.WinUI.NodeProcessors
         {
             var node = context.CurrentNode;
 
-            var result = node.TryGetAttribute(AttributeNames.Name, out var seqNameKvp, true) ?
+            var result = node.TryGetAttribute(AttributeNames.Name, true, out var seqNameKvp) ?
                     seqNameKvp.Value :
                     string.Empty;
 
-            if (node.TryGetAttribute(AttributeNames.Number, out var seqNumberKvps, true))
+            if (node.TryGetAttribute(AttributeNames.Number, true, out var seqNumberKvps))
                 result = string.IsNullOrEmpty(result) ? seqNumberKvps.Value : $"{result} {seqNumberKvps.Value}";
 
             return string.IsNullOrEmpty(result) ?

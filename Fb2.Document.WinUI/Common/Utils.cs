@@ -12,6 +12,7 @@ namespace Fb2.Document.WinUI.Common
             if (elements == null || !elements.Any())
                 throw new ArgumentNullException(nameof(elements));
 
+            // TODO : use OfType<TextElement> ?
             return Paragraphize(elements.Where(e => e != null));
         }
 

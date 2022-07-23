@@ -177,11 +177,11 @@ namespace Fb2.Document.WinUI.NodeProcessors
                 Padding = new Thickness(7)
             };
 
-            if (cellModel.TryGetAttribute(AttributeNames.Align, out var align, true) &&
+            if (cellModel.TryGetAttribute(AttributeNames.Align, true, out var align) &&
                 Enum.TryParse<TextAlignment>(align.Value, true, out var horAlign))
                 textPresenter.HorizontalTextAlignment = horAlign;
 
-            if (cellModel.TryGetAttribute(AttributeNames.VerticalAlign, out var verAlign, true) &&
+            if (cellModel.TryGetAttribute(AttributeNames.VerticalAlign, true, out var verAlign) &&
                 Enum.TryParse<VerticalAlignment>(verAlign.Value, true, out var verticalAlignment))
                 textPresenter.VerticalAlignment = verticalAlignment;
 
@@ -200,7 +200,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
             if (cell == null || string.IsNullOrWhiteSpace(spanAttrName))
                 throw new ArgumentNullException();
 
-            if (cell.TryGetAttribute(spanAttrName, out var span, true) &&
+            if (cell.TryGetAttribute(spanAttrName, true, out var span) &&
                 int.TryParse(span.Value, out int spanNumber) && spanNumber > 1)
                 return spanNumber;
 

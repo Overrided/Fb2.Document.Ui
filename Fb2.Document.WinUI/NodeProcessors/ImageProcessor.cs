@@ -30,7 +30,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
         {
             var imageNode = context.CurrentNode;
 
-            if (!imageNode.TryGetAttribute(AttributeNames.XHref, out var xHref, true)) // if value (linked image id) was String.Empty
+            if (!imageNode.TryGetAttribute(AttributeNames.XHref, true, out var xHref)) // if value (linked image id) was String.Empty
                 return null;
 
             var linkedBinaries = GetLinkedBinaries(context);
@@ -62,7 +62,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
                 MaxHeight = bitmap.PixelHeight
             };
 
-            if (imageNode.TryGetAttribute(AttributeNames.Alt, out var altAttribute, true))
+            if (imageNode.TryGetAttribute(AttributeNames.Alt, true, out var altAttribute))
                 SetTooltip(image, altAttribute.Value);
 
             var result = new InlineUIContainer();
@@ -89,7 +89,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
             else
             {
                 // TODO: make configurable - if user wants to see image titles at all, and if yes - title location? Top/Bottom/Left/Right etc.?
-                if (imageNode.TryGetAttribute(AttributeNames.Title, out var titleAttribute, true))
+                if (imageNode.TryGetAttribute(AttributeNames.Title, true, out var titleAttribute))
                 {
                     var imageTitleTextBlock = new TextBlock
                     {

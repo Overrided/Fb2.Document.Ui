@@ -26,7 +26,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
                 Content = richContentWrapper
             };
 
-            if (context.CurrentNode.TryGetAttribute(AttributeNames.XHref, out var xHrefAttr, true))
+            if (context.CurrentNode.TryGetAttribute(AttributeNames.XHref, true, out var xHrefAttr))
             {
                 var linkValue = xHrefAttr.Value;
                 SetTooltip(hyperlinkButton, linkValue);
