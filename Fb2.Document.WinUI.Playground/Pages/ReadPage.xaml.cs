@@ -113,7 +113,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
         private void RichTextView_OnProgress(object sender, RichTextView.EventArguments.BookProgressChangedEventArgs e)
         {
-            Debug.WriteLine($"Book current position: {e.OldValue}, vOffset: {e.NewValue}");
+            Debug.WriteLine($"Book current position: {e.ScrollableHeight}, vOffset: {e.VerticalOffset}");
         }
 
         private async void RichTextView_HyperlinkActivated(object sender, RichTextView.EventArguments.RichHyperlinkActivatedEventArgs e)

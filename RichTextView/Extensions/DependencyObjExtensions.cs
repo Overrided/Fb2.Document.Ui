@@ -153,11 +153,12 @@ namespace RichTextView.Extensions
                 tcs.SetResult(true);
             };
             element.LayoutUpdated += handler;
+            element.UpdateLayout();
 
             // Await at least 1 ms (to force UI pump) and until the Task is completed
             // If you don't wait the 1ms then you can get a 'layout cycle detected' error
             // from the XAML runtime.
-            return Task.WhenAll(new[] { Task.Delay(1), tcs.Task });
+            return Task.WhenAll(new[] { Task.Delay(10), tcs.Task });
         }
 
         public static IEnumerable<DependencyObject> GetVisualParents(this DependencyObject element)

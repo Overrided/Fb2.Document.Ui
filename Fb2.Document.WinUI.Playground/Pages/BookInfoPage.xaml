@@ -36,7 +36,7 @@
 								  x:Name="descriptionViewPort"
 								  RichTextContent="{x:Bind BookInfoViewModel.ChaptersContent, Mode=OneWay}"
 								  ShowProgress="False"
-                                  ShowLoading="False"
+                                  ShowLoading="True"
 								  HorizontalAlignment="Stretch"
 								  VerticalAlignment="Center">
                 </rtv:RichTextView>

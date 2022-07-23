@@ -76,7 +76,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
             if (firstCoverpageImage == null)
                 return result;
 
-            if (!firstCoverpageImage.TryGetAttribute(AttributeNames.XHref, out var xHref, true)) // if value (linked image id) was String.Empty
+            if (!firstCoverpageImage.TryGetAttribute(AttributeNames.XHref, true, out var xHref)) // if value (linked image id) was String.Empty
                 return result;
 
             if (fb2Doc.BinaryImages == null || !fb2Doc.BinaryImages.Any())

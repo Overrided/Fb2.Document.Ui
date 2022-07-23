@@ -34,8 +34,7 @@
 												  HorizontalAlignment="Stretch"
 												  VerticalAlignment="Stretch"
 												  HorizontalContentAlignment="Stretch"
-												  VerticalContentAlignment="Stretch"
-												  IsDeferredScrollingEnabled="False">
+												  VerticalContentAlignment="Stretch">
                                         <ItemsPresenter />
                                     </ScrollViewer>
                                     <ProgressBar x:Name="progressIndicator"
@@ -50,9 +49,9 @@
 
                             <ItemsPanelTemplate x:Key="ItemsHostPanelTemplate">
                                 <ItemsStackPanel Orientation="Vertical"
-												 CacheMode="BitmapCache"
+                                                 CacheMode="BitmapCache"
 												 CacheLength="4.0"
-												 VirtualizingStackPanel.VirtualizationMode="Standard" />
+												 VirtualizingStackPanel.VirtualizationMode="Recycling" />
                             </ItemsPanelTemplate>
 
                         </Border.Resources>
@@ -60,16 +59,6 @@
                         <VisualStateManager.VisualStateGroups>
                             <!--todo: rename group & add states to control stuff etc? -->
                             <VisualStateGroup x:Name="CommonStates">
-                                <VisualStateGroup.Transitions>
-                                    <VisualTransition From="Loading" 
-                                                      To="Rendered"
-                                                      GeneratedDuration="0:0:0.75">
-                                        <Storyboard>
-                                            <FadeOutThemeAnimation TargetName="loadingIndicator" />
-                                            <FadeInThemeAnimation TargetName="itemsHost" />
-                                        </Storyboard>
-                                    </VisualTransition>
-                                </VisualStateGroup.Transitions>
                                 <VisualState x:Name="Empty"/>
                                 <VisualState x:Name="Loading">
                                     <VisualState.Setters>

@@ -13,6 +13,7 @@
         <rtv:RichTextView x:Name="viewPort"
 						  PageMargin="{x:Bind ReadViewModel.PageMargin, Mode=OneWay}"
 						  ShowProgress="{x:Bind ReadViewModel.ShowBookProgress, Mode=OneWay}"
+                          ShowLoading="True"
 						  RichTextContent="{x:Bind ReadViewModel.ChaptersContent, Mode=OneWay}"
 						  HyperlinkActivated="RichTextView_HyperlinkActivated"
 						  BookRendered="viewPort_BookRendered"

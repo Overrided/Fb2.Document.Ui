@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -8,11 +7,9 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using RichTextView.Common;
 using RichTextView.DTOs;
 using RichTextView.EventArguments;
@@ -20,27 +17,11 @@ using RichTextView.Extensions;
 using RichTextView.Services;
 using Windows.Foundation;
 //using Microsoft.Toolkit.Uwp;
-using Microsoft.UI.Dispatching;
-using Windows.System;
-using Windows.UI.Core;
 
 // The Templated Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234235
 
 namespace RichTextView
 {
-    //// TODO : move to separate file
-    //public class RichTextViewModel : ObservableObject
-    //{
-    //    public ObservableCollection<RichTextBlock> Pages { get; } = new ObservableCollection<RichTextBlock>();
-
-    //    public bool IsRendered { get; set; } = false;
-
-    //    public ConcurrentBag<double> PreviousWidths = new ConcurrentBag<double>();
-
-    //    public int FirstVisiblePageIndex = 0;
-    //    public int LastVisiblePageIndex = 0;
-    //}
-
     // TODO : update Rendered event - raise Rendered false on reset? 
     // TODO : add font size change?
     // TODO : add font family change?
@@ -61,7 +42,6 @@ namespace RichTextView
         // private members
         private HashSet<double> previousWidths = new HashSet<double>();
         private ScrollViewer scrollHost = null;
-        //private ItemsControl itemsHost = null;
         private Grid viewPortContainer = null;
         private ProgressBar bookProgressBar = null;
         private TappedEventHandler defaultLinkClickEventHandler;
@@ -75,56 +55,6 @@ namespace RichTextView
         // public properties
         public ObservableCollection<RichTextBlock> Pages { get; private set; } = new ObservableCollection<RichTextBlock>();
         public bool IsRendered { get; private set; } = false;
-
-        // ctor + OnApplyTemplate init
-        public RichTextView()
-        {
-            DefaultStyleKey = typeof(RichTextView);
-            defaultLinkClickEventHandler = new TappedEventHandler(HyperlinkBtn_Tapped);
-            Unloaded += RichTextView_Unloaded;
-        }
-
-        protected override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            InitElementHost();
-            menuFlyout = BuildMenuFlyout();
-        }
-
-        // public methods
-        public Size GetViewHostSize()
-        {
-            var originalSize = viewPortContainer.ActualSize.ToSize();
-            var expectedWidth = originalSize.Width - (PageMargin.Left + PageMargin.Right);
-
-            var result = new Size
-            {
-                Height = originalSize.Height,
-                Width = Math.Max(expectedWidth, 0)
-            };
-            return result;
-        }
-
-        public async Task ResetView()
-        {
-            IsRendered = false;
-            BookRendered?.Invoke(this, IsRendered);
-            previousWidths.Clear();
-
-            if (Pages.Any())
-            {
-                foreach (var page in Pages)
-                {
-                    page.Loaded -= RichTextBlock_Loaded;
-                    //page.EffectiveViewportChanged -= RichTextBlock_EffectiveViewportChanged;
-                    page.ClearValue(ContextFlyoutProperty);
-                }
-                Pages.Clear();
-            }
-
-            await GoToVisualStateAsync("Empty");
-            GC.Collect();
-        }
 
         // Dependency properties
         public ChaptersContent RichTextContent
@@ -200,6 +130,57 @@ namespace RichTextView
                 typeof(RichTextView),
                 new PropertyMetadata(true));
 
+        // ctor + OnApplyTemplate init
+        public RichTextView()
+        {
+            DefaultStyleKey = typeof(RichTextView);
+            defaultLinkClickEventHandler = new TappedEventHandler(HyperlinkBtn_Tapped);
+            Unloaded += RichTextView_Unloaded;
+        }
+
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            InitElementHost();
+            menuFlyout = BuildMenuFlyout();
+        }
+
+        // public methods
+        public Size GetViewHostSize()
+        {
+            var originalSize = viewPortContainer.ActualSize.ToSize();
+            var expectedWidth = originalSize.Width - (PageMargin.Left + PageMargin.Right);
+
+            var result = new Size
+            {
+                Height = originalSize.Height,
+                Width = Math.Max(expectedWidth, 0)
+            };
+            return result;
+        }
+
+        public async Task ResetView()
+        {
+            IsRendered = false;
+            BookRendered?.Invoke(this, IsRendered);
+            previousWidths.Clear();
+
+            if (Pages.Any())
+            {
+                foreach (var page in Pages)
+                {
+                    page.Loaded -= RichTextBlock_Loaded;
+                    //page.EffectiveViewportChanged -= RichTextBlock_EffectiveViewportChanged;
+                    page.ClearValue(ContextFlyoutProperty);
+                }
+                Pages.Clear();
+            }
+
+            await GoToVisualStateAsync("Empty");
+            //GC.Collect();
+        }
+
+
         // init stuff
         private void InitElementHost()
         {
@@ -218,6 +199,15 @@ namespace RichTextView
                 throw new Exception("template scrollHost is missing!");
 
             scrollHost = scrollViewer;
+            scrollHost.ViewChanged += ScrollHost_ViewChanged;
+        }
+
+        private void ScrollHost_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            var verticalOffset = scrollHost.VerticalOffset;
+            var scrollableHeight = scrollHost.ScrollableHeight;
+
+            this.BookProgressChanged?.Invoke(this, new BookProgressChangedEventArgs(verticalOffset, scrollableHeight));
         }
 
         private void InitProgressBar()
@@ -227,7 +217,6 @@ namespace RichTextView
                 throw new Exception("template progressBar is missing!");
 
             bookProgressBar = progressBar;
-            bookProgressBar.ValueChanged += BookProgressBar_ValueChanged;
         }
 
         private MenuFlyout BuildMenuFlyout()
@@ -286,9 +275,10 @@ namespace RichTextView
                 Pages = null;
             }
 
-            bookProgressBar.ValueChanged -= BookProgressBar_ValueChanged;
+            //bookProgressBar.ValueChanged -= BookProgressBar_ValueChanged;
             bookProgressBar = null;
 
+            scrollHost.ViewChanged -= ScrollHost_ViewChanged;
             scrollHost = null;
 
             viewPortContainer.SizeChanged -= ItemsHost_SizeChanged;
@@ -304,11 +294,6 @@ namespace RichTextView
             //GC.Collect();
         }
 
-        private void BookProgressBar_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
-        {
-            BookProgressChanged?.Invoke(this, new BookProgressChangedEventArgs(e.OldValue, e.NewValue));
-        }
-
         // rendering
         private async Task RenderContent(bool shouldResetView, ChaptersContent chaptersContent)
         {
@@ -322,10 +307,6 @@ namespace RichTextView
 
             var q = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
 
-            // Execute some code on the target dispatcher queue
-            //await dispatcherQueue.EnqueueAsync(() =>
-
-            //await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             q.TryEnqueue(async () =>
             {
                 var size = GetViewHostSize();
@@ -391,19 +372,23 @@ namespace RichTextView
         }
 
         // rendered page events
-        private async void RichTextBlock_Loaded(object sender, RoutedEventArgs e)
+        private void RichTextBlock_Loaded(object sender, RoutedEventArgs e)
         {
-            //await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            var q = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+
+            q.TryEnqueue(() =>
             {
                 var richTextBlock = sender as RichTextBlock;
                 UpdateVisiblePage(richTextBlock, GetViewHostSize(), true, true, false);
                 Debug.WriteLine($"{nameof(RichTextBlock_Loaded)} on {richTextBlock.Tag}");
-            }
+            });
         }
 
-        private async void RichTextBlock_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
+        private void RichTextBlock_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
         {
-            //await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            var q = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+
+            q.TryEnqueue(() =>
             {
                 var richTextBlock = (RichTextBlock)sender;
                 if (args.BringIntoViewDistanceY < richTextBlock.ActualHeight && richTextBlock.IsLoaded)
@@ -411,18 +396,20 @@ namespace RichTextView
                     UpdateVisiblePage(richTextBlock, GetViewHostSize(), false, true, true);
                     Debug.WriteLine($"{nameof(RichTextBlock_EffectiveViewportChanged)} on {richTextBlock.Tag}");
                 }
-            }
+            });
         }
 
-        private async void RichTextBlock_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void RichTextBlock_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            //await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            var q = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+
+            q.TryEnqueue(() =>
             {
                 var richTextBlock = (RichTextBlock)sender;
 
                 UpdateVisiblePage(richTextBlock, GetViewHostSize(), false, true, true);
                 Debug.WriteLine($"{nameof(RichTextBlock_SizeChanged)} on {richTextBlock.Tag}");
-            }
+            });
         }
 
         // context menu
@@ -597,12 +584,8 @@ namespace RichTextView
         // miscellaneous
         private async Task GoToVisualStateAsync(string stateName)
         {
-            Func<Task> hideProgress = async () =>
-            {
-                VisualStateManager.GoToState(this, stateName, false);
-                await this.FinishLayoutAsync();
-            };
-            await hideProgress();
+            VisualStateManager.GoToState(this, stateName, false);
+            await this.FinishLayoutAsync();
         }
     }
 }
