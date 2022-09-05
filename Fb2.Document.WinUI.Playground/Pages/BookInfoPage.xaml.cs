@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
 using Fb2.Document.WinUI.Entities;
+using Fb2.Document.WinUI.NodeProcessors;
 using Fb2.Document.WinUI.Playground.Models;
 using Fb2.Document.WinUI.Playground.Services;
 using Fb2.Document.WinUI.Playground.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using RichTextView.DTOs;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using RichTextView.WinUI.DTOs;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -31,7 +23,6 @@ namespace Fb2.Document.WinUI.Playground.Pages
     public sealed partial class BookInfoPage : Page
     {
         private Fb2Mapper fb2MappingService = new Fb2Mapper();
-        private Fb2MappingConfig defaultMappingConfig = new Fb2MappingConfig();
         public BookInfoViewModel BookInfoViewModel { get; private set; } = new BookInfoViewModel();
         private BookModel bookModel = null;
 
@@ -61,7 +52,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
         private void DescriptionViewPort_Loaded(object sender, RoutedEventArgs e)
         {
-            Fb2Container titleInfo = (Fb2Container)bookModel.Fb2Document.Title ?? (Fb2Container)bookModel.Fb2Document.SourceTitle;
+            TitleInfoBase titleInfo = (TitleInfoBase)bookModel.Fb2Document.Title ?? bookModel.Fb2Document.SourceTitle;
 
             var titleInfoAuthors = titleInfo?.GetDescendants<Author>();
 
@@ -115,8 +106,8 @@ namespace Fb2.Document.WinUI.Playground.Pages
                     descriptionText.AddRange(customInfoPage);
             }
 
-            var contentPages = descriptionText.Select(p => new RichContentPage(p));
-            var content = new ChaptersContent(contentPages);
+            var contentPages = descriptionText.Select(p => new RichContentPage(p)).ToList();
+            var content = new RichContent(contentPages, new HashSet<string> { ImageProcessor.NotInlineImageTag });
             BookInfoViewModel.ChaptersContent = content;
 
             BookInfoViewModel.CoverpageBase64Image = bookModel.CoverpageBase64Image;

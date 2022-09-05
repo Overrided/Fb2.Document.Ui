@@ -40,10 +40,8 @@ namespace RichTextView
         private const string ViewPortContainerName = "viewPortContainer";
 
         // private members
-        private HashSet<double> previousWidths = new HashSet<double>();
         private ScrollViewer scrollHost = null;
         private Grid viewPortContainer = null;
-        private ProgressBar bookProgressBar = null;
         private TappedEventHandler defaultLinkClickEventHandler;
         private MenuFlyout menuFlyout = null;
 
@@ -57,16 +55,16 @@ namespace RichTextView
         public bool IsRendered { get; private set; } = false;
 
         // Dependency properties
-        public ChaptersContent RichTextContent
+        public RichContent RichTextContent
         {
-            get { return (ChaptersContent)GetValue(RichTextContentProperty); }
+            get { return (RichContent)GetValue(RichTextContentProperty); }
             set { SetValue(RichTextContentProperty, value); }
         }
 
         public static readonly DependencyProperty RichTextContentProperty =
             DependencyProperty.Register(
                 nameof(RichTextContent),
-                typeof(ChaptersContent),
+                typeof(RichContent),
                 typeof(RichTextView),
                 new PropertyMetadata(null, new PropertyChangedCallback(RichTextContent_PropertyChangedCallback)));
 
@@ -76,12 +74,7 @@ namespace RichTextView
         {
             Debug.WriteLine("Chapters_PropertyChangedCallback");
 
-            // debatable
-            if (args.NewValue == null)
-                return;
-
-            var chaptersContent = args.NewValue as ChaptersContent;
-
+            var chaptersContent = args.NewValue as RichContent;
             if (chaptersContent?.IsEmpty() ?? true)
                 return;
 
@@ -163,14 +156,12 @@ namespace RichTextView
         {
             IsRendered = false;
             BookRendered?.Invoke(this, IsRendered);
-            previousWidths.Clear();
 
             if (Pages.Any())
             {
                 foreach (var page in Pages)
                 {
                     page.Loaded -= RichTextBlock_Loaded;
-                    //page.EffectiveViewportChanged -= RichTextBlock_EffectiveViewportChanged;
                     page.ClearValue(ContextFlyoutProperty);
                 }
                 Pages.Clear();
@@ -180,7 +171,6 @@ namespace RichTextView
             //GC.Collect();
         }
 
-
         // init stuff
         private void InitElementHost()
         {
@@ -189,14 +179,13 @@ namespace RichTextView
                 throw new Exception($"Template {ViewPortContainerName} is missing!");
 
             viewPortContainer = viewPortContainerElement;
-            viewPortContainer.SizeChanged += ItemsHost_SizeChanged;
         }
 
         private void InitScrollViewer()
         {
             var scrollViewer = viewPortContainer.FindVisualChild<ScrollViewer>(); // hmmmm
             if (scrollViewer == null)
-                throw new Exception("template scrollHost is missing!");
+                throw new Exception("template scrollViewer is missing!");
 
             scrollHost = scrollViewer;
             scrollHost.ViewChanged += ScrollHost_ViewChanged;
@@ -208,15 +197,6 @@ namespace RichTextView
             var scrollableHeight = scrollHost.ScrollableHeight;
 
             this.BookProgressChanged?.Invoke(this, new BookProgressChangedEventArgs(verticalOffset, scrollableHeight));
-        }
-
-        private void InitProgressBar()
-        {
-            var progressBar = viewPortContainer.FindVisualChild<ProgressBar>(); // hmmmm
-            if (progressBar == null)
-                throw new Exception("template progressBar is missing!");
-
-            bookProgressBar = progressBar;
         }
 
         private MenuFlyout BuildMenuFlyout()
@@ -243,22 +223,9 @@ namespace RichTextView
         }
 
         // inner events handlers
-        private void ItemsHost_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (!IsRendered)
-                return;
-
-            var actualSize = GetViewHostSize();
-
-            SaveScreenWidth(actualSize);
-        }
-
         private void RichTextView_Unloaded(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("RichTextView_Unloaded");
-
-            previousWidths.Clear();
-            //previousWidths = null;
 
             if (Pages.Count > 0)
             {
@@ -276,12 +243,12 @@ namespace RichTextView
             }
 
             //bookProgressBar.ValueChanged -= BookProgressBar_ValueChanged;
-            bookProgressBar = null;
+            //bookProgressBar = null;
 
             scrollHost.ViewChanged -= ScrollHost_ViewChanged;
             scrollHost = null;
 
-            viewPortContainer.SizeChanged -= ItemsHost_SizeChanged;
+            //viewPortContainer.SizeChanged -= ItemsHost_SizeChanged;
             viewPortContainer = null;
 
             Unloaded -= RichTextView_Unloaded;
@@ -295,7 +262,7 @@ namespace RichTextView
         }
 
         // rendering
-        private async Task RenderContent(bool shouldResetView, ChaptersContent chaptersContent)
+        private async Task RenderContent(bool shouldResetView, RichContent chaptersContent)
         {
             if (shouldResetView)
                 await ResetView();
@@ -311,8 +278,6 @@ namespace RichTextView
             {
                 var size = GetViewHostSize();
                 var contentPages = chaptersContent.RichContentPages;
-
-                SaveScreenWidth(size);
 
                 var result = contentPages.Select((section, i) =>
                 {
@@ -335,7 +300,7 @@ namespace RichTextView
             await GoToVisualStateAsync("Rendered");
 
             InitScrollViewer();
-            InitProgressBar();
+            //InitProgressBar();
 
             IsRendered = true;
             BookRendered?.Invoke(this, IsRendered);
@@ -531,8 +496,7 @@ namespace RichTextView
             richTextBlock.UpdateLayout();
         }
 
-        // hacky af
-        // look for elements that are bigger than screen and tag those, resize & repeat)
+        // look for elements that are bigger than screen and resize)
         private void TryResizeNotInlineImages(RichTextBlock richTextBlock, Size actualSize)
         {
             var anyImages = richTextBlock.FindVisualChildren<Image>();
@@ -541,44 +505,30 @@ namespace RichTextView
                 return;
 
             var actualWidth = actualSize.Width;
+            var notInlineImageTags = RichTextContent.NotInlineImageTags;
 
             // TODO : break it up & refactor!
-            Func<FrameworkElement, bool> predicate = (fe) =>
-            {
-                var elementWidth = fe.ActualWidth;
-                return elementWidth >= actualWidth ||
-                       (elementWidth < actualWidth && fe.Tag != null && fe.Tag.ToString().Equals("fullWidthImage")) ||
-                       previousWidths.Any(s => s <= elementWidth);
-            };
+            Func<FrameworkElement, bool> imagePredicate = notInlineImageTags != null && notInlineImageTags.Any() ?
+                (fe) => fe.Tag != null && notInlineImageTags.Any(tag => fe.Tag.ToString().Contains(tag)) :
+                (fe) => fe.ActualWidth >= actualWidth;
 
-            var parentsByImage = anyImages
-                .SelectMany(im => im.GetVisualParents()) // hacky af
-                .OfType<FrameworkElement>()
-                .Where(predicate)
-                .ToList();
-
-            var imagesToResize = anyImages.Where(predicate);
-
-            if (imagesToResize.Any())
-                parentsByImage.AddRange(imagesToResize);
-
-            if (!parentsByImage.Any())
+            var elementsToResize = anyImages.Where(imagePredicate).ToList();
+            if (elementsToResize.Count == 0)
                 return;
 
-            foreach (var pbi in parentsByImage)
-            {
-                if (pbi.Tag == null)
-                    pbi.Tag = "fullWidthImage";
+            var parentsByImage = elementsToResize
+                .SelectMany(im => im.GetVisualParents())
+                .OfType<FrameworkElement>()
+                .ToList();
 
+            if (parentsByImage.Count > 0)
+                elementsToResize.AddRange(parentsByImage);
+
+            foreach (var pbi in elementsToResize)
+            {
                 pbi.Width = actualWidth;
                 pbi.UpdateLayout();
             }
-        }
-
-        private void SaveScreenWidth(Size actualSize)
-        {
-            if (!previousWidths.Contains(actualSize.Width))
-                previousWidths.Add(actualSize.Width);
         }
 
         // miscellaneous

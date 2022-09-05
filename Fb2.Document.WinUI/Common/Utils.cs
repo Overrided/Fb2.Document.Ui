@@ -19,7 +19,6 @@ namespace Fb2.Document.WinUI.Common
         public List<TextElement> Paragraphize(IEnumerable<TextElement> elements)
         {
             Paragraph actualParagraph = null;
-
             var result = new List<TextElement>();
 
             foreach (var element in elements)

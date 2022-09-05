@@ -29,8 +29,9 @@ namespace Fb2.Document.WinUI.Playground.Pages
     public sealed partial class BookshelfPage : Page
     {
         private const int EditingDistanceThreshold = 3;
+        private bool isAddingBooks = false;
 
-        public ObservableCollection<BookModel> selectedBooks = new ObservableCollection<BookModel> { BookModel.AddBookModel };
+        public ObservableCollection<BookModel> selectedBooks = new();
 
         public ObservableCollection<BookModel> SelectedBooks { get { return selectedBooks; } }
 
@@ -185,19 +186,13 @@ namespace Fb2.Document.WinUI.Playground.Pages
             return distance[sourceCharCount, targetCharCount];
         }
 
-        private async void Book_Click(object sender, ItemClickEventArgs e)
+        private void Book_Click(object sender, ItemClickEventArgs e)
         {
             try
             {
                 var bookModel = (BookModel)e.ClickedItem;
-
-                if (bookModel.Equals(BookModel.AddBookModel))
-                    await AddBooks();
-                else
-                {
-                    NavigationService.Instance.NavigateContentFrame(typeof(BookInfoPage), bookModel);
-                    UpdateLayout();
-                }
+                NavigationService.Instance.NavigateContentFrame(typeof(BookInfoPage), bookModel);
+                UpdateLayout();
             }
             catch (Exception)
             {
@@ -223,18 +218,14 @@ namespace Fb2.Document.WinUI.Playground.Pages
             if (files == null || !files.Any())
                 return;
 
-            foreach (var file in files)
+            var fileTasks = files.Select(async f =>
             {
-                try
-                {
-                    var model = await ParseFile(file);
-                    SelectedBooks.Add(model);
-                }
-                catch (Exception ex)
-                {
-                    //throw;
-                }
-            }
+                var book = await ParseFile(f);
+                SelectedBooks.Add(book);
+                return book;
+            });
+
+            var books = await Task.WhenAll(fileTasks);
         }
 
         private void OnBookReadButtonClick(object sender, RoutedEventArgs e)
@@ -244,6 +235,16 @@ namespace Fb2.Document.WinUI.Playground.Pages
                 return;
 
             NavigationService.Instance.NavigateContentFrame(typeof(ReadPage), bookModel);
+        }
+
+        private async void AddBooksButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (isAddingBooks)
+                return;
+
+            isAddingBooks = true;
+            await AddBooks();
+            isAddingBooks = false;
         }
     }
 }

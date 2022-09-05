@@ -80,21 +80,21 @@ namespace Fb2.Document.WinUI.Entities
     // TODO : add bool UseStyles / UseDefaultStyles
     public class Fb2MappingConfig
     {
-        public int BaseFontSize { get; }
+        public int BaseFontSize { get; set; }
 
-        public double ParagraphIndent { get; }
+        public double ParagraphIndent { get; set; }
 
-        public bool HighlightUnsafe { get; }
+        public bool HighlightUnsafe { get; set; }
 
-        public PoemConfig Poem { get; }
+        public PoemConfig Poem { get; set; }
 
-        public ConfigBase Body { get; }
+        public ConfigBase Body { get; set; }
 
-        public SectionConfig Section { get; }
+        public SectionConfig Section { get; set; }
 
-        public QuoteConfig Quote { get; }
+        public QuoteConfig Quote { get; set; }
 
-        public AnnotationConfig Annotation { get; }
+        public AnnotationConfig Annotation { get; set; }
 
         public Fb2MappingConfig(
             int baseFontSize = 18,

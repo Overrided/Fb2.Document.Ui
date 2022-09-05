@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using AngleSharp;
+using AngleSharp.Dom;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
 using Fb2.Document.WinUI.Entities;
+using HtmlAgilityPack;
 using Microsoft.UI.Xaml.Documents;
 using Windows.Foundation;
 
@@ -13,6 +17,36 @@ namespace Fb2.Document.WinUI
     // TODO : add table of contents?? (or on app level?)
     public class Fb2Mapper
     {
+        //public async Task MapAngle()
+        //{
+        //    var context = BrowsingContext.New();
+        //    // get new document, not completely empty (has head and body)
+        //    var document = await context.OpenNewAsync();
+        //    var element = document.CreateElement("strong");
+        //    element.TextContent = "Hello World!";
+        //    document.Body.AppendChild(element);
+        //    var html = document.ToHtml();
+        //}
+
+        //public HtmlDocument MapDocument()
+        //{
+        //    var doc = new HtmlDocument();
+        //    var p = doc.CreateElement("p");
+        //    var text = doc.CreateTextNode("hello world");
+        //    p.AppendChild(text);
+
+        //    //var p = new HtmlNode(HtmlNodeType.Element, doc, -1);
+        //    //p.ChildNodes.Add(new HtmlNode(HtmlNodeType.Text, doc, -1));
+        //    doc.DocumentNode.AppendChild(p);
+
+        //    var textContent = doc.DocumentNode.OuterHtml;
+        //    var toStrContent = doc.DocumentNode.ToString();
+
+        //    return doc;
+
+        //    //doc.AppendChild(HtmlNode.CreateNode(HtmlNode.HtmlNodeTypeNameText));
+        //}
+
         public IEnumerable<Fb2ContentPage> MapDocument(Fb2Document document, Size viewPortSize, Fb2MappingConfig config = null)
         {
             var context = new RenderingContext<Fb2Document>(document, viewPortSize, config);
@@ -55,12 +89,9 @@ namespace Fb2.Document.WinUI
         }
 
         private List<TextElement> BuildNodes(IEnumerable<Fb2Node> nodes, IRenderingContext context) =>
-            nodes.Select(n => BuildNode(n, context))
+            nodes.Select(n => context.ProcessorFactory.DefaultProcessor.ElementSelector(n, context))
                  .OfType<List<TextElement>>()
                  .SelectMany(l => l).ToList();
-
-        private List<TextElement> BuildNode(Fb2Node node, IRenderingContext context) =>
-            context.ProcessorFactory.DefaultProcessor.ElementSelector(node, context);
 
         private List<Fb2Node> GetRenderableNodes(RenderingContext<Fb2Document> context)
         {

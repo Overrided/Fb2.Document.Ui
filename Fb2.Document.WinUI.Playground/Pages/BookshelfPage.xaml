@@ -5,7 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Fb2.Document.WinUI.Playground.Converters"
-    xmlns:templateSelectors="using:Fb2.Document.WinUI.Playground.TemplateSelectors"
     xmlns:models="using:Fb2.Document.WinUI.Playground.Models" 
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" 
     xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
@@ -14,38 +13,116 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"
+                                              x:Name="BoolToVisibilityConverter" />
+
+        <converters:CountToVisibilityInvertedConverter x:Name="CountToVisibilityInvertedConverter" 
+                                                       x:Key="CountToVisibilityInvertedConverter" />
+
         <converters:String64ToImageConverter x:Key="SToImage"
 											 x:Name="SToImage" />
 
-        <DataTemplate x:Key="AddBookTemplate"
-                      x:DataType="models:BookModel">
-            <Grid Height="230"
-				  Width="190"
-				  Margin="6"
-				  Padding="3"
-				  HorizontalAlignment="Stretch"
-				  VerticalAlignment="Stretch">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="3*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <FontIcon Grid.Row="0"
-                          FontFamily="Segoe MDL2 Assets"
-                          Glyph="&#xE710;"
-                          FontSize="86"
-                          FontWeight="ExtraBlack"
-                          Opacity="0.6"
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="1"
-                           Text="add books"
-                           FontSize="24"
-                           FontWeight="Bold"
-                           Opacity="0.6"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"/>
-            </Grid>
-        </DataTemplate>
+        <Style TargetType="Button" 
+               BasedOn="{StaticResource DefaultButtonStyle}"
+               x:Key="ReactiveButton"
+               x:Name="ReactiveButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter x:Name="ContentPresenter"
+                                          Background="{TemplateBinding Background}"
+                                          BackgroundSizing="{TemplateBinding BackgroundSizing}"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          BorderThickness="{TemplateBinding BorderThickness}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          ContentTransitions="{TemplateBinding ContentTransitions}"
+                                          CornerRadius="{TemplateBinding CornerRadius}"
+                                          Padding="{TemplateBinding Padding}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          AutomationProperties.AccessibilityView="Raw">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                        </Storyboard>
+                                    </VisualState>
+
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
+                                                                           Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <SolidColorBrush Color="Black" Opacity="0.8"/>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
+                                                                           Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
+                                                                           Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPointerOver}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                        </Storyboard>
+                                    </VisualState>
+
+                                    <VisualState x:Name="Pressed">
+
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
+                                                                           Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <SolidColorBrush Color="Black" Opacity="0.5"/>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
+                                                                           Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
+                                                                           Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" 
+                                                                        Value="{ThemeResource ButtonForegroundPressed}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                        </Storyboard>
+                                    </VisualState>
+
+                                    <VisualState x:Name="Disabled">
+
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
+                                                                           Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundDisabled}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
+                                                                           Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
+                                                                           Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundDisabled}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+
+                                </VisualStateGroup>
+
+                            </VisualStateManager.VisualStateGroups>
+                        </ContentPresenter>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
         <DataTemplate x:Key="RecentBookTemplate"
 					  x:DataType="models:BookModel">
@@ -64,6 +141,13 @@
                         </Core:ChangePropertyAction>
                     </Core:EventTriggerBehavior>
                     <Core:EventTriggerBehavior EventName="PointerExited"
+                                               SourceObject="{Binding ElementName=coverpageContainer}">
+                        <Core:ChangePropertyAction PropertyName="Visibility"
+                                                   TargetObject="{Binding ElementName=overlayContainer}"
+                                                   Value="Collapsed">
+                        </Core:ChangePropertyAction>
+                    </Core:EventTriggerBehavior>
+                    <Core:EventTriggerBehavior EventName="PointerReleased"
                                                SourceObject="{Binding ElementName=coverpageContainer}">
                         <Core:ChangePropertyAction PropertyName="Visibility"
                                                    TargetObject="{Binding ElementName=overlayContainer}"
@@ -109,106 +193,12 @@
                                     VerticalContentAlignment="Center"
                                     Width="70"
                                     Height="70"
+                                    Style="{StaticResource ReactiveButton}"
                                     Click="OnBookReadButtonClick">
                                 <Button.Background>
                                     <SolidColorBrush Color="Black"
                                                      Opacity="0.55"/>
                                 </Button.Background>
-                                <Button.Style>
-                                    <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="Button">
-                                                    <ContentPresenter x:Name="ContentPresenter"
-                                                              Background="{TemplateBinding Background}"
-                                                              BackgroundSizing="{TemplateBinding BackgroundSizing}"
-                                                              BorderBrush="{TemplateBinding BorderBrush}"
-                                                              BorderThickness="{TemplateBinding BorderThickness}"
-                                                              Content="{TemplateBinding Content}"
-                                                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                              ContentTransitions="{TemplateBinding ContentTransitions}"
-                                                              CornerRadius="{TemplateBinding CornerRadius}"
-                                                              Padding="{TemplateBinding Padding}"
-                                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                              AutomationProperties.AccessibilityView="Raw">
-                                                        <VisualStateManager.VisualStateGroups>
-                                                            <VisualStateGroup x:Name="CommonStates">
-                                                                <VisualState x:Name="Normal">
-                                                                    <Storyboard>
-                                                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
-                                                                    </Storyboard>
-                                                                </VisualState>
-
-                                                                <VisualState x:Name="PointerOver">
-                                                                    <Storyboard>
-                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
-                                                                                                       Storyboard.TargetProperty="Background">
-                                                                            <DiscreteObjectKeyFrame KeyTime="0">
-                                                                                <DiscreteObjectKeyFrame.Value>
-                                                                                    <SolidColorBrush Color="Black"
-                                                                                                     Opacity="0.75"/>
-                                                                                </DiscreteObjectKeyFrame.Value>
-                                                                            </DiscreteObjectKeyFrame>
-                                                                        </ObjectAnimationUsingKeyFrames>
-                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent" />
-                                                                        </ObjectAnimationUsingKeyFrames>
-                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPointerOver}" />
-                                                                        </ObjectAnimationUsingKeyFrames>
-                                                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
-                                                                    </Storyboard>
-                                                                </VisualState>
-
-                                                                <VisualState x:Name="Pressed">
-
-                                                                    <Storyboard>
-                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" 
-                                                                                                       Storyboard.TargetProperty="Background">
-                                                                            <!--<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPressed}" />-->
-                                                                            <DiscreteObjectKeyFrame KeyTime="0">
-                                                                                <DiscreteObjectKeyFrame.Value>
-                                                                                    <SolidColorBrush Color="Black"
-                                                                                                     Opacity="0.45"/>
-                                                                                </DiscreteObjectKeyFrame.Value>
-                                                                            </DiscreteObjectKeyFrame>
-                                                                        </ObjectAnimationUsingKeyFrames>
-                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}" />
-                                                                        </ObjectAnimationUsingKeyFrames>
-                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPressed}" />
-                                                                        </ObjectAnimationUsingKeyFrames>
-                                                                        <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter" />
-                                                                    </Storyboard>
-                                                                </VisualState>
-
-                                                                <VisualState x:Name="Disabled">
-
-                                                                    <Storyboard>
-                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundDisabled}" />
-                                                                        </ObjectAnimationUsingKeyFrames>
-                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}" />
-                                                                        </ObjectAnimationUsingKeyFrames>
-                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundDisabled}" />
-                                                                        </ObjectAnimationUsingKeyFrames>
-                                                                    </Storyboard>
-                                                                </VisualState>
-
-                                                            </VisualStateGroup>
-
-                                                        </VisualStateManager.VisualStateGroups>
-                                                    </ContentPresenter>
-
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </Button.Style>
                                 <FontIcon FontFamily="Segoe MDL2 Assets"
                                       Glyph="&#xE736;"
                                       FontSize="36"
@@ -245,27 +235,18 @@
             </Grid>
         </DataTemplate>
 
-        <templateSelectors:BookTemplateSelector x:Key="BookTemplateSelector"
-                                                AddBookTemplate="{StaticResource AddBookTemplate}"
-                                                ViewBookTemplate="{StaticResource RecentBookTemplate}"/>
-
     </Page.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
 
         <GridView x:Name="itemGridView"
-				  Grid.Row="0"
 				  Margin="10"
 				  HorizontalAlignment="Stretch"
 				  VerticalAlignment="Stretch"
 				  VerticalContentAlignment="Stretch"
 				  HorizontalContentAlignment="Stretch"
 				  ItemsSource="{x:Bind SelectedBooks, Mode=OneWay}"
-                  ItemTemplateSelector="{StaticResource BookTemplateSelector}"
+                  ItemTemplate="{StaticResource RecentBookTemplate}"
 				  SelectionMode="None"
 				  IsSwipeEnabled="False"
 				  IsItemClickEnabled="True"
@@ -283,5 +264,26 @@
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
         </GridView>
+
+        <TextBlock Text="no books added yet"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Opacity="0.5"
+                   Style="{ThemeResource HeaderTextBlockStyle}"
+                   Visibility="{x:Bind SelectedBooks.Count, Mode=OneWay, Converter={StaticResource CountToVisibilityInvertedConverter}}" />
+
+        <Button CornerRadius="90"
+				HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+				Width="60"
+				Height="60"
+                Margin="20"
+				Click="AddBooksButtonClick">
+            <FontIcon FontFamily="Segoe MDL2 Assets"
+                      Glyph="&#xE710;"
+                      FontSize="32"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"/>
+        </Button>
     </Grid>
 </Page>

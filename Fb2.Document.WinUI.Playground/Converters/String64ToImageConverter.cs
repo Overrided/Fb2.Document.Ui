@@ -1,9 +1,10 @@
 ﻿using System;
+using System.IO;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.Storage.Streams;
-//using DataConvert = System.Convert; // fucking method name collision lol
+using DataConvert = System.Convert; // fucking method name collision lol
 
 namespace Fb2.Document.WinUI.Playground.Converters
 {
@@ -30,18 +31,14 @@ namespace Fb2.Document.WinUI.Playground.Converters
             {
                 var bitmap = new BitmapImage();
 
-                using (var stream = new InMemoryRandomAccessStream())
+                using (var stream = new MemoryStream())
                 {
-                    byte[] bytes = System.Convert.FromBase64String(base64ImageContent);
+                    byte[] imageBytes = DataConvert.FromBase64String(base64ImageContent);
+                    stream.Write(imageBytes, 0, imageBytes.Length);
 
-                    var dataWriter = new DataWriter(stream); // TODO: different writer?
-                    dataWriter.WriteBytes(bytes);
-
-                    dataWriter.StoreAsync();
-                    stream.FlushAsync();
-
-                    stream.Seek(0);
-                    bitmap.SetSource(stream);
+                    var randomAccessStream = stream.AsRandomAccessStream();
+                    randomAccessStream.Seek(0);
+                    bitmap.SetSource(randomAccessStream);
                 }
 
                 if (bitmap.PixelHeight == 0 || bitmap.PixelWidth == 0)

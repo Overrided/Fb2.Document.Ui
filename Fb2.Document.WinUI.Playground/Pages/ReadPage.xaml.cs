@@ -1,33 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Numerics;
 using Fb2.Document.WinUI.Entities;
+using Fb2.Document.WinUI.NodeProcessors;
+using Fb2.Document.WinUI.Playground.Models;
+using Fb2.Document.WinUI.Playground.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Documents;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using RichTextView.DTOs;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using WinRT;
-using Windows.Storage.Pickers;
-using Windows.UI.Popups;
-using Fb2.Document.WinUI.Playground.ViewModels;
-using Windows.Storage;
-using System.Threading.Tasks;
-using Fb2.Document.LoadingOptions;
-using Fb2.Document.WinUI.Playground.Models;
-using Fb2.Document.WinUI.Playground.Services;
+using RichTextView.WinUI.DTOs;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -61,12 +43,17 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
         private void ViewPort_Loaded(object sender, RoutedEventArgs e)
         {
+
+            //var html = fb2MappingService.MapDocument();
+
             var stop = Stopwatch.StartNew();
 
-            var actualViewHostSize = viewPort.GetViewHostSize();
+            //var actualViewHostSize = viewPort.GetViewHostSize();
             //var smallFontConfig = new Fb2MappingConfig(14);
             //var unsafeMappingConfig = new Fb2MappingConfig(highlightUnsafe: true);
-            var uiContent = fb2MappingService.MapDocument(selectedFb2Document, actualViewHostSize, defaultMappingConfig);
+            //var uiContent = fb2MappingService.MapDocument(selectedFb2Document, actualViewHostSize, defaultMappingConfig);
+
+            var uiContent = fb2MappingService.MapDocument(selectedFb2Document, viewPort.ActualSize.ToSize(), defaultMappingConfig);
 
             stop.Stop();
 
@@ -74,7 +61,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
                 .SelectMany(uic => uic.Chunk(40))
                 .Select(rp => new RichContentPage(rp))
                 .ToList();
-            
+
             Debug.WriteLine($"UI Mapping elapsed: {stop.Elapsed}");
 
             //var content = new ChaptersContent(UiContent, pagePadding: defaultMappingConfig.PagePadding);
@@ -85,7 +72,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
             //var content = new ChaptersContent(contentPages);
             //var content = new ChaptersContent(contentPages, 71406.8);
 
-            var content = new ChaptersContent(resplitContent);
+            var content = new RichContent(resplitContent, new HashSet<string> { ImageProcessor.NotInlineImageTag });
 
             ReadViewModel.ChaptersContent = content;
         }
@@ -111,35 +98,35 @@ namespace Fb2.Document.WinUI.Playground.Pages
             base.OnNavigatingFrom(e);
         }
 
-        private void RichTextView_OnProgress(object sender, RichTextView.EventArguments.BookProgressChangedEventArgs e)
-        {
-            Debug.WriteLine($"Book current position: {e.ScrollableHeight}, vOffset: {e.VerticalOffset}");
-        }
+        //private void RichTextView_OnProgress(object sender, RichTextView.EventArguments.BookProgressChangedEventArgs e)
+        //{
+        //    Debug.WriteLine($"Book current position: {e.ScrollableHeight}, vOffset: {e.VerticalOffset}");
+        //}
 
-        private async void RichTextView_HyperlinkActivated(object sender, RichTextView.EventArguments.RichHyperlinkActivatedEventArgs e)
-        {
-            string testMessage;
+        //private async void RichTextView_HyperlinkActivated(object sender, RichTextView.EventArguments.RichHyperlinkActivatedEventArgs e)
+        //{
+        //    string testMessage;
 
-            if (e.OriginalSender is Hyperlink hyperlink)
-                testMessage = hyperlink.NavigateUri?.ToString() ?? "No Hyperlink";
-            else if (e.OriginalSender is HyperlinkButton hyperlinkButton)
-                testMessage = hyperlinkButton.Tag.ToString();
-            else
-                throw new Exception("unexpected hyprlink btn");
+        //    if (e.OriginalSender is Hyperlink hyperlink)
+        //        testMessage = hyperlink.NavigateUri?.ToString() ?? "No Hyperlink";
+        //    else if (e.OriginalSender is HyperlinkButton hyperlinkButton)
+        //        testMessage = hyperlinkButton.Tag.ToString();
+        //    else
+        //        throw new Exception("unexpected hyprlink btn");
 
-            var messageDialog = new MessageDialog($"test inline hyperlink click: {testMessage}");
-            PopupInitializerService.Instance.InitializePopup(messageDialog);
+        //    var messageDialog = new MessageDialog($"test inline hyperlink click: {testMessage}");
+        //    PopupInitializerService.Instance.InitializePopup(messageDialog);
 
-            // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
-            messageDialog.Commands.Add(new UICommand("Close"));
+        //    // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
+        //    messageDialog.Commands.Add(new UICommand("Close"));
 
-            // Set the command that will be invoked by default
-            messageDialog.DefaultCommandIndex = 0;
-            // Set the command to be invoked when escape is pressed
-            messageDialog.CancelCommandIndex = 0;
+        //    // Set the command that will be invoked by default
+        //    messageDialog.DefaultCommandIndex = 0;
+        //    // Set the command to be invoked when escape is pressed
+        //    messageDialog.CancelCommandIndex = 0;
 
-            await messageDialog.ShowAsync();
-        }
+        //    await messageDialog.ShowAsync();
+        //}
 
         private void viewPort_BookRendered(object sender, bool e)
         {

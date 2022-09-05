@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Fb2.Document.WinUI.Playground.Common;
+﻿using Fb2.Document.WinUI.Playground.Common;
 using Microsoft.UI.Xaml;
-using RichTextView.DTOs;
+using RichTextView.WinUI.DTOs;
 
 namespace Fb2.Document.WinUI.Playground.ViewModels
 {
@@ -12,7 +10,7 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
 
         private Thickness pageMargin;
 
-        private ChaptersContent chaptersContent;
+        private RichContent chaptersContent;
 
         public bool ShowBookProgress
         {
@@ -42,7 +40,7 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
             }
         }
 
-        public ChaptersContent ChaptersContent
+        public RichContent ChaptersContent
         {
             get { return chaptersContent; }
             set
@@ -54,7 +52,7 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
         }
 
         public ReadViewModel(
-            ChaptersContent chaptersContent = null,
+            RichContent chaptersContent = null,
             Thickness? suggestedPageMargin = null,
             bool? showBookProgress = null)
         {

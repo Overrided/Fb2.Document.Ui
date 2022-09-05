@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Fb2.Document.WinUI.Playground.Common;
-using RichTextView.DTOs;
+﻿using Fb2.Document.WinUI.Playground.Common;
+using RichTextView.WinUI.DTOs;
 
 namespace Fb2.Document.WinUI.Playground.ViewModels
 {
     public class BookInfoViewModel : ObservableObject
     {
-        private string coverpageBase64Image = String.Empty;
+        private string coverpageBase64Image = string.Empty;
 
         public string CoverpageBase64Image
         {
@@ -26,9 +21,9 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
             }
         }
 
-        private ChaptersContent chaptersContent;
+        private RichContent chaptersContent;
 
-        public ChaptersContent ChaptersContent
+        public RichContent ChaptersContent
         {
             get { return chaptersContent; }
             set
