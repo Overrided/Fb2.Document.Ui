@@ -10,7 +10,7 @@ using Fb2.Document.WinUI.Playground.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
-using RichTextView.WinUI.DTOs;
+using RichTextView.DTOs;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -24,7 +24,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
     {
         private Fb2Mapper fb2MappingService = new Fb2Mapper();
         public BookInfoViewModel BookInfoViewModel { get; private set; } = new BookInfoViewModel();
-        private BookModel bookModel = null;
+        private BookModel? bookModel = null;
 
         public BookInfoPage()
         {
@@ -52,7 +52,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
         private void DescriptionViewPort_Loaded(object sender, RoutedEventArgs e)
         {
-            TitleInfoBase titleInfo = (TitleInfoBase)bookModel.Fb2Document.Title ?? bookModel.Fb2Document.SourceTitle;
+            TitleInfoBase? titleInfo = (TitleInfoBase?)bookModel?.Fb2Document?.Title ?? bookModel?.Fb2Document?.SourceTitle;
 
             var titleInfoAuthors = titleInfo?.GetDescendants<Author>();
 

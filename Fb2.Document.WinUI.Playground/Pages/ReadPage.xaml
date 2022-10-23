@@ -6,12 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:rtv="using:RichTextView"
-    xmlns:rtv1="using:RichTextView.WinUI"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <!--<rtv:RichTextView x:Name="viewPort"
+	<Grid>
+		<rtv:RichTextView x:Name="viewPort"
 						  PageMargin="{x:Bind ReadViewModel.PageMargin, Mode=OneWay}"
 						  ShowProgress="{x:Bind ReadViewModel.ShowBookProgress, Mode=OneWay}"
                           ShowLoading="True"
@@ -19,10 +18,6 @@
 						  HyperlinkActivated="RichTextView_HyperlinkActivated"
 						  BookRendered="viewPort_BookRendered"
                           BookProgressChanged="RichTextView_OnProgress">
-        </rtv:RichTextView>-->
-        <rtv1:RichTextView x:Name="viewPort"
-                           RichContent="{x:Bind ReadViewModel.ChaptersContent, Mode=OneWay}">
-
-        </rtv1:RichTextView>
-    </Grid>
+		</rtv:RichTextView>
+	</Grid>
 </Page>

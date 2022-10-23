@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using Fb2.Document.WinUI.Entities;
 using Fb2.Document.WinUI.NodeProcessors;
 using Fb2.Document.WinUI.Playground.Models;
+using Fb2.Document.WinUI.Playground.Services;
 using Fb2.Document.WinUI.Playground.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Navigation;
-using RichTextView.WinUI.DTOs;
+using RichTextView.DTOs;
+using Windows.UI.Popups;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -98,35 +102,35 @@ namespace Fb2.Document.WinUI.Playground.Pages
             base.OnNavigatingFrom(e);
         }
 
-        //private void RichTextView_OnProgress(object sender, RichTextView.EventArguments.BookProgressChangedEventArgs e)
-        //{
-        //    Debug.WriteLine($"Book current position: {e.ScrollableHeight}, vOffset: {e.VerticalOffset}");
-        //}
+        private void RichTextView_OnProgress(object sender, RichTextView.EventArguments.BookProgressChangedEventArgs e)
+        {
+            Debug.WriteLine($"Book current position: {e.ScrollableHeight}, vOffset: {e.VerticalOffset}");
+        }
 
-        //private async void RichTextView_HyperlinkActivated(object sender, RichTextView.EventArguments.RichHyperlinkActivatedEventArgs e)
-        //{
-        //    string testMessage;
+        private async void RichTextView_HyperlinkActivated(object sender, RichTextView.EventArguments.RichHyperlinkActivatedEventArgs e)
+        {
+            string testMessage;
 
-        //    if (e.OriginalSender is Hyperlink hyperlink)
-        //        testMessage = hyperlink.NavigateUri?.ToString() ?? "No Hyperlink";
-        //    else if (e.OriginalSender is HyperlinkButton hyperlinkButton)
-        //        testMessage = hyperlinkButton.Tag.ToString();
-        //    else
-        //        throw new Exception("unexpected hyprlink btn");
+            if (e.OriginalSender is Hyperlink hyperlink)
+                testMessage = hyperlink.NavigateUri?.ToString() ?? "No Hyperlink";
+            else if (e.OriginalSender is HyperlinkButton hyperlinkButton)
+                testMessage = hyperlinkButton.Tag.ToString();
+            else
+                throw new Exception("unexpected hyprlink btn");
 
-        //    var messageDialog = new MessageDialog($"test inline hyperlink click: {testMessage}");
-        //    PopupInitializerService.Instance.InitializePopup(messageDialog);
+            var messageDialog = new MessageDialog($"test inline hyperlink click: {testMessage}");
+            PopupInitializerService.Instance.InitializePopup(messageDialog);
 
-        //    // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
-        //    messageDialog.Commands.Add(new UICommand("Close"));
+            // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
+            messageDialog.Commands.Add(new UICommand("Close"));
 
-        //    // Set the command that will be invoked by default
-        //    messageDialog.DefaultCommandIndex = 0;
-        //    // Set the command to be invoked when escape is pressed
-        //    messageDialog.CancelCommandIndex = 0;
+            // Set the command that will be invoked by default
+            messageDialog.DefaultCommandIndex = 0;
+            // Set the command to be invoked when escape is pressed
+            messageDialog.CancelCommandIndex = 0;
 
-        //    await messageDialog.ShowAsync();
-        //}
+            await messageDialog.ShowAsync();
+        }
 
         private void viewPort_BookRendered(object sender, bool e)
         {
