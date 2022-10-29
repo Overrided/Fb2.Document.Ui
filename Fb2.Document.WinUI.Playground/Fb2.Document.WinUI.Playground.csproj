@@ -48,7 +48,7 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Fb2.Document.WinUI\Fb2.Document.WinUI.csproj" />
+    <ProjectReference Include="..\Fb2.Document.WinUI\Fb2.Document.UI.csproj" />
     <ProjectReference Include="..\RichTextView\RichTextView.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -68,8 +68,5 @@
     <Page Update="Pages\SettingsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\" />
   </ItemGroup>
 </Project>

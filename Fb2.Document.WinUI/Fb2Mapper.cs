@@ -3,49 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AngleSharp;
-using AngleSharp.Dom;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
-using Fb2.Document.WinUI.Entities;
-using HtmlAgilityPack;
+using Fb2.Document.UI.WinUi.Entities;
+using Fb2.Document.UI.WinUi.Html;
 using Microsoft.UI.Xaml.Documents;
 using Windows.Foundation;
 
-namespace Fb2.Document.WinUI
+namespace Fb2.Document.UI.WinUi
 {
     // TODO : make static? 
     // TODO : add table of contents?? (or on app level?)
     public class Fb2Mapper
     {
-        //public async Task MapAngle()
-        //{
-        //    var context = BrowsingContext.New();
-        //    // get new document, not completely empty (has head and body)
-        //    var document = await context.OpenNewAsync();
-        //    var element = document.CreateElement("strong");
-        //    element.TextContent = "Hello World!";
-        //    document.Body.AppendChild(element);
-        //    var html = document.ToHtml();
-        //}
-
-        //public HtmlDocument MapDocument()
-        //{
-        //    var doc = new HtmlDocument();
-        //    var p = doc.CreateElement("p");
-        //    var text = doc.CreateTextNode("hello world");
-        //    p.AppendChild(text);
-
-        //    //var p = new HtmlNode(HtmlNodeType.Element, doc, -1);
-        //    //p.ChildNodes.Add(new HtmlNode(HtmlNodeType.Text, doc, -1));
-        //    doc.DocumentNode.AppendChild(p);
-
-        //    var textContent = doc.DocumentNode.OuterHtml;
-        //    var toStrContent = doc.DocumentNode.ToString();
-
-        //    return doc;
-
-        //    //doc.AppendChild(HtmlNode.CreateNode(HtmlNode.HtmlNodeTypeNameText));
-        //}
+        public async Task MapAngle(Fb2Document fb2Document, HtmlMappingConfig htmlMappingConfig)
+        {
+            var context = BrowsingContext.New();
+            // get new document, not completely empty (has head and body)
+            var document = await context.OpenNewAsync();
+            var element = document.CreateElement("strong");
+            element.TextContent = "Hello World!";
+            document.Body.AppendChild(element);
+            var html = document.ToHtml();
+        }
 
         public IEnumerable<Fb2ContentPage> MapDocument(Fb2Document document, Size viewPortSize, Fb2MappingConfig config = null)
         {

@@ -5,54 +5,97 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Fb2.Document.WinUI.Playground.Converters"
+	xmlns:locl="using:Fb2.Document.WinUI.Playground.Controls"
     xmlns:rtv="using:RichTextView"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Page.Resources>
-        <converters:String64ToImageConverter x:Key="SToImage"
+	<Page.Resources>
+		<converters:String64ToImageConverter x:Key="SToImage"
 											 x:Name="SToImage" />
-    </Page.Resources>
+	</Page.Resources>
 
-    <Grid>
-        <Grid ColumnSpacing="20"
+	<Grid>
+		<Grid ColumnSpacing="20"
 			  Margin="20, 30">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Image Grid.Column="0"
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Image Grid.Column="0"
 				   VerticalAlignment="Center"
 				   HorizontalAlignment="Center"
 				   Stretch="Uniform"
 				   Source="{x:Bind BookInfoViewModel.CoverpageBase64Image, Converter={StaticResource SToImage}, Mode=OneWay}">
-            </Image>
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <rtv:RichTextView Grid.Row="0"
+			</Image>
+			<Grid Grid.Column="1">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<!--<Expander Grid.Row="0"
+						  IsExpanded="True"
+						  ExpandDirection="Down"
+						  HorizontalAlignment="Stretch"
+						  HorizontalContentAlignment="Stretch"
+						  VerticalAlignment="Top"
+						  VerticalContentAlignment="Stretch"
+						  Header="This text is in the header">
+					<Expander.Content>
+						<rtv:RichTextView x:Name="descriptionViewPort"
+										  RichTextContent="{x:Bind BookInfoViewModel.ChaptersContent, Mode=OneWay}"
+								          ShowProgress="False"
+										  ShowLoading="True"
+										  HorizontalAlignment="Stretch"
+										  VerticalAlignment="Center">
+						</rtv:RichTextView>
+					</Expander.Content>
+				</Expander>-->
+
+				<rtv:RichTextView Grid.Row="0"
 								  x:Name="descriptionViewPort"
 								  RichTextContent="{x:Bind BookInfoViewModel.ChaptersContent, Mode=OneWay}"
 								  ShowProgress="False"
                                   ShowLoading="True"
 								  HorizontalAlignment="Stretch"
 								  VerticalAlignment="Center">
-                </rtv:RichTextView>
-                <Button Grid.Row="1"
-						CornerRadius="90"
+				</rtv:RichTextView>
+
+				<StackPanel Grid.Row="1">
+
+					<locl:TitleInfoBaseRenderer TitleInfo="{x:Bind BookInfoViewModel.TitleInfo, Mode=OneWay}">
+					</locl:TitleInfoBaseRenderer>
+
+					<!--<Expander Grid.Row="0"
+						  IsExpanded="False"
+						  ExpandDirection="Down"
+						  HorizontalAlignment="Stretch"
+						  HorizontalContentAlignment="Stretch"
+						  VerticalAlignment="Top"
+						  VerticalContentAlignment="Stretch"
+						  Header="This text is in the header">
+						<Expander.Content>
+							<locl:TitleInfoBaseRenderer TitleInfo="{x:Bind BookInfoViewModel.TitleInfo, Mode=OneWay}">
+							</locl:TitleInfoBaseRenderer>
+						</Expander.Content>
+					</Expander>-->
+				</StackPanel>
+
+
+				<Button CornerRadius="90"
+						Grid.RowSpan="2"
 						HorizontalAlignment="Right"
+						VerticalAlignment="Bottom"
 						Width="54"
 						Height="54"
 						Click="OnReadButton_Click">
-                    <FontIcon FontFamily="Segoe MDL2 Assets"
+					<FontIcon FontFamily="Segoe MDL2 Assets"
                               Glyph="&#xE736;"
                               FontSize="26"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"/>
-                </Button>
-            </Grid>
-        </Grid>
-    </Grid>
+				</Button>
+			</Grid>
+		</Grid>
+	</Grid>
 </Page>

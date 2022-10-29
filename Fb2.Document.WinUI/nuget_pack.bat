@@ -1,1 +1,1 @@
-nuget pack Fb2.Document.WinUI.nuspec
+nuget pack Fb2.Document.UI.WinUi.nuspec

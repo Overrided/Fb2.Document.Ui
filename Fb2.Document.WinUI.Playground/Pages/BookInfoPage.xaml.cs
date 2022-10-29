@@ -2,8 +2,9 @@
 using System.Linq;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
-using Fb2.Document.WinUI.Entities;
-using Fb2.Document.WinUI.NodeProcessors;
+using Fb2.Document.UI.WinUi;
+using Fb2.Document.UI.WinUi.Entities;
+using Fb2.Document.UI.WinUi.NodeProcessors;
 using Fb2.Document.WinUI.Playground.Models;
 using Fb2.Document.WinUI.Playground.Services;
 using Fb2.Document.WinUI.Playground.ViewModels;
@@ -29,6 +30,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
         public BookInfoPage()
         {
             this.InitializeComponent();
+
             this.descriptionViewPort.Loaded += DescriptionViewPort_Loaded;
         }
 
@@ -52,64 +54,66 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
         private void DescriptionViewPort_Loaded(object sender, RoutedEventArgs e)
         {
-            TitleInfoBase? titleInfo = (TitleInfoBase?)bookModel?.Fb2Document?.Title ?? bookModel?.Fb2Document?.SourceTitle;
+            //TitleInfoBase? titleInfo = (TitleInfoBase?)bookModel?.Fb2Document?.Title ?? bookModel?.Fb2Document?.SourceTitle;
 
-            var titleInfoAuthors = titleInfo?.GetDescendants<Author>();
+            //var titleInfoAuthors = titleInfo?.GetDescendants<Author>();
 
-            var titleInfoBookName = titleInfo?.GetFirstDescendant<BookTitle>() as Fb2Node;
-            var publishInfoBookName = bookModel.Fb2Document.PublishInfo?.GetFirstChild<BookName>() as Fb2Node;
-            var bookTitle = titleInfoBookName ?? publishInfoBookName;
-            var annotation = titleInfo?.GetFirstDescendant<Annotation>();
-            var tiltleSequences = titleInfo?.GetDescendants<SequenceInfo>();
-            var publishInfoSequences = bookModel.Fb2Document.PublishInfo?.GetDescendants<SequenceInfo>();
+            //var titleInfoBookName = titleInfo?.GetFirstDescendant<BookTitle>() as Fb2Node;
+            //var publishInfoBookName = bookModel.Fb2Document.PublishInfo?.GetFirstChild<BookName>() as Fb2Node;
+            //var bookTitle = titleInfoBookName ?? publishInfoBookName;
+            //var annotation = titleInfo?.GetFirstDescendant<Annotation>();
+            //var tiltleSequences = titleInfo?.GetDescendants<SequenceInfo>();
+            //var publishInfoSequences = bookModel.Fb2Document.PublishInfo?.GetDescendants<SequenceInfo>();
 
-            var nodes = new List<Fb2Node>();
-            if (titleInfoAuthors != null && titleInfoAuthors.Any())
-                nodes.AddRange(titleInfoAuthors);
+            BookInfoViewModel.SrcTitleInfo = bookModel?.Fb2Document?.SourceTitle;
+            BookInfoViewModel.TitleInfo = bookModel?.Fb2Document?.Title;
 
-            // TODO : TryGetFirstDescendant once using new lib
-            if (bookTitle != null)
-                nodes.Add(bookTitle);
+            //var nodes = new List<Fb2Node>();
+            //if (titleInfoAuthors != null && titleInfoAuthors.Any())
+            //    nodes.AddRange(titleInfoAuthors);
 
-            if (tiltleSequences != null && tiltleSequences.Any())
-                nodes.AddRange(tiltleSequences);
+            //// TODO : TryGetFirstDescendant once using new lib
+            //if (bookTitle != null)
+            //    nodes.Add(bookTitle);
 
-            if (publishInfoSequences != null && publishInfoSequences.Any())
-                nodes.AddRange(publishInfoSequences);
+            //if (tiltleSequences != null && tiltleSequences.Any())
+            //    nodes.AddRange(tiltleSequences);
 
-            // TODO : distinct different sequences once using new version of a lib (if ever)
+            //if (publishInfoSequences != null && publishInfoSequences.Any())
+            //    nodes.AddRange(publishInfoSequences);
 
-            if (annotation != null)
-                nodes.Add(annotation);
+            //// TODO : distinct different sequences once using new version of a lib (if ever)
 
-            var size = descriptionViewPort.GetViewHostSize();
-            var descriptionText = new List<Fb2ContentPage>();
+            //if (annotation != null)
+            //    nodes.Add(annotation);
 
-            descriptionText.AddRange(fb2MappingService.MapNodes(nodes, size));
+            //var size = descriptionViewPort.GetViewHostSize();
+            //var descriptionText = new List<Fb2ContentPage>();
 
-            // we have had sequence info mapped before
-            // use Remove api once new lib is hooked
-            var publishInfo = bookModel.Fb2Document.PublishInfo;
-            if (publishInfo != null && publishInfo.Content.Any())
-            {
-                publishInfo.Content.RemoveAll(n => n is SequenceInfo);
-                var publishInfoPage = fb2MappingService.MapNode(publishInfo, size);
-                if (publishInfoPage != null && publishInfoPage.Any())
-                    descriptionText.AddRange(publishInfoPage);
-            }
+            //descriptionText.AddRange(fb2MappingService.MapNodes(nodes, size));
 
-            var customInfo = bookModel.Fb2Document.CustomInfo;
-            if (customInfo != null)
-            {
-                var customInfoPage = fb2MappingService.MapNode(customInfo, size);
-                if (customInfoPage != null && customInfoPage.Any())
-                    descriptionText.AddRange(customInfoPage);
-            }
+            //// we have had sequence info mapped before
+            //// use Remove api once new lib is hooked
+            //var publishInfo = bookModel.Fb2Document.PublishInfo;
+            //if (publishInfo != null && publishInfo.Content.Any())
+            //{
+            //    publishInfo.Content.RemoveAll(n => n is SequenceInfo);
+            //    var publishInfoPage = fb2MappingService.MapNode(publishInfo, size);
+            //    if (publishInfoPage != null && publishInfoPage.Any())
+            //        descriptionText.AddRange(publishInfoPage);
+            //}
 
-            var contentPages = descriptionText.Select(p => new RichContentPage(p)).ToList();
-            var content = new RichContent(contentPages, new HashSet<string> { ImageProcessor.NotInlineImageTag });
-            BookInfoViewModel.ChaptersContent = content;
+            //var customInfo = bookModel.Fb2Document.CustomInfo;
+            //if (customInfo != null)
+            //{
+            //    var customInfoPage = fb2MappingService.MapNode(customInfo, size);
+            //    if (customInfoPage != null && customInfoPage.Any())
+            //        descriptionText.AddRange(customInfoPage);
+            //}
 
+            //var contentPages = descriptionText.Select(p => new RichContentPage(p)).ToList();
+            //var content = new RichContent(contentPages, new HashSet<string> { ImageProcessor.NotInlineImageTag });
+            //BookInfoViewModel.ChaptersContent = content;
             BookInfoViewModel.CoverpageBase64Image = bookModel.CoverpageBase64Image;
         }
 

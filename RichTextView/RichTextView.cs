@@ -141,6 +141,9 @@ namespace RichTextView
         // public methods
         public Size GetViewHostSize()
         {
+            if (viewPortContainer == null)
+                return Size.Empty;
+
             var originalSize = viewPortContainer.ActualSize.ToSize();
             var expectedWidth = originalSize.Width - (PageMargin.Left + PageMargin.Right);
 

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using Fb2.Document.WinUI.Entities;
-using Fb2.Document.WinUI.NodeProcessors;
+using Fb2.Document.UI.WinUi;
+using Fb2.Document.UI.WinUi.Entities;
+using Fb2.Document.UI.WinUi.NodeProcessors;
 using Fb2.Document.WinUI.Playground.Models;
 using Fb2.Document.WinUI.Playground.Services;
 using Fb2.Document.WinUI.Playground.ViewModels;
@@ -62,7 +63,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
             stop.Stop();
 
             var resplitContent = uiContent
-                .SelectMany(uic => uic.Chunk(40))
+                .SelectMany(uic => uic.Chunk(50))
                 .Select(rp => new RichContentPage(rp))
                 .ToList();
 
