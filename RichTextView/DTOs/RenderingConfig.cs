@@ -21,7 +21,7 @@ namespace RichTextView.DTOs
 
         public RichContent(
             IEnumerable<RichContentPage> content,
-            HashSet<string> notInlineImageTags,
+            HashSet<string>? notInlineImageTags = null,
             double leftOffPosition = 0)
         {
             RichContentPages = content;

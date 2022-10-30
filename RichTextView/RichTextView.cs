@@ -247,9 +247,11 @@ namespace RichTextView
 
             //bookProgressBar.ValueChanged -= BookProgressBar_ValueChanged;
             //bookProgressBar = null;
-
-            scrollHost.ViewChanged -= ScrollHost_ViewChanged;
-            scrollHost = null;
+            if (scrollHost != null)
+            {
+                scrollHost.ViewChanged -= ScrollHost_ViewChanged;
+                scrollHost = null;
+            }
 
             //viewPortContainer.SizeChanged -= ItemsHost_SizeChanged;
             viewPortContainer = null;

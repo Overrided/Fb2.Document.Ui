@@ -23,4 +23,44 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+
+	<Style TargetType="local:PublishInfoRenderer">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="local:PublishInfoRenderer">
+					<Border
+						DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+
+						<rtv:RichTextView ShowProgress="False"
+										  ShowLoading="True"
+										  RichTextContent="{Binding ViewModel.PublishInfoContent, Mode=OneWay}">
+						</rtv:RichTextView>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="local:CustomInfoRenderer">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="local:CustomInfoRenderer">
+					<Border
+						DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+
+						<rtv:RichTextView ShowProgress="False"
+										  ShowLoading="True"
+										  RichTextContent="{Binding ViewModel.CustomInfoContent, Mode=OneWay}">
+						</rtv:RichTextView>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 </ResourceDictionary>

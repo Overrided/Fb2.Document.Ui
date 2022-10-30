@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
 using Fb2.Document.UI.WinUi;
+using Fb2.Document.UI.WinUi.NodeProcessors;
 using Fb2.Document.WinUI.Playground.Common;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -24,9 +25,9 @@ namespace Fb2.Document.WinUI.Playground.Controls;
 
 public class TitleInfoBaseRendererViewModel : ObservableObject
 {
-    private RichContentPage titleInfoContent;
+    private RichContent titleInfoContent;
 
-    public RichContentPage TitleInfoContent
+    public RichContent TitleInfoContent
     {
         get { return titleInfoContent; }
         set
@@ -36,7 +37,6 @@ public class TitleInfoBaseRendererViewModel : ObservableObject
             OnPropertyChanged();
         }
     }
-
 }
 
 public sealed class TitleInfoBaseRenderer : Control
@@ -63,7 +63,7 @@ public sealed class TitleInfoBaseRenderer : Control
     // Using a DependencyProperty as the backing store for TitleInfo.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty TitleInfoProperty =
         DependencyProperty.Register(
-            "TitleInfo",
+            nameof(TitleInfo),
             typeof(TitleInfoBase),
             typeof(TitleInfoBaseRenderer),
             new PropertyMetadata(null, new PropertyChangedCallback(OnTitleInfoProperyChangedCallback)));
@@ -85,7 +85,7 @@ public sealed class TitleInfoBaseRenderer : Control
         var authors = titleInfo.GetDescendants<Author>();
         var titleInfoBookName = titleInfo.GetFirstDescendant<BookTitle>();
         var subTitle = titleInfo.GetFirstDescendant<SubTitle>();
-        var genres = titleInfo.GetDescendants<BookGenre>();
+        //var genres = titleInfo.GetDescendants<BookGenre>();
         var annotation = titleInfo.GetFirstDescendant<Annotation>();
         var sequences = titleInfo.GetDescendants<SequenceInfo>();
         var keywords = titleInfo.GetDescendants<Keywords>();
@@ -93,18 +93,19 @@ public sealed class TitleInfoBaseRenderer : Control
         var nodes = new List<Fb2Node>();
         nodes.AddRange(authors.Where(a => a != null && !a.IsEmpty));
 
+        nodes.AddRange(sequences.Where(s => s != null));
+
         if (titleInfoBookName != null)
             nodes.Add(titleInfoBookName);
 
         if (subTitle != null)
             nodes.Add(subTitle);
 
-        nodes.AddRange(genres.Where(g => g != null && !g.IsEmpty));
+        //nodes.AddRange(genres.Where(g => g != null && !g.IsEmpty));
 
         if (annotation != null)
             nodes.Add(annotation);
 
-        nodes.AddRange(sequences.Where(s => s != null && !s.IsEmpty));
         nodes.AddRange(keywords.Where(k => k != null && !k.IsEmpty));
 
         var mappedNodes = new Fb2Mapper().MapNodes(nodes, Size.Empty);
@@ -119,6 +120,7 @@ public sealed class TitleInfoBaseRenderer : Control
         var paragr = new Fb2.Document.UI.WinUi.Common.Utils().Paragraphize(normalizedContent);
 
         var contentPage = new RichContentPage(paragr);
-        sender.ViewModel.TitleInfoContent = contentPage;
+        var content = new RichContent(new List<RichContentPage>(1) { contentPage });
+        sender.ViewModel.TitleInfoContent = content;
     }
 }

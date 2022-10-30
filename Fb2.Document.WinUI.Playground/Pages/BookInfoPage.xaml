@@ -13,11 +13,13 @@
 	<Page.Resources>
 		<converters:String64ToImageConverter x:Key="SToImage"
 											 x:Name="SToImage" />
+
+		<converters:ValueToVisibilityConverter x:Key="VtvConterter" x:Name="VtvConterter" />
 	</Page.Resources>
 
 	<Grid>
 		<Grid ColumnSpacing="20"
-			  Margin="20, 30">
+			  Margin="20, 20">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="*" />
@@ -29,57 +31,64 @@
 				   Source="{x:Bind BookInfoViewModel.CoverpageBase64Image, Converter={StaticResource SToImage}, Mode=OneWay}">
 			</Image>
 			<Grid Grid.Column="1">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*" />
-					<RowDefinition Height="Auto" />
-				</Grid.RowDefinitions>
-				<!--<Expander Grid.Row="0"
-						  IsExpanded="True"
-						  ExpandDirection="Down"
-						  HorizontalAlignment="Stretch"
-						  HorizontalContentAlignment="Stretch"
-						  VerticalAlignment="Top"
-						  VerticalContentAlignment="Stretch"
-						  Header="This text is in the header">
-					<Expander.Content>
-						<rtv:RichTextView x:Name="descriptionViewPort"
-										  RichTextContent="{x:Bind BookInfoViewModel.ChaptersContent, Mode=OneWay}"
-								          ShowProgress="False"
-										  ShowLoading="True"
-										  HorizontalAlignment="Stretch"
-										  VerticalAlignment="Center">
-						</rtv:RichTextView>
-					</Expander.Content>
-				</Expander>-->
+				<ScrollViewer HorizontalAlignment="Stretch"
+							  HorizontalContentAlignment="Stretch"
+							  VerticalAlignment="Stretch"
+							  VerticalContentAlignment="Stretch"
+							  Padding="0,0,0,56">
+					<StackPanel HorizontalAlignment="Stretch" 
+								VerticalAlignment="Center">
 
-				<rtv:RichTextView Grid.Row="0"
-								  x:Name="descriptionViewPort"
-								  RichTextContent="{x:Bind BookInfoViewModel.ChaptersContent, Mode=OneWay}"
-								  ShowProgress="False"
-                                  ShowLoading="True"
+						<locl:TitleInfoBaseRenderer TitleInfo="{x:Bind BookInfoViewModel.TitleInfo, Mode=OneWay}">
+						</locl:TitleInfoBaseRenderer>
+
+						<Expander Margin="0, 10, 0, 0" 
+								  IsExpanded="False"
+								  ExpandDirection="Down"
 								  HorizontalAlignment="Stretch"
-								  VerticalAlignment="Center">
-				</rtv:RichTextView>
+								  HorizontalContentAlignment="Stretch"
+								  VerticalAlignment="Top"
+								  VerticalContentAlignment="Stretch"
+								  Header="Source Title Info"
+								  Visibility="{x:Bind BookInfoViewModel.SrcTitleInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+							<Expander.Content>
+								<locl:TitleInfoBaseRenderer TitleInfo="{x:Bind BookInfoViewModel.SrcTitleInfo, Mode=OneWay}">
+								</locl:TitleInfoBaseRenderer>
+							</Expander.Content>
+						</Expander>
 
-				<StackPanel Grid.Row="1">
+						<Expander Margin="0, 10, 0, 0" 
+								  IsExpanded="False"
+								  ExpandDirection="Down"
+								  HorizontalAlignment="Stretch"
+								  HorizontalContentAlignment="Stretch"
+								  VerticalAlignment="Top"
+								  VerticalContentAlignment="Stretch"
+								  Header="Publish Info"
+								  Visibility="{x:Bind BookInfoViewModel.PublishInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+							<Expander.Content>
+								<locl:PublishInfoRenderer PublishInfo="{x:Bind BookInfoViewModel.PublishInfo, Mode=OneWay}">
+								</locl:PublishInfoRenderer>
+							</Expander.Content>
+						</Expander>
 
-					<locl:TitleInfoBaseRenderer TitleInfo="{x:Bind BookInfoViewModel.TitleInfo, Mode=OneWay}">
-					</locl:TitleInfoBaseRenderer>
+						<Expander Margin="0, 10, 0, 0" 
+								  IsExpanded="False"
+								  ExpandDirection="Down"
+								  HorizontalAlignment="Stretch"
+								  HorizontalContentAlignment="Stretch"
+								  VerticalAlignment="Top"
+								  VerticalContentAlignment="Stretch"
+								  Header="Custom Info"
+								  Visibility="{x:Bind BookInfoViewModel.CustomInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+							<Expander.Content>
+								<locl:CustomInfoRenderer CustomInfo="{x:Bind BookInfoViewModel.CustomInfo, Mode=OneWay}">
+								</locl:CustomInfoRenderer>
+							</Expander.Content>
+						</Expander>
 
-					<!--<Expander Grid.Row="0"
-						  IsExpanded="False"
-						  ExpandDirection="Down"
-						  HorizontalAlignment="Stretch"
-						  HorizontalContentAlignment="Stretch"
-						  VerticalAlignment="Top"
-						  VerticalContentAlignment="Stretch"
-						  Header="This text is in the header">
-						<Expander.Content>
-							<locl:TitleInfoBaseRenderer TitleInfo="{x:Bind BookInfoViewModel.TitleInfo, Mode=OneWay}">
-							</locl:TitleInfoBaseRenderer>
-						</Expander.Content>
-					</Expander>-->
-				</StackPanel>
+					</StackPanel>
+				</ScrollViewer>
 
 
 				<Button CornerRadius="90"

@@ -12,7 +12,7 @@ using Windows.Foundation;
 
 namespace Fb2.Document.UI.WinUi
 {
-    // TODO : make static? 
+    // TODO : make static/singletone? 
     // TODO : add table of contents?? (or on app level?)
     public class Fb2Mapper
     {

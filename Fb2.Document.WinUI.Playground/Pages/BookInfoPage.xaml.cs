@@ -30,8 +30,16 @@ namespace Fb2.Document.WinUI.Playground.Pages
         public BookInfoPage()
         {
             this.InitializeComponent();
+            this.Loaded += BookInfoPage_Loaded;
+        }
 
-            this.descriptionViewPort.Loaded += DescriptionViewPort_Loaded;
+        private void BookInfoPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            BookInfoViewModel.SrcTitleInfo = bookModel?.Fb2Document?.SourceTitle;
+            BookInfoViewModel.TitleInfo = bookModel?.Fb2Document?.Title;
+            BookInfoViewModel.CoverpageBase64Image = bookModel.CoverpageBase64Image;
+            BookInfoViewModel.PublishInfo = bookModel.Fb2Document.PublishInfo;
+            BookInfoViewModel.CustomInfo = bookModel.Fb2Document.CustomInfo;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -49,72 +57,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
         {
             base.OnNavigatedFrom(e);
 
-            this.descriptionViewPort.Loaded -= DescriptionViewPort_Loaded;
-        }
-
-        private void DescriptionViewPort_Loaded(object sender, RoutedEventArgs e)
-        {
-            //TitleInfoBase? titleInfo = (TitleInfoBase?)bookModel?.Fb2Document?.Title ?? bookModel?.Fb2Document?.SourceTitle;
-
-            //var titleInfoAuthors = titleInfo?.GetDescendants<Author>();
-
-            //var titleInfoBookName = titleInfo?.GetFirstDescendant<BookTitle>() as Fb2Node;
-            //var publishInfoBookName = bookModel.Fb2Document.PublishInfo?.GetFirstChild<BookName>() as Fb2Node;
-            //var bookTitle = titleInfoBookName ?? publishInfoBookName;
-            //var annotation = titleInfo?.GetFirstDescendant<Annotation>();
-            //var tiltleSequences = titleInfo?.GetDescendants<SequenceInfo>();
-            //var publishInfoSequences = bookModel.Fb2Document.PublishInfo?.GetDescendants<SequenceInfo>();
-
-            BookInfoViewModel.SrcTitleInfo = bookModel?.Fb2Document?.SourceTitle;
-            BookInfoViewModel.TitleInfo = bookModel?.Fb2Document?.Title;
-
-            //var nodes = new List<Fb2Node>();
-            //if (titleInfoAuthors != null && titleInfoAuthors.Any())
-            //    nodes.AddRange(titleInfoAuthors);
-
-            //// TODO : TryGetFirstDescendant once using new lib
-            //if (bookTitle != null)
-            //    nodes.Add(bookTitle);
-
-            //if (tiltleSequences != null && tiltleSequences.Any())
-            //    nodes.AddRange(tiltleSequences);
-
-            //if (publishInfoSequences != null && publishInfoSequences.Any())
-            //    nodes.AddRange(publishInfoSequences);
-
-            //// TODO : distinct different sequences once using new version of a lib (if ever)
-
-            //if (annotation != null)
-            //    nodes.Add(annotation);
-
-            //var size = descriptionViewPort.GetViewHostSize();
-            //var descriptionText = new List<Fb2ContentPage>();
-
-            //descriptionText.AddRange(fb2MappingService.MapNodes(nodes, size));
-
-            //// we have had sequence info mapped before
-            //// use Remove api once new lib is hooked
-            //var publishInfo = bookModel.Fb2Document.PublishInfo;
-            //if (publishInfo != null && publishInfo.Content.Any())
-            //{
-            //    publishInfo.Content.RemoveAll(n => n is SequenceInfo);
-            //    var publishInfoPage = fb2MappingService.MapNode(publishInfo, size);
-            //    if (publishInfoPage != null && publishInfoPage.Any())
-            //        descriptionText.AddRange(publishInfoPage);
-            //}
-
-            //var customInfo = bookModel.Fb2Document.CustomInfo;
-            //if (customInfo != null)
-            //{
-            //    var customInfoPage = fb2MappingService.MapNode(customInfo, size);
-            //    if (customInfoPage != null && customInfoPage.Any())
-            //        descriptionText.AddRange(customInfoPage);
-            //}
-
-            //var contentPages = descriptionText.Select(p => new RichContentPage(p)).ToList();
-            //var content = new RichContent(contentPages, new HashSet<string> { ImageProcessor.NotInlineImageTag });
-            //BookInfoViewModel.ChaptersContent = content;
-            BookInfoViewModel.CoverpageBase64Image = bookModel.CoverpageBase64Image;
+            //this.descriptionViewPort.Loaded -= DescriptionViewPort_Loaded;
         }
 
         private void OnReadButton_Click(object sender, RoutedEventArgs e)

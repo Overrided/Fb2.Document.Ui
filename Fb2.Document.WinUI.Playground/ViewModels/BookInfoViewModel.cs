@@ -1,4 +1,5 @@
-﻿using Fb2.Document.Models.Base;
+﻿using Fb2.Document.Models;
+using Fb2.Document.Models.Base;
 using Fb2.Document.WinUI.Playground.Common;
 using RichTextView.DTOs;
 
@@ -22,19 +23,6 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
             }
         }
 
-        //private RichContent titleContent;
-
-        //public RichContent TitleContent
-        //{
-        //    get { return titleContent; }
-        //    set
-        //    {
-        //        OnPropertyChanging();
-        //        titleContent = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
-
         private TitleInfoBase titleInfo;
 
         public TitleInfoBase TitleInfo
@@ -56,21 +44,48 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
         public TitleInfoBase SrcTitleInfo
         {
             get { return srcTitleInfo; }
-            set { srcTitleInfo = value; }
-        }
-
-
-        private RichContent chaptersContent;
-
-        public RichContent ChaptersContent
-        {
-            get { return chaptersContent; }
             set
             {
-                OnPropertyChanging();
-                chaptersContent = value;
-                OnPropertyChanged();
+                if (srcTitleInfo != value)
+                {
+                    OnPropertyChanging();
+                    srcTitleInfo = value;
+                    OnPropertyChanged();
+                }
             }
         }
+
+        private PublishInfo publishInfo;
+
+        public PublishInfo PublishInfo
+        {
+            get { return publishInfo; }
+            set
+            {
+                if (publishInfo != value)
+                {
+                    OnPropertyChanging();
+                    publishInfo = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private CustomInfo customInfo;
+
+        public CustomInfo CustomInfo
+        {
+            get { return customInfo; }
+            set
+            {
+                if (customInfo != value)
+                {
+                    OnPropertyChanging();
+                    customInfo = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
     }
 }
