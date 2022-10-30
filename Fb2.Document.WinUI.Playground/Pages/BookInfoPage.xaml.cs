@@ -40,6 +40,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
             BookInfoViewModel.CoverpageBase64Image = bookModel.CoverpageBase64Image;
             BookInfoViewModel.PublishInfo = bookModel.Fb2Document.PublishInfo;
             BookInfoViewModel.CustomInfo = bookModel.Fb2Document.CustomInfo;
+            BookInfoViewModel.BookImages = bookModel.Fb2Document.BinaryImages;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -56,8 +57,6 @@ namespace Fb2.Document.WinUI.Playground.Pages
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-
-            //this.descriptionViewPort.Loaded -= DescriptionViewPort_Loaded;
         }
 
         private void OnReadButton_Click(object sender, RoutedEventArgs e)

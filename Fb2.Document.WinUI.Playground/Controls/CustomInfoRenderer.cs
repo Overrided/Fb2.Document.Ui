@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Fb2.Document.Models;
 using Fb2.Document.UI.WinUi;
@@ -8,13 +7,11 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using RichTextView.DTOs;
 using Windows.Foundation;
-using Windows.UI.WebUI;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace Fb2.Document.WinUI.Playground.Controls;
-
 
 public class CustomInfoRendererViewModel : ObservableObject
 {
@@ -31,6 +28,7 @@ public class CustomInfoRendererViewModel : ObservableObject
         }
     }
 }
+
 public sealed class CustomInfoRenderer : Control
 {
     public CustomInfoRendererViewModel ViewModel { get; set; }

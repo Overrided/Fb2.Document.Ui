@@ -48,9 +48,6 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
         private void ViewPort_Loaded(object sender, RoutedEventArgs e)
         {
-
-            //var html = fb2MappingService.MapDocument();
-
             var stop = Stopwatch.StartNew();
 
             //var actualViewHostSize = viewPort.GetViewHostSize();
@@ -58,7 +55,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
             //var unsafeMappingConfig = new Fb2MappingConfig(highlightUnsafe: true);
             //var uiContent = fb2MappingService.MapDocument(selectedFb2Document, actualViewHostSize, defaultMappingConfig);
 
-            var uiContent = fb2MappingService.MapDocument(selectedFb2Document, viewPort.ActualSize.ToSize(), defaultMappingConfig);
+            var uiContent = fb2MappingService.MapDocument(selectedFb2Document, viewPort.GetViewHostSize(), defaultMappingConfig);
 
             stop.Stop();
 
@@ -68,14 +65,6 @@ namespace Fb2.Document.WinUI.Playground.Pages
                 .ToList();
 
             Debug.WriteLine($"UI Mapping elapsed: {stop.Elapsed}");
-
-            //var content = new ChaptersContent(UiContent, pagePadding: defaultMappingConfig.PagePadding);
-
-            //var contentPages = uiContent.Select(p => new RichContentPage(p));
-
-            //var contentPages = uiContent.Select(p => new RichContentPage(p));
-            //var content = new ChaptersContent(contentPages);
-            //var content = new ChaptersContent(contentPages, 71406.8);
 
             var content = new RichContent(resplitContent, new HashSet<string> { ImageProcessor.NotInlineImageTag });
 

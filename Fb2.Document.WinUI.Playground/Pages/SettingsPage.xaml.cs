@@ -48,29 +48,5 @@ namespace Fb2.Document.WinUI.Playground.Pages
             if (selectedTheme != null && Enum.TryParse<ElementTheme>(selectedTheme, out var convertedTheme))
                 MainWindowsService.Instance.ContentFrame.RequestedTheme = convertedTheme;
         }
-
-        //private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        //{
-        //    var isOn = ((ToggleSwitch)sender).IsOn;
-
-        //    ApplicationData.Current.LocalSettings.Values["themeSetting"] = isOn ? 1 : 0;
-
-        //    // kills the app - tho it shoundt have had
-        //    //App.Current.RequestedTheme = isOn ? ApplicationTheme.Light : ApplicationTheme.Dark;
-
-        //    var framwContent = MainWindowsService.Instance.ContentFrame;
-        //    if (framwContent != null)
-        //    {
-        //        var selectedTheme = isOn ? ElementTheme.Light : ElementTheme.Dark;
-        //        framwContent.RequestedTheme = selectedTheme;
-        //    }
-        //}
-
-        //private void ToggleSwitch_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    //((ToggleSwitch)sender).IsOn = App.Current.RequestedTheme == ApplicationTheme.Light;
-
-        //    ((ToggleSwitch)sender).IsOn = MainWindowsService.Instance.ContentFrame.RequestedTheme == ElementTheme.Light;
-        //}
     }
 }

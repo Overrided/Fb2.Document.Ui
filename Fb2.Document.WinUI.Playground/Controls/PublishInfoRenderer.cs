@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Fb2.Document.Models;
 using Fb2.Document.UI.WinUi;
 using Fb2.Document.WinUI.Playground.Common;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Documents;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using RichTextView.DTOs;
 using Windows.Foundation;
 
@@ -18,7 +12,6 @@ using Windows.Foundation;
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace Fb2.Document.WinUI.Playground.Controls;
-
 
 public class PublishInfoRendererViewModel : ObservableObject
 {

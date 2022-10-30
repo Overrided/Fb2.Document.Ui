@@ -1,7 +1,7 @@
-﻿using Fb2.Document.Models;
+﻿using System.Collections.Generic;
+using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
 using Fb2.Document.WinUI.Playground.Common;
-using RichTextView.DTOs;
 
 namespace Fb2.Document.WinUI.Playground.ViewModels
 {
@@ -84,6 +84,19 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
                     customInfo = value;
                     OnPropertyChanged();
                 }
+            }
+        }
+
+        private IEnumerable<BinaryImage> binaryImages;
+
+        public IEnumerable<BinaryImage> BookImages
+        {
+            get { return binaryImages; }
+            set
+            {
+                OnPropertyChanging();
+                binaryImages = value;
+                OnPropertyChanged();
             }
         }
 

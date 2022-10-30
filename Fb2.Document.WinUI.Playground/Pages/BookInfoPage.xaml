@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Fb2.Document.WinUI.Playground.Converters"
 	xmlns:locl="using:Fb2.Document.WinUI.Playground.Controls"
-    xmlns:rtv="using:RichTextView"
+    xmlns:models="using:Fb2.Document.Models"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -84,6 +84,51 @@
 							<Expander.Content>
 								<locl:CustomInfoRenderer CustomInfo="{x:Bind BookInfoViewModel.CustomInfo, Mode=OneWay}">
 								</locl:CustomInfoRenderer>
+							</Expander.Content>
+						</Expander>
+
+						<Expander Margin="0, 10, 0, 0" 
+								  IsExpanded="False"
+								  ExpandDirection="Down"
+								  HorizontalAlignment="Stretch"
+								  HorizontalContentAlignment="Stretch"
+								  VerticalAlignment="Top"
+								  VerticalContentAlignment="Stretch"
+								  Header="Images">
+							<Expander.Content>
+								<ListView ItemsSource="{x:Bind BookInfoViewModel.BookImages, Mode=OneWay}"
+										  HorizontalAlignment="Stretch"
+										  HorizontalContentAlignment="Stretch"
+										  VerticalAlignment="Stretch"
+										  VerticalContentAlignment="Stretch"
+										  UseSystemFocusVisuals="False"
+										  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+										  ScrollViewer.HorizontalScrollMode="Auto"
+										  ScrollViewer.IsHorizontalRailEnabled="True"										  
+										  ScrollViewer.VerticalScrollBarVisibility="Hidden"
+										  ScrollViewer.VerticalScrollMode="Disabled"
+										  ScrollViewer.IsVerticalRailEnabled="False"
+										  SelectionMode="None">
+									<ListView.ItemsPanel>
+										<ItemsPanelTemplate>
+											<ItemsStackPanel Orientation="Horizontal" />
+										</ItemsPanelTemplate>
+									</ListView.ItemsPanel>
+									<ListView.ItemTemplate>
+										<DataTemplate x:DataType="models:BinaryImage">
+											<Border HorizontalAlignment="Stretch"
+													VerticalAlignment="Stretch"
+													Height="250"
+													Width="200"
+													Margin="6">
+												<Image Source="{x:Bind Content, Converter={StaticResource SToImage}}"
+													   Stretch="Uniform"													   
+													   HorizontalAlignment="Center"
+													   VerticalAlignment="Center" />
+											</Border>
+										</DataTemplate>
+									</ListView.ItemTemplate>
+								</ListView>
 							</Expander.Content>
 						</Expander>
 
