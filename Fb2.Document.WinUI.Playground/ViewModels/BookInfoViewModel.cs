@@ -1,10 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
 using Fb2.Document.WinUI.Playground.Common;
 
 namespace Fb2.Document.WinUI.Playground.ViewModels
 {
+    public class BinaryImageViewModel
+    {
+        public string Content { get; set; }
+
+        public string Id { get; set; }
+
+        public string ContentType { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is BinaryImageViewModel model &&
+                Content == model.Content &&
+                Id == model.Id &&
+                ContentType == model.ContentType;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Content, Id, ContentType);
+        }
+    }
+
     public class BookInfoViewModel : ObservableObject
     {
         private string coverpageBase64Image = string.Empty;
@@ -87,9 +110,9 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
             }
         }
 
-        private IEnumerable<BinaryImage> binaryImages;
+        private List<BinaryImageViewModel> binaryImages;
 
-        public IEnumerable<BinaryImage> BookImages
+        public List<BinaryImageViewModel> BookImages
         {
             get { return binaryImages; }
             set

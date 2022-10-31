@@ -1,17 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Fb2.Document.Models;
-using Fb2.Document.Models.Base;
+﻿using System.Linq;
+using Fb2.Document.Constants;
 using Fb2.Document.UI.WinUi;
-using Fb2.Document.UI.WinUi.Entities;
-using Fb2.Document.UI.WinUi.NodeProcessors;
 using Fb2.Document.WinUI.Playground.Models;
 using Fb2.Document.WinUI.Playground.Services;
 using Fb2.Document.WinUI.Playground.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
-using RichTextView.DTOs;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -31,6 +26,16 @@ namespace Fb2.Document.WinUI.Playground.Pages
         {
             this.InitializeComponent();
             this.Loaded += BookInfoPage_Loaded;
+            this.SizeChanged += BookInfoPage_SizeChanged;
+        }
+
+        private void BookInfoPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (StandardPopup.IsOpen)
+            {
+                PopupContentContainer.Width = OuterGrid.ActualWidth;
+                PopupContentContainer.Height = OuterGrid.ActualHeight;
+            }
         }
 
         private void BookInfoPage_Loaded(object sender, RoutedEventArgs e)
@@ -40,7 +45,25 @@ namespace Fb2.Document.WinUI.Playground.Pages
             BookInfoViewModel.CoverpageBase64Image = bookModel.CoverpageBase64Image;
             BookInfoViewModel.PublishInfo = bookModel.Fb2Document.PublishInfo;
             BookInfoViewModel.CustomInfo = bookModel.Fb2Document.CustomInfo;
-            BookInfoViewModel.BookImages = bookModel.Fb2Document.BinaryImages;
+            BookInfoViewModel.BookImages = bookModel.Fb2Document.BinaryImages.Select(bi =>
+            {
+                var id = bi.TryGetAttribute(AttributeNames.Id, true, out var idAttr) ?
+                            idAttr.Value :
+                            string.Empty;
+
+                var contentType = bi.TryGetAttribute(AttributeNames.ContentType, out var contentTypeAttr) ?
+                                contentTypeAttr.Value :
+                                string.Empty;
+
+                var vm = new BinaryImageViewModel
+                {
+                    Content = bi.Content,
+                    Id = id,
+                    ContentType = contentType
+                };
+
+                return vm;
+            }).ToList();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -62,6 +85,29 @@ namespace Fb2.Document.WinUI.Playground.Pages
         private void OnReadButton_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Instance.NavigateContentFrame(typeof(ReadPage), bookModel);
+        }
+
+        private void ClosePopupClicked(object sender, RoutedEventArgs e)
+        {
+            if (StandardPopup.IsOpen)
+            {
+                StandardPopup.IsOpen = false;
+            }
+        }
+
+        private void OnEnlargeImageClick(object sender, ItemClickEventArgs e)
+        {
+            if (!StandardPopup.IsOpen)
+            {
+                var imageInfo = e.ClickedItem as BinaryImageViewModel;
+
+                var index = imageInfo != null ? BookInfoViewModel.BookImages.IndexOf(imageInfo) : 0;
+                FullScreenImagesContainer.SelectedIndex = index;
+
+                PopupContentContainer.Width = OuterGrid.ActualWidth;
+                PopupContentContainer.Height = OuterGrid.ActualHeight;
+                StandardPopup.IsOpen = true;
+            }
         }
     }
 }
