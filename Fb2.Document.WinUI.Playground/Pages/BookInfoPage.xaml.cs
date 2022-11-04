@@ -109,5 +109,10 @@ namespace Fb2.Document.WinUI.Playground.Pages
                 StandardPopup.IsOpen = true;
             }
         }
+
+        private void ImagesThumbnailContainer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ImagesThumbnailContainer.ScrollIntoView(ImagesThumbnailContainer.SelectedItem);
+        }
     }
 }
