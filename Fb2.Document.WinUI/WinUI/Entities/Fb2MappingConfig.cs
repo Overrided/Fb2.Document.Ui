@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Documents;
 
 namespace Fb2.Document.UI.WinUi.Entities
 {
@@ -86,6 +87,8 @@ namespace Fb2.Document.UI.WinUi.Entities
 
         public bool HighlightUnsafe { get; set; }
 
+        public bool UseStyles { get; set; }
+
         public PoemConfig Poem { get; set; }
 
         public ConfigBase Body { get; set; }
@@ -100,6 +103,7 @@ namespace Fb2.Document.UI.WinUi.Entities
             int baseFontSize = 18,
             double paragraphIndent = 20,
             bool highlightUnsafe = false,
+            bool useStyles = true,
             PoemConfig poemConfig = null,
             ConfigBase bodyConfig = null,
             SectionConfig bodySectionConfig = null,
@@ -109,6 +113,7 @@ namespace Fb2.Document.UI.WinUi.Entities
             BaseFontSize = baseFontSize;
             ParagraphIndent = paragraphIndent;
             HighlightUnsafe = highlightUnsafe;
+            UseStyles = useStyles;
 
             Poem = poemConfig ?? new PoemConfig();
             Body = bodyConfig ?? new ConfigBase();

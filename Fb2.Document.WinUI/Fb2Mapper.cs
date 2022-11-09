@@ -16,16 +16,16 @@ namespace Fb2.Document.UI.WinUi
     // TODO : add table of contents?? (or on app level?)
     public class Fb2Mapper
     {
-        public async Task MapAngle(Fb2Document fb2Document, HtmlMappingConfig htmlMappingConfig)
-        {
-            var context = BrowsingContext.New();
-            // get new document, not completely empty (has head and body)
-            var document = await context.OpenNewAsync();
-            var element = document.CreateElement("strong");
-            element.TextContent = "Hello World!";
-            document.Body.AppendChild(element);
-            var html = document.ToHtml();
-        }
+        //public async Task MapAngle(Fb2Document fb2Document, HtmlMappingConfig htmlMappingConfig)
+        //{
+        //    var context = BrowsingContext.New();
+        //    // get new document, not completely empty (has head and body)
+        //    var document = await context.OpenNewAsync();
+        //    var element = document.CreateElement("strong");
+        //    element.TextContent = "Hello World!";
+        //    document.Body.AppendChild(element);
+        //    var html = document.ToHtml();
+        //}
 
         public IEnumerable<Fb2ContentPage> MapDocument(Fb2Document document, Size viewPortSize, Fb2MappingConfig config = null)
         {

@@ -25,7 +25,7 @@ namespace Fb2.Document.WinUI.Playground.Converters
             return defaultBitmap;
         }
 
-        private BitmapImage ConvertBase64StringToBitmapImage(string base64ImageContent)
+        private BitmapImage? ConvertBase64StringToBitmapImage(string base64ImageContent)
         {
             try
             {

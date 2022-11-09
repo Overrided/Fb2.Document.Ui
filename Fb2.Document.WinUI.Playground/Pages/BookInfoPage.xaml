@@ -17,12 +17,13 @@
 											 x:Name="SToImage" />
 
 		<converters:ValueToVisibilityConverter x:Key="VtvConterter" x:Name="VtvConterter" />
+		<converters:CountToVisibilityConverter x:Key="CtVConterter" x:Name="CtVConterter" />
 
 	</Page.Resources>
 
 	<Grid x:Name="OuterGrid"
 			  ColumnSpacing="12"
-			  Margin="12">
+			  Margin="16">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="*" />
@@ -34,12 +35,19 @@
 				  ShouldConstrainToRootBounds="True"
 				  UseSystemFocusVisuals="True">
 
+			<Popup.ChildTransitions>
+				<TransitionCollection>
+					<PopupThemeTransition FromVerticalOffset="750" 
+										  FromHorizontalOffset="750" />
+				</TransitionCollection>
+			</Popup.ChildTransitions>
+
 			<Grid x:Name="PopupContentContainer"
 					  VerticalAlignment="Stretch"
 					  HorizontalAlignment="Stretch"
 					  BorderThickness="1"
 					  CornerRadius="5"
-					  Translation="0,0,48">
+					  Translation="0,0,56">
 
 				<Grid.BorderBrush>
 					<SolidColorBrush Color="{StaticResource SolidBackgroundFillColorSecondary}" />
@@ -124,12 +132,12 @@
 										HorizontalAlignment="Stretch"
 										VerticalAlignment="Stretch"
 										Height="100"
-										Width="80">
+										Width="80"
+										ToolTipService.ToolTip="{x:Bind Id}">
 								<Image Source="{x:Bind Content, Converter={StaticResource SToImage}}"
 										   Stretch="Uniform"													   
 										   HorizontalAlignment="Center"
-										   VerticalAlignment="Center"
-										   ToolTipService.ToolTip="{x:Bind Id}"/>
+										   VerticalAlignment="Center"/>
 							</Border>
 						</DataTemplate>
 					</ListView.ItemTemplate>
@@ -150,14 +158,29 @@
 								  VerticalAlignment="Center"/>
 				</Button>
 
+				<Button Grid.Row="0"
+							Click="ExportImageButtonClicked" 
+							HorizontalAlignment="Right" 
+							VerticalAlignment="Bottom"
+							Width="40"
+							Height="40"
+							Padding="0">
+					<FontIcon FontFamily="Segoe MDL2 Assets"
+								  Glyph="&#xE896;"
+								  FontSize="20"
+								  Margin="0"
+								  HorizontalAlignment="Center"
+								  VerticalAlignment="Center"/>
+				</Button>
+
 			</Grid>
 		</Popup>
 
 		<Image Grid.Column="0"
-				   VerticalAlignment="Center"
-				   HorizontalAlignment="Center"
-				   Stretch="Uniform"
-				   Source="{x:Bind BookInfoViewModel.CoverpageBase64Image, Converter={StaticResource SToImage}, Mode=OneWay}">
+			   VerticalAlignment="Center"
+			   HorizontalAlignment="Center"
+			   Stretch="Uniform"
+			   Source="{x:Bind BookInfoViewModel.CoverpageBase64Image, Converter={StaticResource SToImage}, Mode=OneWay}">
 		</Image>
 
 		<Grid Grid.Column="1">
@@ -171,7 +194,8 @@
 								VerticalAlignment="Stretch">
 
 					<locl:TitleInfoBaseRenderer TitleInfo="{x:Bind BookInfoViewModel.TitleInfo, Mode=OneWay}" 
-												Margin="0,0,0,10">
+												Margin="0,0,0,10"
+												Visibility="{x:Bind BookInfoViewModel.TitleInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
 					</locl:TitleInfoBaseRenderer>
 
 					<Expander Margin="0, 10, 0, 0" 
@@ -211,11 +235,11 @@
 								  HorizontalContentAlignment="Stretch"
 								  VerticalAlignment="Top"
 								  VerticalContentAlignment="Stretch"
-								  Header="Custom Info"
-								  Visibility="{x:Bind BookInfoViewModel.CustomInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+								  Header="Document Info"
+								  Visibility="{x:Bind BookInfoViewModel.DocumentInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
 						<Expander.Content>
-							<locl:CustomInfoRenderer CustomInfo="{x:Bind BookInfoViewModel.CustomInfo, Mode=OneWay}">
-							</locl:CustomInfoRenderer>
+							<locl:DocumentInfoRenderer DocumentInfo="{x:Bind BookInfoViewModel.DocumentInfo, Mode=OneWay}">
+							</locl:DocumentInfoRenderer>
 						</Expander.Content>
 					</Expander>
 
@@ -225,7 +249,23 @@
 								  HorizontalAlignment="Stretch"
 								  HorizontalContentAlignment="Stretch"
 								  VerticalAlignment="Top"
-								  VerticalContentAlignment="Stretch">
+								  VerticalContentAlignment="Stretch"
+								  Header="Custom Info"
+								  Visibility="{x:Bind BookInfoViewModel.CustomInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+						<Expander.Content>
+							<locl:CustomInfoRenderer CustomInfo="{x:Bind BookInfoViewModel.CustomInfo, Mode=OneWay}">
+							</locl:CustomInfoRenderer>
+						</Expander.Content>
+					</Expander>
+
+					<Expander Margin="0, 10, 0, 0" 
+							  IsExpanded="False"
+							  ExpandDirection="Down"
+							  HorizontalAlignment="Stretch"
+							  HorizontalContentAlignment="Stretch"
+							  VerticalAlignment="Top"
+							  VerticalContentAlignment="Stretch"
+							  Visibility="{x:Bind BookInfoViewModel.BookImages, Mode=OneWay, Converter={StaticResource VtvConterter}}">
 						<Expander.Header>
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Text="Images ("/>
@@ -260,8 +300,8 @@
 											<Setter.Value>
 												<ControlTemplate>
 													<Grid x:Name="ItemContainer"
-																HorizontalAlignment="Stretch"
-																VerticalAlignment="Stretch">
+														  HorizontalAlignment="Stretch"
+														  VerticalAlignment="Stretch">
 														<Interactivity:Interaction.Behaviors>
 															<Core:EventTriggerBehavior 
 																			EventName="PointerEntered" 
@@ -323,11 +363,11 @@
 																	<SolidColorBrush Color="Black" Opacity="0.55"/>
 																</Button.Background>
 																<FontIcon FontFamily="Segoe MDL2 Assets"
-																			  Glyph="&#xE740;"
-																			  FontSize="32"
-																			  Foreground="White"
-																			  HorizontalAlignment="Center"
-																			  VerticalAlignment="Center"/>
+																		  Glyph="&#xE740;"
+																		  FontSize="32"
+																		  Foreground="White"
+																		  HorizontalAlignment="Center"
+																		  VerticalAlignment="Center"/>
 															</Button>
 
 														</Border>
@@ -343,12 +383,12 @@
 													HorizontalAlignment="Stretch"
 													VerticalAlignment="Stretch"
 													Height="250"
-													Width="200">
+													Width="200"
+													ToolTipService.ToolTip="{x:Bind Id}">
 											<Image Source="{x:Bind Content, Converter={StaticResource SToImage}}"
 													   Stretch="Uniform"													   
 													   HorizontalAlignment="Center"
-													   VerticalAlignment="Center"
-													   ToolTipService.ToolTip="{x:Bind Id}"/>
+													   VerticalAlignment="Center"/>
 										</Border>
 									</DataTemplate>
 								</ListView.ItemTemplate>
@@ -358,7 +398,6 @@
 
 				</StackPanel>
 			</ScrollViewer>
-
 
 			<Button CornerRadius="90"
 						Grid.RowSpan="2"
@@ -373,6 +412,7 @@
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"/>
 			</Button>
+
 		</Grid>
 	</Grid>
 

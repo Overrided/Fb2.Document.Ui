@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Fb2.Document.Constants;
+using Fb2.Document.Models.Base;
 using Fb2.Document.UI.WinUi;
 using Fb2.Document.WinUI.Playground.Models;
 using Fb2.Document.WinUI.Playground.Services;
@@ -7,6 +10,8 @@ using Fb2.Document.WinUI.Playground.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -18,6 +23,17 @@ namespace Fb2.Document.WinUI.Playground.Pages
     /// </summary>
     public sealed partial class BookInfoPage : Page
     {
+        private Dictionary<string, string> imageSignatures = new()
+        {
+            ["R0lGODdh"] = "image/gif",
+            ["R0lGODlh"] = "image/gif",
+            ["iVBORw0KGgo"] = "image/png",
+            ["/9j/"] = "image/jpeg",
+            ["SUkqAA"] = "image/tiff",
+            ["TU0AKg"] = "image/tiff",
+            ["Qk0"] = "image/bmp"
+        };
+
         private Fb2Mapper fb2MappingService = new Fb2Mapper();
         public BookInfoViewModel BookInfoViewModel { get; private set; } = new BookInfoViewModel();
         private BookModel? bookModel = null;
@@ -40,20 +56,22 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
         private void BookInfoPage_Loaded(object sender, RoutedEventArgs e)
         {
-            BookInfoViewModel.SrcTitleInfo = bookModel?.Fb2Document?.SourceTitle;
-            BookInfoViewModel.TitleInfo = bookModel?.Fb2Document?.Title;
-            BookInfoViewModel.CoverpageBase64Image = bookModel.CoverpageBase64Image;
-            BookInfoViewModel.PublishInfo = bookModel.Fb2Document.PublishInfo;
-            BookInfoViewModel.CustomInfo = bookModel.Fb2Document.CustomInfo;
-            BookInfoViewModel.BookImages = bookModel.Fb2Document.BinaryImages.Select(bi =>
+            var fb2Document = bookModel?.Fb2Document;
+
+            BookInfoViewModel.TitleInfo = GetFb2NodeOrDefault(fb2Document?.Title);
+            BookInfoViewModel.SrcTitleInfo = GetFb2NodeOrDefault(fb2Document?.SourceTitle);
+            BookInfoViewModel.CoverpageBase64Image = bookModel?.CoverpageBase64Image;
+            BookInfoViewModel.PublishInfo = GetFb2NodeOrDefault(fb2Document?.PublishInfo);
+            BookInfoViewModel.DocumentInfo = GetFb2NodeOrDefault(fb2Document?.DocumentInfo);
+            BookInfoViewModel.CustomInfo = GetFb2NodeOrDefault(fb2Document?.CustomInfo);
+
+            BookInfoViewModel.BookImages = fb2Document?.BinaryImages?.Select(bi =>
             {
                 var id = bi.TryGetAttribute(AttributeNames.Id, true, out var idAttr) ?
-                            idAttr.Value :
-                            string.Empty;
+                            idAttr!.Value : string.Empty;
 
                 var contentType = bi.TryGetAttribute(AttributeNames.ContentType, out var contentTypeAttr) ?
-                                contentTypeAttr.Value :
-                                string.Empty;
+                                contentTypeAttr!.Value : string.Empty;
 
                 var vm = new BinaryImageViewModel
                 {
@@ -63,7 +81,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
                 };
 
                 return vm;
-            }).ToList();
+            })?.ToList();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -71,8 +89,8 @@ namespace Fb2.Document.WinUI.Playground.Pages
             base.OnNavigatedTo(e);
 
             var model = e.Parameter as BookModel;
-            if (model == null)
-                return;
+            //if (model == null)
+            //    return;
 
             bookModel = model;
         }
@@ -110,9 +128,80 @@ namespace Fb2.Document.WinUI.Playground.Pages
             }
         }
 
+        private async void ExportImageButtonClicked(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = FullScreenImagesContainer.SelectedItem as BinaryImageViewModel;
+            if (selectedItem == null ||
+                string.IsNullOrEmpty(selectedItem.Content))
+            {
+                return;
+            }
+
+            var contentType = string.IsNullOrEmpty(selectedItem.ContentType) ?
+                TryGetContentTypeFromBase64Content(selectedItem.Content) :
+                selectedItem.ContentType;
+
+            var fileExtension = contentType.Split('/').Last();
+            var normalizedFileExtension = $".{fileExtension}";
+
+            var suggestedFileName = selectedItem.Id.EndsWith(normalizedFileExtension) ?
+                selectedItem.Id :
+                $"{selectedItem.Id}{normalizedFileExtension}";
+
+            FileSavePicker picker = new();
+            picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            picker.FileTypeChoices.Add("Images", new List<string>() { normalizedFileExtension });
+            picker.SuggestedFileName = suggestedFileName;
+            //picker.SettingsIdentifier = "settingsIdentifier";
+            picker.DefaultFileExtension = normalizedFileExtension;
+            PopupInitializerService.Instance.InitializePopup(picker);
+
+            var saveFile = await picker.PickSaveFileAsync();
+
+            if (saveFile == null)
+            {
+                // operation cancelled
+                return;
+            }
+
+            //using (var sst = await saveFile.OpenStreamForWriteAsync())
+            //{
+            //    var writer = new StreamWriter(sst)
+            //    {
+            //        AutoFlush = true
+            //    };
+            //    await writer.WriteAsync(selectedItem.Content);
+            //    await writer.FlushAsync();
+            //}
+
+            var bytes = Convert.FromBase64String(selectedItem.Content);
+            await FileIO.WriteBytesAsync(saveFile, bytes);
+        }
+
+        private string TryGetContentTypeFromBase64Content(string base64Content)
+        {
+            var mime = imageSignatures.FirstOrDefault(k => base64Content.StartsWith(k.Key)).Value;
+            if (string.IsNullOrEmpty(mime))
+                mime = "application/octet-stream";
+
+            return mime;
+        }
+
         private void ImagesThumbnailContainer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ImagesThumbnailContainer.ScrollIntoView(ImagesThumbnailContainer.SelectedItem);
         }
+
+        private T? GetFb2NodeOrDefault<T>(T? instance) where T : Fb2Node
+        {
+            if (instance == null)
+                return null;
+
+            if (instance.IsEmpty)
+                return null;
+
+            return instance;
+        }
+
     }
 }

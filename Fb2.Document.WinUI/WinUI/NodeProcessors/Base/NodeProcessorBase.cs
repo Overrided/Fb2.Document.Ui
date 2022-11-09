@@ -22,7 +22,8 @@ namespace Fb2.Document.UI.WinUi.NodeProcessors.Base
             var processor = context.ProcessorFactory.GetNodeProcessor(node);
             var result = processor.Process(context);
 
-            if (result?.Any() ?? false)
+            var shouldApplyStyles = context.RenderingConfig.UseStyles && (result?.Any() ?? false);
+            if (shouldApplyStyles)
                 context.Styler.ApplyStyle(context, result);
 
             context.Backtrack();

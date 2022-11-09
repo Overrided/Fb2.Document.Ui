@@ -30,9 +30,9 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
 
     public class BookInfoViewModel : ObservableObject
     {
-        private string coverpageBase64Image = string.Empty;
+        private string? coverpageBase64Image = string.Empty;
 
-        public string CoverpageBase64Image
+        public string? CoverpageBase64Image
         {
             get { return coverpageBase64Image; }
             set
@@ -46,9 +46,9 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
             }
         }
 
-        private TitleInfoBase titleInfo;
+        private TitleInfoBase? titleInfo;
 
-        public TitleInfoBase TitleInfo
+        public TitleInfoBase? TitleInfo
         {
             get { return titleInfo; }
             set
@@ -62,9 +62,9 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
             }
         }
 
-        private TitleInfoBase srcTitleInfo;
+        private TitleInfoBase? srcTitleInfo;
 
-        public TitleInfoBase SrcTitleInfo
+        public TitleInfoBase? SrcTitleInfo
         {
             get { return srcTitleInfo; }
             set
@@ -78,9 +78,9 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
             }
         }
 
-        private PublishInfo publishInfo;
+        private PublishInfo? publishInfo;
 
-        public PublishInfo PublishInfo
+        public PublishInfo? PublishInfo
         {
             get { return publishInfo; }
             set
@@ -94,9 +94,26 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
             }
         }
 
-        private CustomInfo customInfo;
+        private DocumentInfo? documentInfo;
 
-        public CustomInfo CustomInfo
+        public DocumentInfo? DocumentInfo
+        {
+            get { return documentInfo; }
+            set
+            {
+                if (documentInfo != value)
+                {
+                    OnPropertyChanging();
+                    documentInfo = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+        private CustomInfo? customInfo;
+
+        public CustomInfo? CustomInfo
         {
             get { return customInfo; }
             set
@@ -110,9 +127,9 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
             }
         }
 
-        private List<BinaryImageViewModel> binaryImages;
+        private List<BinaryImageViewModel>? binaryImages = null;
 
-        public List<BinaryImageViewModel> BookImages
+        public List<BinaryImageViewModel>? BookImages
         {
             get { return binaryImages; }
             set

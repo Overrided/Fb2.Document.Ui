@@ -18,6 +18,10 @@ namespace Fb2.Document.UI.WinUi.NodeProcessors
             if (fName != null)
                 sb.Append(fName.Content);
 
+            var nickName = authorInfo.GetFirstChild<Nickname>();
+            if (nickName != null)
+                sb.Append($" {nickName.Content}");
+
             var mName = authorInfo.GetFirstChild<MiddleName>();
             if (mName != null)
                 sb.Append($" {mName.Content}");

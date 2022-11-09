@@ -15,7 +15,6 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
-using Windows.Storage.Streams;
 using Windows.UI.Text;
 using Image = Microsoft.UI.Xaml.Controls.Image;
 

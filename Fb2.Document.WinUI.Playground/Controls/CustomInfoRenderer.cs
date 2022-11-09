@@ -70,12 +70,13 @@ public sealed class CustomInfoRenderer : Control
         if (customInfo == null)
             return;
 
-        var mappedNodes = new Fb2Mapper().MapNode(customInfo, Size.Empty);
+        var mappedNodes = new Fb2Mapper().MapNode(
+            customInfo,
+            Size.Empty,
+            new(useStyles: false));
 
         var normalizedContent = mappedNodes
-                //.SelectMany(uic => uic.Chunk(50))
                 .SelectMany(uic => uic)
-                //.Select(rp => new RichContentPage(rp))
                 .ToList();
 
         var paragr = new Fb2.Document.UI.WinUi.Common.Utils().Paragraphize(normalizedContent);

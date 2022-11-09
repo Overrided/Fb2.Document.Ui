@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
@@ -28,6 +29,8 @@ public class TitleInfoBaseRendererViewModel : ObservableObject
             OnPropertyChanged();
         }
     }
+
+    public ObservableCollection<BookGenre> BookGenres { get; set; } = new();
 }
 
 public sealed class TitleInfoBaseRenderer : Control
@@ -76,14 +79,13 @@ public sealed class TitleInfoBaseRenderer : Control
         var authors = titleInfo.GetDescendants<Author>();
         var titleInfoBookName = titleInfo.GetFirstDescendant<BookTitle>();
         var subTitle = titleInfo.GetFirstDescendant<SubTitle>();
-        //var genres = titleInfo.GetDescendants<BookGenre>();
         var annotation = titleInfo.GetFirstDescendant<Annotation>();
         var sequences = titleInfo.GetDescendants<SequenceInfo>();
         var keywords = titleInfo.GetDescendants<Keywords>();
 
         var nodes = new List<Fb2Node>();
-        nodes.AddRange(authors.Where(a => a != null && !a.IsEmpty));
 
+        nodes.AddRange(authors.Where(a => a != null && !a.IsEmpty));
         nodes.AddRange(sequences.Where(s => s != null));
 
         if (titleInfoBookName != null)
@@ -92,20 +94,15 @@ public sealed class TitleInfoBaseRenderer : Control
         if (subTitle != null)
             nodes.Add(subTitle);
 
-        //nodes.AddRange(genres.Where(g => g != null && !g.IsEmpty));
-
         if (annotation != null)
             nodes.Add(annotation);
 
         nodes.AddRange(keywords.Where(k => k != null && !k.IsEmpty));
 
         var mappedNodes = new Fb2Mapper().MapNodes(nodes, Size.Empty);
-        //var contentPage = new RichContentPage(mappedNodes);
 
         var normalizedContent = mappedNodes
-                //.SelectMany(uic => uic.Chunk(50))
                 .SelectMany(uic => uic)
-                //.Select(rp => new RichContentPage(rp))
                 .ToList();
 
         var paragr = new Fb2.Document.UI.WinUi.Common.Utils().Paragraphize(normalizedContent);
@@ -113,5 +110,11 @@ public sealed class TitleInfoBaseRenderer : Control
         var contentPage = new RichContentPage(paragr);
         var content = new RichContent(new List<RichContentPage>(1) { contentPage });
         sender.ViewModel.TitleInfoContent = content;
+
+        var genres = titleInfo.GetDescendants<BookGenre>();
+        foreach (var genre in genres)
+        {
+            sender.ViewModel.BookGenres.Add(genre);
+        }
     }
 }

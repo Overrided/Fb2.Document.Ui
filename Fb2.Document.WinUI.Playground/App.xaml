@@ -14,7 +14,6 @@
 			<BitmapImage x:Key="DefaultBookImage"
 					 UriSource="Assets/BookNullTarget/book-open-page-variant-256x256.png" />
 
-
 			<Style TargetType="Button" 
 				   BasedOn="{StaticResource DefaultButtonStyle}"
 				   x:Key="ReactiveButton"

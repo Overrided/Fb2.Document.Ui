@@ -12,10 +12,9 @@ using Fb2.Document.WinUI.Playground.Models;
 using Fb2.Document.WinUI.Playground.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Navigation;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using Windows.UI.Popups;
+using WinRT.Interop;
 using Fb2Image = Fb2.Document.Models.Image;
 
 // To learn more about WinUI, the WinUI project structure,
