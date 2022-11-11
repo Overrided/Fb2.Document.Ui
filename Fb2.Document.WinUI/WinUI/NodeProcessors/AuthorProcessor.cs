@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 using Fb2.Document.Models;
 using Fb2.Document.UI.WinUi.Entities;
 using Fb2.Document.UI.WinUi.NodeProcessors.Base;
@@ -12,29 +11,30 @@ namespace Fb2.Document.UI.WinUi.NodeProcessors
         public override List<TextElement> Process(IRenderingContext context)
         {
             var authorInfo = context.CurrentNode as Author;
-            var sb = new StringBuilder();
+            var names = new List<string>();
 
             var fName = authorInfo.GetFirstChild<FirstName>();
             if (fName != null)
-                sb.Append(fName.Content);
+                names.Add(fName.Content);
 
             var nickName = authorInfo.GetFirstChild<Nickname>();
             if (nickName != null)
-                sb.Append($" {nickName.Content}");
+                names.Add(nickName.Content);
 
             var mName = authorInfo.GetFirstChild<MiddleName>();
             if (mName != null)
-                sb.Append($" {mName.Content}");
+                names.Add(mName.Content);
 
             var lName = authorInfo.GetFirstChild<LastName>();
             if (lName != null)
-                sb.Append($" {lName.Content}");
+                names.Add(lName.Content);
 
-            var text = sb.ToString();
+            var finalName = string.Join(' ', names);
 
-            var run = new Run { Text = text };
+            var p = new Microsoft.UI.Xaml.Documents.Paragraph();
+            p.Inlines.Add(new Run { Text = finalName });
 
-            return context.Utils.Paragraphize(run);
+            return new List<TextElement>(1) { p };
         }
     }
 }
