@@ -28,6 +28,7 @@ public class DocumentInfoRendererViewModel : ObservableObject
         }
     }
 }
+
 public sealed class DocumentInfoRenderer : Control
 {
     public DocumentInfoRendererViewModel ViewModel { get; set; }
@@ -42,8 +43,6 @@ public sealed class DocumentInfoRenderer : Control
     {
         base.OnApplyTemplate();
     }
-
-
 
     public DocumentInfo DocumentInfo
     {

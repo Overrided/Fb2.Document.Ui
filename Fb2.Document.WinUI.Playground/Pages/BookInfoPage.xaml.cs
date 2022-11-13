@@ -34,7 +34,6 @@ namespace Fb2.Document.WinUI.Playground.Pages
             ["Qk0"] = "image/bmp"
         };
 
-        private Fb2Mapper fb2MappingService = new Fb2Mapper();
         public BookInfoViewModel BookInfoViewModel { get; private set; } = new BookInfoViewModel();
         private BookModel? bookModel = null;
 
@@ -202,6 +201,5 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
             return instance;
         }
-
     }
 }

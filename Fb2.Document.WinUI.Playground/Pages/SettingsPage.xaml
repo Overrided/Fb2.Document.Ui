@@ -1,43 +1,43 @@
-﻿<Page
-    x:Class="Fb2.Document.WinUI.Playground.Pages.SettingsPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Fb2.Document.WinUI.Playground.Pages"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+﻿<Page x:Class="Fb2.Document.WinUI.Playground.Pages.SettingsPage"
+	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	  xmlns:local="using:Fb2.Document.WinUI.Playground.Pages"
+	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	  mc:Ignorable="d"
+	  NavigationCacheMode="Disabled"
+	  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <Grid Margin="20,10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0"
+	<Grid>
+		<Grid Margin="20,10">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<TextBlock Grid.Row="0"
 					   Style="{StaticResource TitleTextBlockStyle}"
 					   FontWeight="Normal"
 					   Text="Theme Mode" />
-            <StackPanel x:Name="ThemePanel"
+			<StackPanel x:Name="ThemePanel"
 						Grid.Row="1">
-                <RadioButton Tag="Light"
+				<RadioButton Tag="Light"
 							 Checked="OnThemeRadioButtonChecked"
 							 Content="Light" />
-                <RadioButton Tag="Dark"
+				<RadioButton Tag="Dark"
 							 Checked="OnThemeRadioButtonChecked"
 							 Content="Dark" />
-                <RadioButton Tag="Default"
+				<RadioButton Tag="Default"
 							 Checked="OnThemeRadioButtonChecked"
 							 Content="Use system setting" />
-            </StackPanel>
-        </Grid>
+			</StackPanel>
+		</Grid>
 
-        <!--<ToggleSwitch Header="Theme"
+		<!--<ToggleSwitch Header="Theme"
                       VerticalAlignment="Top"
                       Margin="30"
                       OnContent="Light" 
                       OffContent="Dark"
                       Toggled="ToggleSwitch_Toggled" 
                       Loaded="ToggleSwitch_Loaded"/>-->
-    </Grid>
+	</Grid>
 </Page>

@@ -1,21 +1,21 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:local="using:RichTextView"
-                    xmlns:converters="using:RichTextView.Converters">
+					xmlns:converters="using:RichTextView.Converters">
 
 	<Style TargetType="local:RichTextView">
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="local:RichTextView">
 					<Border x:Name="outherBorder"
-                            DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+							DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 							Background="{TemplateBinding Background}"
 							BorderBrush="{TemplateBinding BorderBrush}"
 							BorderThickness="{TemplateBinding BorderThickness}">
 						<Border.Resources>
 
 							<converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"
-                                                                  x:Name="BoolToVisibilityConverter" />
+																  x:Name="BoolToVisibilityConverter" />
 
 							<ControlTemplate TargetType="ItemsControl"
 											 x:Key="ItemsHostTemplate">
@@ -27,7 +27,7 @@
 
 									<ScrollViewer x:Name="scrollHost"
 												  Grid.Row="0"
-                                                  Grid.RowSpan="2"
+												  Grid.RowSpan="2"
 												  VerticalScrollBarVisibility="Auto"
 												  VerticalScrollMode="Auto"
 												  UseSystemFocusVisuals="False"
@@ -35,13 +35,13 @@
 												  VerticalAlignment="Stretch"
 												  HorizontalContentAlignment="Stretch"
 												  VerticalContentAlignment="Stretch"
-                                                  CanContentRenderOutsideBounds="True">
+												  CanContentRenderOutsideBounds="True">
 										<ItemsPresenter />
 									</ScrollViewer>
 									<ProgressBar x:Name="progressIndicator"
 												 Grid.Row="1"
-                                                 Opacity="0.8"
-                                                 Visibility="{Binding ShowProgress, Converter={StaticResource BoolToVisibilityConverter}}"
+												 Opacity="0.8"
+												 Visibility="{Binding ShowProgress, Converter={StaticResource BoolToVisibilityConverter}}"
 												 Minimum="0"
 												 Maximum="{Binding ElementName=scrollHost,Path=ScrollableHeight}"
 												 Value="{Binding ElementName=scrollHost, Path=VerticalOffset}" />
@@ -50,7 +50,7 @@
 
 							<ItemsPanelTemplate x:Key="ItemsHostPanelTemplate">
 								<ItemsStackPanel Orientation="Vertical"
-                                                 CacheMode="BitmapCache"
+												 CacheMode="BitmapCache"
 												 CacheLength="4.0"
 												 VirtualizingStackPanel.VirtualizationMode="Recycling" />
 							</ItemsPanelTemplate>
@@ -60,7 +60,7 @@
 						<VisualStateManager.VisualStateGroups>
 							<!--todo: rename group & add states to control stuff etc? -->
 							<VisualStateGroup x:Name="CommonStates">
-								<VisualState x:Name="Empty"/>
+								<VisualState x:Name="Empty" />
 								<VisualState x:Name="Loading">
 									<VisualState.Setters>
 										<Setter Target="loadingIndicator.Visibility"
@@ -82,7 +82,7 @@
 
 						<Grid x:Name="viewPortContainer">
 							<ItemsControl x:Name="itemsHost"
-                                          Visibility="Collapsed"
+										  Visibility="Collapsed"
 										  HorizontalAlignment="Stretch"
 										  VerticalAlignment="Stretch"
 										  HorizontalContentAlignment="Stretch"

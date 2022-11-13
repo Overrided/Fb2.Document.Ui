@@ -86,7 +86,7 @@ public sealed class TitleInfoBaseRenderer : Control
         var nodes = new List<Fb2Node>();
 
         nodes.AddRange(authors.Where(a => a != null && !a.IsEmpty));
-        nodes.AddRange(sequences.Where(s => s != null));
+        nodes.AddRange(sequences.Where(s => s != null && s.HasAttributes));
 
         if (titleInfoBookName != null)
             nodes.Add(titleInfoBookName);

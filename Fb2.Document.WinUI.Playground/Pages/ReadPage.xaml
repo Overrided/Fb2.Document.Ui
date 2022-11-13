@@ -1,23 +1,23 @@
-﻿<Page
-    x:Class="Fb2.Document.WinUI.Playground.Pages.ReadPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Fb2.Document.WinUI.Playground"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:rtv="using:RichTextView"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+﻿<Page x:Class="Fb2.Document.WinUI.Playground.Pages.ReadPage"
+	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	  xmlns:local="using:Fb2.Document.WinUI.Playground"
+	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	  xmlns:rtv="using:RichTextView"
+	  mc:Ignorable="d"
+	  NavigationCacheMode="Disabled"
+	  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
 	<Grid>
 		<rtv:RichTextView x:Name="viewPort"
 						  PageMargin="{x:Bind ReadViewModel.PageMargin, Mode=OneWay}"
 						  ShowProgress="{x:Bind ReadViewModel.ShowBookProgress, Mode=OneWay}"
-                          ShowLoading="True"
+						  ShowLoading="True"
 						  RichTextContent="{x:Bind ReadViewModel.ChaptersContent, Mode=OneWay}"
 						  HyperlinkActivated="RichTextView_HyperlinkActivated"
 						  BookRendered="viewPort_BookRendered"
-                          BookProgressChanged="RichTextView_OnProgress">
+						  BookProgressChanged="RichTextView_OnProgress">
 		</rtv:RichTextView>
 	</Grid>
 </Page>
