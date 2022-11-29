@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using Fb2.Document.Constants;
 using Fb2.Document.Models.Base;
-using Fb2.Document.UI.WinUi.Entities;
+using Fb2.Document.UI.Entities;
 using Microsoft.UI;
 using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
@@ -12,7 +12,7 @@ using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
 using Windows.UI.Text;
 
-namespace Fb2.Document.UI.WinUi.Services
+namespace Fb2.Document.UI.Services
 {
     public class ElementStyler
     {

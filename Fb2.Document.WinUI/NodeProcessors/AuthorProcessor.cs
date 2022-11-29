@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Fb2.Document.Models;
-using Fb2.Document.UI.WinUi.Entities;
-using Fb2.Document.UI.WinUi.NodeProcessors.Base;
+using Fb2.Document.UI.Entities;
+using Fb2.Document.UI.NodeProcessors.Base;
 using Microsoft.UI.Xaml.Documents;
 
-namespace Fb2.Document.UI.WinUi.NodeProcessors
+namespace Fb2.Document.UI.NodeProcessors
 {
     public class AuthorProcessor : DefaultNodeProcessor
     {

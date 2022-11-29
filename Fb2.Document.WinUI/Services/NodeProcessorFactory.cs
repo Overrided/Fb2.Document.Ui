@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
-using Fb2.Document.UI.WinUi.NodeProcessors;
-using Fb2.Document.UI.WinUi.NodeProcessors.Base;
+using Fb2.Document.UI.NodeProcessors;
+using Fb2.Document.UI.NodeProcessors.Base;
 using Fb2Image = Fb2.Document.Models.Image;
 using Fb2Paragraph = Fb2.Document.Models.Paragraph;
 
-namespace Fb2.Document.UI.WinUi.Services
+namespace Fb2.Document.UI.Services
 {
     public class NodeProcessorFactory
     {

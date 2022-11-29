@@ -4,8 +4,8 @@ using System.Linq;
 using Fb2.Document.Constants;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
-using Fb2.Document.UI.WinUi.Entities;
-using Fb2.Document.UI.WinUi.NodeProcessors.Base;
+using Fb2.Document.UI.Entities;
+using Fb2.Document.UI.NodeProcessors.Base;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -13,7 +13,7 @@ using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
 using Paragraph = Microsoft.UI.Xaml.Documents.Paragraph;
 
-namespace Fb2.Document.UI.WinUi.NodeProcessors
+namespace Fb2.Document.UI.NodeProcessors
 {
     public class TableProcessor : NodeProcessorBase
     {

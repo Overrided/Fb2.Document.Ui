@@ -1,9 +1,9 @@
 ﻿using Fb2.Document.Models.Base;
-using Fb2.Document.UI.WinUi.Common;
-using Fb2.Document.UI.WinUi.Services;
+using Fb2.Document.UI.Common;
+using Fb2.Document.UI.Services;
 using Windows.Foundation;
 
-namespace Fb2.Document.UI.WinUi.Entities
+namespace Fb2.Document.UI.Entities
 {
     public interface IRenderingContext
     {

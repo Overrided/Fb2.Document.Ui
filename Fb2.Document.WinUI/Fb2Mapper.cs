@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
-using Fb2.Document.UI.WinUi.Entities;
+using Fb2.Document.UI.Entities;
 using Microsoft.UI.Xaml.Documents;
 using Windows.Foundation;
 
-namespace Fb2.Document.UI.WinUi
+namespace Fb2.Document.UI
 {
     // TODO : make static/singletone? 
     // TODO : add table of contents?? (or on app level?)

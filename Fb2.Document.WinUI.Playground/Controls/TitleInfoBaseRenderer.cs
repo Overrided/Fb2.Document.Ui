@@ -6,7 +6,7 @@ using System.Threading;
 using Fb2.Document.Constants;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
-using Fb2.Document.UI.WinUi;
+using Fb2.Document.UI;
 using Fb2.Document.WinUI.Playground.Common;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;

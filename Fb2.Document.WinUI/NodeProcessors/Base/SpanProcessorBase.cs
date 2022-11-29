@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using Fb2.Document.UI.WinUi.Entities;
-using Fb2.Document.UI.WinUi.Extensions;
+using Fb2.Document.UI.Entities;
+using Fb2.Document.UI.Extensions;
 using Microsoft.UI.Xaml.Documents;
 
-namespace Fb2.Document.UI.WinUi.NodeProcessors.Base
+namespace Fb2.Document.UI.NodeProcessors.Base
 {
     public abstract class SpanProcessorBase<T> : DefaultNodeProcessor where T : Span, new()
     {

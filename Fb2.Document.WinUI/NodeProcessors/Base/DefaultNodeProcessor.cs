@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Fb2.Document.Models.Base;
-using Fb2.Document.UI.WinUi.Entities;
+using Fb2.Document.UI.Entities;
 using Microsoft.UI.Xaml.Documents;
 
-namespace Fb2.Document.UI.WinUi.NodeProcessors.Base
+namespace Fb2.Document.UI.NodeProcessors.Base
 {
     public class DefaultNodeProcessor : NodeProcessorBase
     {

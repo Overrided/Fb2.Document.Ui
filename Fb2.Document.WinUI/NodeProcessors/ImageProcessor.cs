@@ -6,8 +6,8 @@ using System.Linq;
 using Fb2.Document.Constants;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
-using Fb2.Document.UI.WinUi.Entities;
-using Fb2.Document.UI.WinUi.NodeProcessors.Base;
+using Fb2.Document.UI.Entities;
+using Fb2.Document.UI.NodeProcessors.Base;
 using Microsoft.UI;
 using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
@@ -18,7 +18,7 @@ using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.UI.Text;
 using Image = Microsoft.UI.Xaml.Controls.Image;
 
-namespace Fb2.Document.UI.WinUi.NodeProcessors
+namespace Fb2.Document.UI.NodeProcessors
 {
     public class ImageProcessor : NodeProcessorBase
     {
@@ -252,7 +252,7 @@ namespace Fb2.Document.UI.WinUi.NodeProcessors
                 for (int j = 1; j <= targetCharCount; j++)
                 {
                     // Step 3
-                    int cost = (target[j - 1] == source[i - 1]) ? 0 : 1;
+                    int cost = target[j - 1] == source[i - 1] ? 0 : 1;
 
                     // Step 4
                     distance[i, j] = Math.Min(Math.Min(distance[i - 1, j] + 1, distance[i, j - 1] + 1), distance[i - 1, j - 1] + cost);

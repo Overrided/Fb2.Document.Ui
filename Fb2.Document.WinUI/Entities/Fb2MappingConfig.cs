@@ -1,7 +1,7 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Documents;
 
-namespace Fb2.Document.UI.WinUi.Entities
+namespace Fb2.Document.UI.Entities
 {
     public class PoemConfig : SectionConfig
     {

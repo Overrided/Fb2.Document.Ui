@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Numerics;
-using Fb2.Document.UI.WinUi;
-using Fb2.Document.UI.WinUi.Entities;
-using Fb2.Document.UI.WinUi.NodeProcessors;
+using Fb2.Document.UI;
+using Fb2.Document.UI.Entities;
+using Fb2.Document.UI.NodeProcessors;
 using Fb2.Document.WinUI.Playground.Models;
 using Fb2.Document.WinUI.Playground.Services;
 using Fb2.Document.WinUI.Playground.ViewModels;

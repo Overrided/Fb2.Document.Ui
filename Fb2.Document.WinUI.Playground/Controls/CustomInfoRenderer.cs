@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Fb2.Document.Models;
-using Fb2.Document.UI.WinUi;
+using Fb2.Document.UI;
 using Fb2.Document.WinUI.Playground.Common;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;

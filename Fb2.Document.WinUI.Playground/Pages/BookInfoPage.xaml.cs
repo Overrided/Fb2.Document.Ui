@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Fb2.Document.Constants;
 using Fb2.Document.Models.Base;
-using Fb2.Document.UI.WinUi;
 using Fb2.Document.WinUI.Playground.Models;
 using Fb2.Document.WinUI.Playground.Services;
 using Fb2.Document.WinUI.Playground.ViewModels;

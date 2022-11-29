@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using Microsoft.UI.Xaml.Documents;
 
-namespace Fb2.Document.UI.WinUi.Common
+namespace Fb2.Document.UI.Common
 {
     public class Utils
     {

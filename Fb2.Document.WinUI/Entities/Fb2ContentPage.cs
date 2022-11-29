@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.UI.Xaml.Documents;
 
-namespace Fb2.Document.UI.WinUi.Entities
+namespace Fb2.Document.UI.Entities
 {
     public class Fb2ContentPage : List<TextElement>
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.UI.Xaml.Documents;
 
-namespace Fb2.Document.UI.WinUi.Extensions
+namespace Fb2.Document.UI.Extensions
 {
     public static class InlineCollectionExtensions
     {
