@@ -27,7 +27,6 @@ namespace Fb2.Document.WinUI.Playground.Pages
     public sealed partial class ReadPage : Page
     {
         private Fb2Document selectedFb2Document = null;
-        private Fb2Mapper fb2MappingService;
         private Fb2MappingConfig defaultMappingConfig = new Fb2MappingConfig();
 
         public ReadViewModel ReadViewModel { get; }
@@ -36,8 +35,6 @@ namespace Fb2.Document.WinUI.Playground.Pages
         {
             this.InitializeComponent();
             viewPort.Loaded += ViewPort_Loaded;
-
-            fb2MappingService = new Fb2Mapper();
 
             ReadViewModel = new ReadViewModel
             {
@@ -55,7 +52,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
             //var unsafeMappingConfig = new Fb2MappingConfig(highlightUnsafe: true);
             //var uiContent = fb2MappingService.MapDocument(selectedFb2Document, actualViewHostSize, defaultMappingConfig);
 
-            var uiContent = fb2MappingService.MapDocument(selectedFb2Document, viewPort.GetViewHostSize(), defaultMappingConfig);
+            var uiContent = Fb2Mapper.Instance.MapDocument(selectedFb2Document, viewPort.GetViewHostSize(), defaultMappingConfig);
 
             stop.Stop();
 

@@ -1,73 +1,104 @@
-<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:rtv="using:RichTextView"
-    xmlns:local="using:Fb2.Document.WinUI.Playground.Controls"
-	xmlns:fb2Doc="using:Fb2.Document.Models">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:rtv="using:RichTextView"
+					xmlns:local="using:Fb2.Document.WinUI.Playground.Controls"
+					xmlns:fb2Doc="using:Fb2.Document.Models">
 
 	<Style TargetType="local:TitleInfoBaseRenderer">
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="local:TitleInfoBaseRenderer">
-					<Grid
-					    DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
+					<Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+						  Background="{TemplateBinding Background}"
+						  BorderBrush="{TemplateBinding BorderBrush}"
+						  BorderThickness="{TemplateBinding BorderThickness}">
 
 						<Grid.RowDefinitions>
-							<RowDefinition Height="*"/>
-							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*" />
+							<RowDefinition Height="Auto" />
 						</Grid.RowDefinitions>
 
-						<rtv:RichTextView Grid.Row="0" 
+						<rtv:RichTextView Grid.Row="0"
 										  ShowProgress="False"
 										  ShowLoading="True"
 										  RichTextContent="{Binding ViewModel.TitleInfoContent, Mode=OneWay}">
 						</rtv:RichTextView>
 
-						<ListView Grid.Row="1"
-								  ItemsSource="{Binding ViewModel.BookGenres, Mode=OneWay}"
-								  HorizontalAlignment="Stretch"
-								  HorizontalContentAlignment="Stretch"
-								  VerticalAlignment="Stretch"
-								  VerticalContentAlignment="Stretch"
-								  SelectionMode="None"
-								  IsItemClickEnabled="False"
-								  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-								  ScrollViewer.HorizontalScrollMode="Auto"
-								  ScrollViewer.IsHorizontalRailEnabled="True"
-								  ScrollViewer.VerticalScrollBarVisibility="Hidden"
-								  ScrollViewer.VerticalScrollMode="Disabled"
-								  ScrollViewer.IsVerticalRailEnabled="False"
-								  ScrollViewer.CanContentRenderOutsideBounds="True"
-								  ScrollViewer.IsDeferredScrollingEnabled="True"
-								  ScrollViewer.IsHorizontalScrollChainingEnabled="True">
-							<ListView.ItemsPanel>
-								<ItemsPanelTemplate>
-									<ItemsStackPanel Orientation="Horizontal" HorizontalAlignment="Stretch"/>
-								</ItemsPanelTemplate>
-							</ListView.ItemsPanel>
-							<ListView.ItemContainerStyle>
-								<Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
-									<Setter Property="Margin" Value="4"/>
-									<Setter Property="Padding" Value="4"/>
-								</Style>
-							</ListView.ItemContainerStyle>
-							<ListView.ItemTemplate>
-								<DataTemplate>
-									<Border x:Name="GenreContainer" 
-											BorderBrush="{StaticResource AccentFillColorTertiaryBrush}"
-											Background="{StaticResource SystemAccentColorDark3}"
-											BorderThickness="1"
-											CornerRadius="6">
-										<TextBlock HorizontalAlignment="Center" 
-												   HorizontalTextAlignment="Center" 
-												   Text="{Binding Content}"/>
-									</Border>
-								</DataTemplate>
-							</ListView.ItemTemplate>
-						</ListView>
+						<StackPanel Grid.Row="1"
+									Margin="0,12,0,0"
+									Orientation="Vertical"
+									Visibility="{Binding ViewModel.BookGenres.Count, Converter={StaticResource CtVConterter}}">
+
+							<TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
+									   FontWeight="SemiBold"
+									   Text="Genres"
+									   HorizontalAlignment="Left"
+									   HorizontalTextAlignment="Center" />
+
+							<ListView ItemsSource="{Binding ViewModel.BookGenres, Mode=OneWay}"
+									  HorizontalAlignment="Stretch"
+									  HorizontalContentAlignment="Stretch"
+									  VerticalAlignment="Stretch"
+									  VerticalContentAlignment="Stretch"
+									  SelectionMode="None"
+									  IsItemClickEnabled="False"
+									  Padding="0,2,0,6"
+									  Margin="0,2,0,0"
+									  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+									  ScrollViewer.HorizontalScrollMode="Auto"
+									  ScrollViewer.IsHorizontalRailEnabled="True"
+									  ScrollViewer.VerticalScrollBarVisibility="Hidden"
+									  ScrollViewer.VerticalScrollMode="Disabled"
+									  ScrollViewer.IsVerticalRailEnabled="False"
+									  ScrollViewer.CanContentRenderOutsideBounds="True">
+								<ListView.ItemsPanel>
+									<ItemsPanelTemplate>
+										<ItemsStackPanel Orientation="Horizontal"
+														 HorizontalAlignment="Stretch"
+														 VerticalAlignment="Stretch" />
+									</ItemsPanelTemplate>
+								</ListView.ItemsPanel>
+								<ListView.ItemContainerStyle>
+									<Style TargetType="ListViewItem"
+										   BasedOn="{StaticResource DefaultListViewItemStyle}">
+										<Setter Property="Margin"
+												Value="0" />
+										<Setter Property="Padding"
+												Value="0" />
+										<Setter Property="HorizontalAlignment"
+												Value="Stretch" />
+										<Setter Property="VerticalAlignment"
+												Value="Stretch" />
+										<Setter Property="VerticalContentAlignment"
+												Value="Stretch" />
+										<Setter Property="HorizontalContentAlignment"
+												Value="Stretch" />
+									</Style>
+								</ListView.ItemContainerStyle>
+								<ListView.ItemTemplate>
+									<DataTemplate>
+										<Border CornerRadius="0"
+												Padding="8,6,8,6"
+												Margin="0,2,6,6"
+												Translation="0,0,28"
+												VerticalAlignment="Stretch"
+												HorizontalAlignment="Stretch">
+											<Border.Shadow>
+												<ThemeShadow />
+											</Border.Shadow>
+											<TextBlock HorizontalAlignment="Stretch"
+													   VerticalAlignment="Center"
+													   HorizontalTextAlignment="Center"
+													   IsTextSelectionEnabled="True"
+													   Text="{Binding Title}">
+											</TextBlock>
+										</Border>
+									</DataTemplate>
+								</ListView.ItemTemplate>
+							</ListView>
+
+						</StackPanel>
+
 					</Grid>
 				</ControlTemplate>
 			</Setter.Value>
@@ -78,11 +109,10 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="local:PublishInfoRenderer">
-					<Border
-						DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
+					<Border DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+							Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}">
 
 						<rtv:RichTextView ShowProgress="False"
 										  ShowLoading="True"
@@ -98,11 +128,10 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="local:CustomInfoRenderer">
-					<Border
-						DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
+					<Border DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+							Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}">
 
 						<rtv:RichTextView ShowProgress="False"
 										  ShowLoading="True"
@@ -118,11 +147,10 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="local:DocumentInfoRenderer">
-					<Border
-						DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
+					<Border DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+							Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}">
 
 						<rtv:RichTextView ShowProgress="False"
 										  ShowLoading="True"

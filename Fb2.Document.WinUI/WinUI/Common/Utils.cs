@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Microsoft.UI.Xaml.Documents;
 
 namespace Fb2.Document.UI.WinUi.Common
 {
     public class Utils
     {
+        private static readonly Lazy<Utils> instance = new(() => new Utils(), LazyThreadSafetyMode.ExecutionAndPublication);
+
+        public static Utils Instance => instance.Value;
+
+        private Utils() { }
+
         public List<TextElement> Paragraphize(params TextElement[] elements)
         {
             if (elements == null || !elements.Any())

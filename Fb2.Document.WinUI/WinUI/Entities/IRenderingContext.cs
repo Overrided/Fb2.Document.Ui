@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Fb2.Document.Models.Base;
+﻿using Fb2.Document.Models.Base;
 using Fb2.Document.UI.WinUi.Common;
 using Fb2.Document.UI.WinUi.Services;
 using Windows.Foundation;

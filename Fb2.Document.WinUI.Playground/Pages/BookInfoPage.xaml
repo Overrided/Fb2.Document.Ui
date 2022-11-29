@@ -16,11 +16,6 @@
 		<converters:String64ToImageConverter x:Key="SToImage"
 											 x:Name="SToImage" />
 
-		<converters:ValueToVisibilityConverter x:Key="VtvConterter"
-											   x:Name="VtvConterter" />
-		<converters:CountToVisibilityConverter x:Key="CtVConterter"
-											   x:Name="CtVConterter" />
-
 	</Page.Resources>
 
 	<Grid x:Name="OuterGrid"
@@ -90,6 +85,8 @@
 											  VerticalContentAlignment="Stretch">
 									<Image Source="{x:Bind Content, Converter={StaticResource SToImage}}"
 										   Stretch="None"
+										   HorizontalAlignment="Center"
+										   VerticalAlignment="Center"
 										   ToolTipService.ToolTip="{x:Bind Id}" />
 								</ScrollViewer>
 							</Border>

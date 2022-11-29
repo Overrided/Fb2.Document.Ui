@@ -18,20 +18,14 @@ namespace Fb2.Document.UI.WinUi.Entities
             Data = data;
             RenderingConfig = config ?? defaultConfig;
             ViewPortSize = viewPortSize;
-
-            Styler = new ElementStyler();
-            Utils = new Utils();
-
-            // test part begins here
-            ProcessorFactory = new NodeProcessorFactory();
         }
 
         // Services, half of them should not be there)
-        public ElementStyler Styler { get; }
+        public ElementStyler Styler => ElementStyler.Instance;
 
-        public Utils Utils { get; }
+        public Utils Utils => Utils.Instance;
 
-        public NodeProcessorFactory ProcessorFactory { get; }
+        public NodeProcessorFactory ProcessorFactory => NodeProcessorFactory.Instance;
 
         //Data
         public Fb2MappingConfig RenderingConfig { get; }

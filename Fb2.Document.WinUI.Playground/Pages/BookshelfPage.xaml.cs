@@ -14,7 +14,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using WinRT.Interop;
 using Fb2Image = Fb2.Document.Models.Image;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -224,7 +223,8 @@ namespace Fb2.Document.WinUI.Playground.Pages
                 return book;
             });
 
-            var books = await Task.WhenAll(fileTasks);
+            //var books = await Task.WhenAll(fileTasks);
+            await Task.WhenAll(fileTasks);
         }
 
         private void OnBookReadButtonClick(object sender, RoutedEventArgs e)

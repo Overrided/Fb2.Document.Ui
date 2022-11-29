@@ -8,11 +8,11 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
 {
     public class BinaryImageViewModel
     {
-        public string Content { get; set; }
+        public string Content { get; set; } = string.Empty;
 
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
-        public string ContentType { get; set; }
+        public string ContentType { get; set; } = string.Empty;
 
         public override bool Equals(object? obj)
         {

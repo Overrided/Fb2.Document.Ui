@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using AngleSharp;
+using System.Threading;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
 using Fb2.Document.UI.WinUi.Entities;
-using Fb2.Document.UI.WinUi.Html;
 using Microsoft.UI.Xaml.Documents;
 using Windows.Foundation;
 
@@ -16,16 +14,11 @@ namespace Fb2.Document.UI.WinUi
     // TODO : add table of contents?? (or on app level?)
     public class Fb2Mapper
     {
-        //public async Task MapAngle(Fb2Document fb2Document, HtmlMappingConfig htmlMappingConfig)
-        //{
-        //    var context = BrowsingContext.New();
-        //    // get new document, not completely empty (has head and body)
-        //    var document = await context.OpenNewAsync();
-        //    var element = document.CreateElement("strong");
-        //    element.TextContent = "Hello World!";
-        //    document.Body.AppendChild(element);
-        //    var html = document.ToHtml();
-        //}
+        private static readonly Lazy<Fb2Mapper> instance = new(() => new Fb2Mapper(), LazyThreadSafetyMode.ExecutionAndPublication);
+
+        public static Fb2Mapper Instance => instance.Value;
+
+        private Fb2Mapper() { }
 
         public IEnumerable<Fb2ContentPage> MapDocument(Fb2Document document, Size viewPortSize, Fb2MappingConfig config = null)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
 using Fb2.Document.UI.WinUi.NodeProcessors;
@@ -11,46 +12,11 @@ namespace Fb2.Document.UI.WinUi.Services
 {
     public class NodeProcessorFactory
     {
-        private ParagraphProcessor paragraphProcessor = null;
+        private static readonly Lazy<NodeProcessorFactory> instance = new Lazy<NodeProcessorFactory>(() => new NodeProcessorFactory(), LazyThreadSafetyMode.ExecutionAndPublication);
 
-        private SpanProcessor spanProcessor = null;
+        public static NodeProcessorFactory Instance => instance.Value;
 
-        private DefaultNodeProcessor defaultProcessor = null;
-
-        private ParagraphProcessor ParagraphProcessor
-        {
-            get
-            {
-                if (paragraphProcessor == null)
-                    paragraphProcessor = new ParagraphProcessor();
-
-                return paragraphProcessor;
-            }
-        }
-
-        private SpanProcessor SpanProcessor
-        {
-            get
-            {
-                if (spanProcessor == null)
-                    spanProcessor = new SpanProcessor();
-
-                return spanProcessor;
-            }
-        }
-
-        public DefaultNodeProcessor DefaultProcessor
-        {
-            get
-            {
-                if (defaultProcessor == null)
-                    defaultProcessor = new DefaultNodeProcessor();
-
-                return defaultProcessor;
-            }
-        }
-
-        private readonly Dictionary<Type, NodeProcessorBase> NodeMap = new Dictionary<Type, NodeProcessorBase>
+        private readonly Dictionary<Type, NodeProcessorBase> nodeMap = new Dictionary<Type, NodeProcessorBase>
         {
             { typeof(Table), new TableProcessor() },
             { typeof(Fb2Image), new ImageProcessor() },
@@ -65,7 +31,7 @@ namespace Fb2.Document.UI.WinUi.Services
             { typeof(CustomInfo), new CustomInfoProcessor() }
         };
 
-        private readonly HashSet<Type> ParagraphElements = new HashSet<Type>
+        private readonly HashSet<Type> paragraphElements = new HashSet<Type>
         {
             typeof(Fb2Paragraph),
             typeof(StanzaVerse),
@@ -85,7 +51,7 @@ namespace Fb2.Document.UI.WinUi.Services
             typeof(ISBNInfo)
         };
 
-        private readonly HashSet<Type> SpanElements = new HashSet<Type>
+        private readonly HashSet<Type> spanElements = new HashSet<Type>
         {
             typeof(Strikethrough),
             typeof(Code),
@@ -99,18 +65,31 @@ namespace Fb2.Document.UI.WinUi.Services
             typeof(HomePage)
         };
 
+        public ParagraphProcessor ParagraphProcessor { get; }
+
+        public SpanProcessor SpanProcessor { get; }
+
+        public DefaultNodeProcessor DefaultProcessor { get; }
+
+        private NodeProcessorFactory()
+        {
+            ParagraphProcessor = new ParagraphProcessor();
+            SpanProcessor = new SpanProcessor();
+            DefaultProcessor = new DefaultNodeProcessor();
+        }
+
         public NodeProcessorBase GetNodeProcessor(Fb2Node node)
         {
             var currentNodeType = node.GetType();
 
-            if (ParagraphElements.Contains(currentNodeType))
+            if (paragraphElements.Contains(currentNodeType))
                 return ParagraphProcessor;
 
-            if (SpanElements.Contains(currentNodeType))
+            if (spanElements.Contains(currentNodeType))
                 return SpanProcessor;
 
-            if (NodeMap.ContainsKey(currentNodeType))
-                return NodeMap[currentNodeType];
+            if (nodeMap.ContainsKey(currentNodeType))
+                return nodeMap[currentNodeType];
 
             return DefaultProcessor;
         }
