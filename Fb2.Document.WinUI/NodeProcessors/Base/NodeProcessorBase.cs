@@ -13,9 +13,9 @@ namespace Fb2.Document.UI.NodeProcessors.Base
     {
         private const string TagSeparator = "|";
 
-        public abstract List<TextElement> Process(IRenderingContext context);
+        public abstract List<TextElement> Process(RenderingContext context);
 
-        public List<TextElement> ElementSelector(Fb2Node node, IRenderingContext context)
+        public List<TextElement> ElementSelector(Fb2Node node, RenderingContext context)
         {
             context.UpdateNode(node);
 
@@ -24,7 +24,7 @@ namespace Fb2.Document.UI.NodeProcessors.Base
 
             var shouldApplyStyles = context.RenderingConfig.UseStyles && (result?.Any() ?? false);
             if (shouldApplyStyles)
-                context.Styler.ApplyStyle(context, result);
+                context.Styler.ApplyStyle(context, result!);
 
             context.Backtrack();
 

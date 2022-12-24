@@ -7,6 +7,6 @@ namespace Fb2.Document.UI.NodeProcessors
 {
     public class EmptyLineProcessor : DefaultNodeProcessor
     {
-        public override List<TextElement> Process(IRenderingContext context) => new List<TextElement>(1) { new LineBreak() };
+        public override List<TextElement> Process(RenderingContext context) => new List<TextElement>(1) { new LineBreak() };
     }
 }

@@ -9,7 +9,7 @@ namespace Fb2.Document.UI.NodeProcessors.Base
 {
     public class DefaultNodeProcessor : NodeProcessorBase
     {
-        public override List<TextElement> Process(IRenderingContext context)
+        public override List<TextElement> Process(RenderingContext context)
         {
             var currentNode = context.CurrentNode;
 

@@ -20,36 +20,45 @@ namespace Fb2.Document.UI
 
         private Fb2Mapper() { }
 
-        public IEnumerable<Fb2ContentPage> MapDocument(Fb2Document document, Size viewPortSize, Fb2MappingConfig config = null)
+        public IEnumerable<Fb2ContentPage> MapDocument(Fb2Document document, Size viewPortSize, Fb2DocumentMappingConfig? config = null)
         {
-            var context = new RenderingContext<Fb2Document>(document, viewPortSize, config);
+            var docConfig = config ?? new();
 
-            var renderableNodes = GetRenderableNodes(context);
+            var mapWholeDoc = docConfig.MapWholeDocument;
+
+            var wholeDocNodes = new List<Fb2Node>(1) { document.Book! };
+            var context = new RenderingContext(wholeDocNodes, viewPortSize, docConfig);
+
+            var renderableNodes = mapWholeDoc ?
+                wholeDocNodes :
+                GetRenderableNodes(document);
 
             return MapContent(renderableNodes, context);
         }
 
-        public IEnumerable<Fb2ContentPage> MapNodes(IEnumerable<Fb2Node> nodes, Size viewPortSize, Fb2MappingConfig config = null)
+        public IEnumerable<Fb2ContentPage> MapNodes(IEnumerable<Fb2Node> nodes, Size viewPortSize, Fb2MappingConfig? config = null)
         {
             if (nodes == null || !nodes.Any())
                 throw new ArgumentNullException(nameof(nodes));
 
-            var context = new RenderingContext<IEnumerable<Fb2Node>>(nodes, viewPortSize, config);
+            var context = new RenderingContext(nodes, viewPortSize, config);
 
             return MapContent(nodes, context);
         }
 
-        public IEnumerable<Fb2ContentPage> MapNode(Fb2Node node, Size viewPortSize, Fb2MappingConfig config = null)
+        public IEnumerable<Fb2ContentPage> MapNode(Fb2Node node, Size viewPortSize, Fb2MappingConfig? config = null)
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
 
-            var context = new RenderingContext<Fb2Node>(node, viewPortSize, config);
 
-            return MapContent(new Fb2Node[1] { node }, context);
+            var nodesToMap = new List<Fb2Node>(1) { node };
+            var context = new RenderingContext(nodesToMap, viewPortSize, config);
+
+            return MapContent(nodesToMap, context);
         }
 
-        private IEnumerable<Fb2ContentPage> MapContent(IEnumerable<Fb2Node> nodes, IRenderingContext renderingContext)
+        private IEnumerable<Fb2ContentPage> MapContent(IEnumerable<Fb2Node> nodes, RenderingContext renderingContext)
         {
             var dataPages = PaginateContent(nodes);
             var textNodes = dataPages.Select(dp =>
@@ -61,19 +70,19 @@ namespace Fb2.Document.UI
             return textNodes;
         }
 
-        private List<TextElement> BuildNodes(IEnumerable<Fb2Node> nodes, IRenderingContext context) =>
+        private List<TextElement> BuildNodes(IEnumerable<Fb2Node> nodes, RenderingContext context) =>
             nodes.Select(n => context.ProcessorFactory.DefaultProcessor.ElementSelector(n, context))
                  .OfType<List<TextElement>>()
                  .SelectMany(l => l).ToList();
 
-        private List<Fb2Node> GetRenderableNodes(RenderingContext<Fb2Document> context)
+        private List<Fb2Node> GetRenderableNodes(Fb2Document document)
         {
             var renderableNodes = new List<Fb2Node>();
 
-            if (context.Data.Book.TryGetFirstDescendant<Coverpage>(out var coverpage))
-                renderableNodes.Add(coverpage);
+            if (document.Book?.TryGetFirstDescendant<Coverpage>(out var coverpage) ?? false)
+                renderableNodes.Add(coverpage!);
 
-            renderableNodes.AddRange(context.Data.Bodies);
+            renderableNodes.AddRange(document.Bodies);
             return renderableNodes;
         }
 
@@ -92,7 +101,7 @@ namespace Fb2.Document.UI
                         currentPage = new List<Fb2Node>();
                     }
 
-                    var bodyContent = PaginateContent((node as Fb2Container).Content);
+                    var bodyContent = PaginateContent((node as Fb2Container)!.Content);
                     if (bodyContent != null && bodyContent.Any())
                         result.AddRange(bodyContent);
                 }

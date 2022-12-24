@@ -195,7 +195,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
             if (instance == null)
                 return null;
 
-            if (instance.IsEmpty)
+            if (!instance.HasContent && !instance.HasAttributes)
                 return null;
 
             return instance;

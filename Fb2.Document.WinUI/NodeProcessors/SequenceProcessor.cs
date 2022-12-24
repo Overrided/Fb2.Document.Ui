@@ -8,7 +8,7 @@ namespace Fb2.Document.UI.NodeProcessors
 {
     public class SequenceProcessor : DefaultNodeProcessor
     {
-        public override List<TextElement> Process(IRenderingContext context)
+        public override List<TextElement> Process(RenderingContext context)
         {
             var node = context.CurrentNode;
 

@@ -26,7 +26,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
     public sealed partial class ReadPage : Page
     {
         private Fb2Document selectedFb2Document = null;
-        private Fb2MappingConfig defaultMappingConfig = new Fb2MappingConfig();
+        private Fb2DocumentMappingConfig defaultMappingConfig = new Fb2DocumentMappingConfig(false);
 
         public ReadViewModel ReadViewModel { get; }
 

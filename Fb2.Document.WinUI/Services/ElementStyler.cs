@@ -22,11 +22,11 @@ namespace Fb2.Document.UI.Services
 
         private const string MonotypeFontFamily = "Courier New";
 
-        private readonly Dictionary<string, Action<IRenderingContext, TextElement>> styles;
+        private readonly Dictionary<string, Action<RenderingContext, TextElement>> styles;
 
         private ElementStyler()
         {
-            styles = new Dictionary<string, Action<IRenderingContext, TextElement>>
+            styles = new Dictionary<string, Action<RenderingContext, TextElement>>
             {
                 { ElementNames.TableHeader, (context, el) => el.FontWeight = FontWeights.SemiBold },
                 { ElementNames.Strikethrough, (context, el) => el.TextDecorations = TextDecorations.Strikethrough },
@@ -259,7 +259,7 @@ namespace Fb2.Document.UI.Services
             };
         }
 
-        public void ApplyStyle(IRenderingContext context, List<TextElement> elements)
+        public void ApplyStyle(RenderingContext context, List<TextElement> elements)
         {
             var currentNode = context.CurrentNode;
             //var parent = context.ParentNodes.Any() ? context.ParentNodes.Peek() : null;

@@ -30,7 +30,7 @@ namespace Fb2.Document.UI.NodeProcessors.Base
             ElementNames.BookBody
         };
 
-        public override List<TextElement> Process(IRenderingContext context)
+        public override List<TextElement> Process(RenderingContext context)
         {
             var originalNode = context.CurrentNode;
 
@@ -45,7 +45,7 @@ namespace Fb2.Document.UI.NodeProcessors.Base
             return normalizedContent;
         }
 
-        protected Fb2Node RewrapNode(IRenderingContext context)
+        protected Fb2Node RewrapNode(RenderingContext context)
         {
             // use node not context
             var affectiveParents = GetAffectingLayoutParents(context);
@@ -79,7 +79,7 @@ namespace Fb2.Document.UI.NodeProcessors.Base
             return new InlineUIContainer { Child = innerContainer };
         }
 
-        private List<Fb2Container> GetAffectingLayoutParents(IRenderingContext context)
+        private List<Fb2Container> GetAffectingLayoutParents(RenderingContext context)
         {
             var ancestors = context.CurrentNode.GetAncestors();
 

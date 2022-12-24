@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:localConverters="clr-namespace:Fb2.Document.MAUI.Playground.Converters"
+			 x:Class="Fb2.Document.MAUI.Playground.MainPage"
+			 Title="Bookshelf">
+	<ContentPage.Resources>
+		<localConverters:Base64StringToImageConverter x:Key="SToImage"
+													  x:Name="SToImage" />
+	</ContentPage.Resources>
+
+	<Grid>
+		<ScrollView VerticalScrollBarVisibility="Always"
+					VerticalOptions="Fill"
+					HorizontalOptions="Fill">
+			<CollectionView x:Name="BooksCollectionView"
+							HorizontalOptions="FillAndExpand"
+							VerticalOptions="FillAndExpand"
+							Margin="8"
+							SelectionMode="Single"
+							SelectionChanged="OnSelectedBook_ChangedEvent">
+				<CollectionView.ItemTemplate>
+					<DataTemplate>
+						<Border Stroke="#666"
+								StrokeThickness="1"
+								HorizontalOptions="Center"
+								Margin="8"
+								Padding="0,6,0,6"
+								MaximumWidthRequest="250"
+								MaximumHeightRequest="300"
+								MinimumWidthRequest="180"
+								MinimumHeightRequest="200">
+
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="*" />
+									<RowDefinition Height="Auto" />
+								</Grid.RowDefinitions>
+								<Image Grid.Row="0"
+									   Source="{Binding CoverpageBase64Image, Converter={StaticResource SToImage}}"
+									   Aspect="AspectFit" />
+
+								<VerticalStackLayout Grid.Row="1">
+									<Label Text="{Binding BookName}"
+										   FontAttributes="Bold"
+										   VerticalOptions="StartAndExpand"
+										   MaxLines="1"
+										   Margin="6,6,0,0" />
+
+									<Label Text="{Binding BookAuthor}"
+										   MaxLines="1"
+										   VerticalOptions="StartAndExpand"
+										   Margin="6,0,0,0" />
+								</VerticalStackLayout>
+							</Grid>
+
+						</Border>
+					</DataTemplate>
+				</CollectionView.ItemTemplate>
+			</CollectionView>
+		</ScrollView>
+		<Label x:Name="emptyStateLabel"
+			   FontSize="36"
+			   Opacity="0.5"
+			   Text="no books yet"
+			   VerticalOptions="Center"
+			   HorizontalOptions="Center" />
+		<ActivityIndicator x:Name="activityIndicator"
+						   IsRunning="False"
+						   IsEnabled="False"
+						   IsVisible="False"
+						   VerticalOptions="Center"
+						   HorizontalOptions="Center" />
+		<Button VerticalOptions="End"
+				HorizontalOptions="End"
+				CornerRadius="90"
+				Text="+"
+				FontSize="42"
+				FontAutoScalingEnabled="True"
+				MaximumHeightRequest="60"
+				MinimumHeightRequest="60"
+				MaximumWidthRequest="60"
+				MinimumWidthRequest="60"
+				Margin="20"
+				Clicked="AddBooks_Button_Clicked">
+		</Button>
+	</Grid>
+
+</ContentPage>
+

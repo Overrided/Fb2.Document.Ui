@@ -1,11 +1,12 @@
-﻿using Fb2.Document.Models.Base;
+﻿using System.Collections.Generic;
+using Fb2.Document.Models.Base;
 using Fb2.Document.UI.Common;
 using Fb2.Document.UI.Services;
 using Windows.Foundation;
 
 namespace Fb2.Document.UI.Entities
 {
-    internal class RenderingContext<T> : IRenderingContext where T : class
+    public class RenderingContext
     {
         //TODO: remove test config
         //private Config defaultConfig = new Config(poemConfig:
@@ -13,7 +14,7 @@ namespace Fb2.Document.UI.Entities
         //        textAuthorHorizontalAlignment: TextAlignment.Left));
         private Fb2MappingConfig defaultConfig = new Fb2MappingConfig();
 
-        internal RenderingContext(T data, Size viewPortSize, Fb2MappingConfig config = null)
+        internal RenderingContext(IEnumerable<Fb2Node> data, Size viewPortSize, Fb2MappingConfig? config = null)
         {
             Data = data;
             RenderingConfig = config ?? defaultConfig;
@@ -30,12 +31,12 @@ namespace Fb2.Document.UI.Entities
         //Data
         public Fb2MappingConfig RenderingConfig { get; }
 
-        public T Data { get; } = null;
+        public IEnumerable<Fb2Node> Data { get; } = null;
 
         public Size ViewPortSize { get; } = Size.Empty;
 
         //State
-        public Fb2Node CurrentNode { get; private set; } = null;
+        public Fb2Node? CurrentNode { get; private set; } = null;
 
         public void UpdateNode(Fb2Node node)
         {
