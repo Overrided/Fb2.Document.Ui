@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace RichTextView.Common
+namespace RichTextView.WinUI.Common
 {
     public abstract class ObservableObject : INotifyPropertyChanged, INotifyPropertyChanging
     {

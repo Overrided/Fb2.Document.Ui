@@ -1,6 +1,6 @@
 ﻿using Fb2.Document.WinUI.Playground.Common;
 using Microsoft.UI.Xaml;
-using RichTextView.DTOs;
+using RichTextView.WinUI.DTOs;
 
 namespace Fb2.Document.WinUI.Playground.ViewModels
 {

@@ -4,7 +4,7 @@
 	  xmlns:local="using:Fb2.Document.WinUI.Playground"
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	  xmlns:rtv="using:RichTextView"
+	  xmlns:rtv="using:RichTextView.WinUI"
 	  mc:Ignorable="d"
 	  NavigationCacheMode="Disabled"
 	  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">

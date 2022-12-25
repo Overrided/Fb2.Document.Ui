@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fb2.Document.WinUI", "Fb2.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fb2.Document.WinUI.Playground", "Fb2.Document.WinUI.Playground\Fb2.Document.WinUI.Playground.csproj", "{9EE217CC-8611-49C3-BD50-A1F649AB76D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RichTextView", "RichTextView\RichTextView.csproj", "{6EBC46A3-8B51-44FA-9694-FCEE2A3FBB06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RichTextView.WinUI", "RichTextView.WinUI\RichTextView.WinUI.csproj", "{6EBC46A3-8B51-44FA-9694-FCEE2A3FBB06}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fb2.Document.MAUI.Playground", "Fb2.Document.MAUI.Playground\Fb2.Document.MAUI.Playground.csproj", "{A2E5099E-01AA-4A5F-B48B-8B6AB58253B7}"
 EndProject

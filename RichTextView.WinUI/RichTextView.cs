@@ -10,17 +10,17 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Input;
-using RichTextView.Common;
-using RichTextView.DTOs;
-using RichTextView.EventArguments;
-using RichTextView.Extensions;
-using RichTextView.Services;
+using RichTextView.WinUI.Common;
+using RichTextView.WinUI.DTOs;
+using RichTextView.WinUI.EventArguments;
+using RichTextView.WinUI.Extensions;
+using RichTextView.WinUI.Services;
 using Windows.Foundation;
 //using Microsoft.Toolkit.Uwp;
 
 // The Templated Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234235
 
-namespace RichTextView
+namespace RichTextView.WinUI
 {
     // TODO : update Rendered event - raise Rendered false on reset? 
     // TODO : add font size change?

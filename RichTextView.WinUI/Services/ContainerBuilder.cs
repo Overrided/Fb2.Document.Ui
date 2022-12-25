@@ -2,7 +2,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace RichTextView.Services
+namespace RichTextView.WinUI.Services
 {
     public static class ContainerBuilder
     {

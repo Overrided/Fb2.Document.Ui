@@ -1,4 +1,4 @@
-﻿namespace RichTextView.EventArguments
+﻿namespace RichTextView.WinUI.EventArguments
 {
     public class BookProgressChangedEventArgs
     {

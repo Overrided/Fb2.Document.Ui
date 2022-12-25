@@ -1,6 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-					xmlns:rtv="using:RichTextView"
+					xmlns:rtv="using:RichTextView.WinUI"
 					xmlns:local="using:Fb2.Document.WinUI.Playground.Controls"
 					xmlns:fb2Doc="using:Fb2.Document.Models">
 
@@ -29,7 +29,7 @@
 									Orientation="Vertical"
 									Visibility="{Binding ViewModel.BookGenres.Count, Converter={StaticResource CtVConterter}}">
 
-							<TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
+							<TextBlock FontSize="18"
 									   FontWeight="SemiBold"
 									   Text="Genres"
 									   HorizontalAlignment="Left"

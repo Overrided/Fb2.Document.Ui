@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.UI.Xaml.Documents;
 
-namespace RichTextView.DTOs
+namespace RichTextView.WinUI.DTOs
 {
     public sealed class RichContentPage : List<TextElement>
     {

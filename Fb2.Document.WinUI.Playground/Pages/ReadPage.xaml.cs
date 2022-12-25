@@ -12,7 +12,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Navigation;
-using RichTextView.DTOs;
+using RichTextView.WinUI.DTOs;
+using RichTextView.WinUI.EventArguments;
 using Windows.UI.Popups;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -88,12 +89,12 @@ namespace Fb2.Document.WinUI.Playground.Pages
             base.OnNavigatingFrom(e);
         }
 
-        private void RichTextView_OnProgress(object sender, RichTextView.EventArguments.BookProgressChangedEventArgs e)
+        private void RichTextView_OnProgress(object sender, BookProgressChangedEventArgs e)
         {
             Debug.WriteLine($"Book current position: {e.ScrollableHeight}, vOffset: {e.VerticalOffset}");
         }
 
-        private async void RichTextView_HyperlinkActivated(object sender, RichTextView.EventArguments.RichHyperlinkActivatedEventArgs e)
+        private async void RichTextView_HyperlinkActivated(object sender, RichHyperlinkActivatedEventArgs e)
         {
             string testMessage;
 

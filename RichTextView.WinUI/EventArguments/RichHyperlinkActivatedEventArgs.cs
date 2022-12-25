@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RichTextView.EventArguments
+namespace RichTextView.WinUI.EventArguments
 {
     public class RichHyperlinkActivatedEventArgs : EventArgs
     {

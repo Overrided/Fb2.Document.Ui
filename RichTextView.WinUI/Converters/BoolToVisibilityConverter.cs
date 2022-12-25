@@ -2,7 +2,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 
-namespace RichTextView.Converters
+namespace RichTextView.WinUI.Converters
 {
     internal class BoolToVisibilityConverter : IValueConverter
     {

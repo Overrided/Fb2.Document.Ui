@@ -47,9 +47,8 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Fb2.Document.Html\Fb2.Document.Html.csproj" />
     <ProjectReference Include="..\Fb2.Document.WinUI\Fb2.Document.WinUI.csproj" />
-    <ProjectReference Include="..\RichTextView\RichTextView.csproj" />
+    <ProjectReference Include="..\RichTextView.WinUI\RichTextView.WinUI.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\BookInfoPage.xaml">

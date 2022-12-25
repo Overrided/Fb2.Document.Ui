@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.UI.Xaml.Documents;
 
-namespace RichTextView.Extensions
+namespace RichTextView.WinUI.Extensions
 {
     public static class BlockCollectionExtensions
     {

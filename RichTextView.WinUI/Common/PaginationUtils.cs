@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.UI.Xaml.Documents;
 
-namespace RichTextView.Common
+namespace RichTextView.WinUI.Common
 {
     internal static class PaginationUtils
     {

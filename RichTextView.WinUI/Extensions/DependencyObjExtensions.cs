@@ -7,7 +7,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
 
-namespace RichTextView.Extensions
+namespace RichTextView.WinUI.Extensions
 {
     public static class DependencyObjExtensions
     {

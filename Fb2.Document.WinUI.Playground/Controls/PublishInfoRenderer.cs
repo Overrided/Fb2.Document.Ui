@@ -5,7 +5,7 @@ using Fb2.Document.WinUI;
 using Fb2.Document.WinUI.Playground.Common;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using RichTextView.DTOs;
+using RichTextView.WinUI.DTOs;
 using Windows.Foundation;
 
 // To learn more about WinUI, the WinUI project structure,
