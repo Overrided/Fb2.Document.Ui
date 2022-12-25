@@ -1,6 +1,6 @@
 ﻿using Microsoft.UI.Xaml;
 
-namespace Fb2.Document.UI.Entities;
+namespace Fb2.Document.WinUI.Entities;
 
 public class PoemConfig : SectionConfig
 {
