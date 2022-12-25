@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Fb2.Document.Models.Base;
-using Fb2.Document.UI.Common;
-using Fb2.Document.UI.Services;
+using Fb2.Document.WinUI.Common;
+using Fb2.Document.WinUI.Services;
 using Windows.Foundation;
 
-namespace Fb2.Document.UI.Entities
+namespace Fb2.Document.WinUI.Entities
 {
     public class RenderingContext
     {

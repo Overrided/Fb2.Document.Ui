@@ -3,12 +3,12 @@ using System.Linq;
 using Fb2.Document.Constants;
 using Fb2.Document.Factories;
 using Fb2.Document.Models.Base;
-using Fb2.Document.UI.Entities;
+using Fb2.Document.WinUI.Entities;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 
-namespace Fb2.Document.UI.NodeProcessors.Base
+namespace Fb2.Document.WinUI.NodeProcessors.Base
 {
     public abstract class RewrapNodeProcessorBase : DefaultNodeProcessor
     {

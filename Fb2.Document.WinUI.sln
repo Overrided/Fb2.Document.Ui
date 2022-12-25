@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fb2.Document.UI", "Fb2.Document.WinUI\Fb2.Document.UI.csproj", "{BA69E727-B0C1-408C-989C-F58620D6BEEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fb2.Document.WinUI", "Fb2.Document.WinUI\Fb2.Document.WinUI.csproj", "{BA69E727-B0C1-408C-989C-F58620D6BEEC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fb2.Document.WinUI.Playground", "Fb2.Document.WinUI.Playground\Fb2.Document.WinUI.Playground.csproj", "{9EE217CC-8611-49C3-BD50-A1F649AB76D5}"
 EndProject
@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RichTextView", "RichTextVie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fb2.Document.MAUI.Playground", "Fb2.Document.MAUI.Playground\Fb2.Document.MAUI.Playground.csproj", "{A2E5099E-01AA-4A5F-B48B-8B6AB58253B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fb2.Document.Html", "Fb2.Document.Html\Fb2.Document.Html.csproj", "{8CEF0A7D-AD6F-409D-B849-5D731BDE9FE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fb2.Document.Html", "Fb2.Document.Html\Fb2.Document.Html.csproj", "{8CEF0A7D-AD6F-409D-B849-5D731BDE9FE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

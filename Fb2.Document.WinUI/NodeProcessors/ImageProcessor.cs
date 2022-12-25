@@ -5,8 +5,8 @@ using System.Linq;
 using Fb2.Document.Constants;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
-using Fb2.Document.UI.Entities;
-using Fb2.Document.UI.NodeProcessors.Base;
+using Fb2.Document.WinUI.Entities;
+using Fb2.Document.WinUI.NodeProcessors.Base;
 using Microsoft.UI;
 using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
@@ -17,7 +17,7 @@ using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.UI.Text;
 using Image = Microsoft.UI.Xaml.Controls.Image;
 
-namespace Fb2.Document.UI.NodeProcessors
+namespace Fb2.Document.WinUI.NodeProcessors
 {
     public class ImageProcessor : NodeProcessorBase
     {

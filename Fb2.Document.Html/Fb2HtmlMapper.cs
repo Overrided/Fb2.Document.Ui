@@ -12,25 +12,6 @@ namespace Fb2.Document.Html;
 
 public class Fb2HtmlMapper
 {
-    //public static string MapDocument(Fb2Document fb2Document)
-    //{
-    //    var renderable = GetRenderableNodes(fb2Document);
-    //    var paginated = PaginateContent(renderable);
-    //    //var proc = new Fb2HtmlNodeProcessorBase();
-
-    //    //var sb = new StringBuilder();
-    //    //foreach (var section in paginated)
-    //    //{
-    //    //    foreach (var node in section)
-    //    //    {
-    //    //        var result = proc.Process(node);
-    //    //        sb.AppendLine(result);
-    //    //    }
-    //    //}
-
-    //    //return sb.ToString();
-    //}
-
     public static string MapDocument(Fb2Document document, Fb2DocumentMappingConfig? config = null)
     {
         var docConfig = config ?? new();
@@ -45,25 +26,32 @@ public class Fb2HtmlMapper
             GetRenderableNodes(document);
 
         var mappd = MapContent(renderableNodes, context);
-        var flat = mappd.SelectMany(x => x);
-        var joined = string.Join(string.Empty, flat); // TODO : stringBuilder / byte[]
+        var joined = string.Join(string.Empty, mappd); // TODO : stringBuilder / byte[]
         return joined;
     }
 
-    private static IEnumerable<List<string>> MapContent(IEnumerable<Fb2Node> nodes, RenderingContext renderingContext)
+    private static List<string> MapContent(IEnumerable<Fb2Node> nodes, RenderingContext renderingContext)
     {
-        var dataPages = PaginateContent(nodes);
-        var textNodes = dataPages.Select(dp =>
-        {
-            var buildNodes = BuildNodes(dp, renderingContext);
-            if (buildNodes == null || buildNodes.Count == 0)
-            {
-                return new List<string>(0);
-            }
-            return new List<string>(buildNodes);
-        });
+        //var dataPages = PaginateContent(nodes);
+        //var textNodes = dataPages.Select(dp =>
+        //{
+        //    var buildNodes = BuildNodes(dp, renderingContext);
+        //    if (buildNodes == null || buildNodes.Count == 0)
+        //    {
+        //        return new List<string>(0);
+        //    }
+        //    return new List<string>(buildNodes);
+        //});
 
-        return textNodes;
+        //return textNodes;
+
+        var buildNodes = BuildNodes(nodes, renderingContext);
+        if (buildNodes == null || buildNodes.Count == 0)
+        {
+            return new List<string>(0);
+        }
+
+        return buildNodes;
     }
     private static List<string> BuildNodes(IEnumerable<Fb2Node> nodes, RenderingContext context) =>
         nodes.Select(n => context.ProcessorFactory.DefaultProcessor.ElementSelector(n, context))
@@ -82,32 +70,32 @@ public class Fb2HtmlMapper
         return renderableNodes;
     }
 
-    private static List<List<Fb2Node>> PaginateContent(IEnumerable<Fb2Node> nodes)
-    {
-        var result = new List<List<Fb2Node>>();
-        var currentPage = new List<Fb2Node>();
+    //private static List<List<Fb2Node>> PaginateContent(IEnumerable<Fb2Node> nodes)
+    //{
+    //    var result = new List<List<Fb2Node>>();
+    //    var currentPage = new List<Fb2Node>();
 
-        foreach (var node in nodes)
-        {
-            if (node is BookBody || node is BodySection || node is Coverpage)
-            {
-                if (currentPage.Any())
-                {
-                    result.Add(currentPage);
-                    currentPage = new List<Fb2Node>();
-                }
+    //    foreach (var node in nodes)
+    //    {
+    //        if (node is BookBody || node is BodySection || node is Coverpage)
+    //        {
+    //            if (currentPage.Any())
+    //            {
+    //                result.Add(currentPage);
+    //                currentPage = new List<Fb2Node>();
+    //            }
 
-                var bodyContent = PaginateContent((node as Fb2Container)!.Content);
-                if (bodyContent != null && bodyContent.Any())
-                    result.AddRange(bodyContent);
-            }
-            else
-                currentPage.Add(node);
-        }
+    //            var bodyContent = PaginateContent((node as Fb2Container)!.Content);
+    //            if (bodyContent != null && bodyContent.Any())
+    //                result.AddRange(bodyContent);
+    //        }
+    //        else
+    //            currentPage.Add(node);
+    //    }
 
-        if (currentPage.Any())
-            result.Add(currentPage);
+    //    if (currentPage.Any())
+    //        result.Add(currentPage);
 
-        return result;
-    }
+    //    return result;
+    //}
 }

@@ -33,10 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fb2.Document" Version="2.2.1" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.4" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.1" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.8" />
+    <PackageReference Include="Fb2.Document" Version="2.3.0" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.2.221209.1" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.755" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fb2.Document.Html\Fb2.Document.Html.csproj" />
-    <ProjectReference Include="..\Fb2.Document.WinUI\Fb2.Document.UI.csproj" />
+    <ProjectReference Include="..\Fb2.Document.WinUI\Fb2.Document.WinUI.csproj" />
     <ProjectReference Include="..\RichTextView\RichTextView.csproj" />
   </ItemGroup>
   <ItemGroup>

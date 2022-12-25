@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Fb2.Document.UI.Entities;
-using Fb2.Document.UI.Extensions;
-using Fb2.Document.UI.NodeProcessors.Base;
+using Fb2.Document.WinUI.Entities;
+using Fb2.Document.WinUI.Extensions;
+using Fb2.Document.WinUI.NodeProcessors.Base;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 
-namespace Fb2.Document.UI.NodeProcessors
+namespace Fb2.Document.WinUI.NodeProcessors
 {
     public class SubscriptProcessor : RewrapNodeProcessorBase
     {
