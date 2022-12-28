@@ -1,0 +1,61 @@
+﻿<Page x:Class="Fb2.Document.UWP.Playground.Pages.BookInfoPage"
+	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	  xmlns:local="using:Fb2.Document.UWP.Playground.Pages"
+	  xmlns:converters="using:Fb2.Document.UWP.Playground.Converters"
+	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	  xmlns:rtv="using:RichTextView.UWP"
+	  mc:Ignorable="d"
+	  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<Page.Resources>
+		<converters:String64ToImageConverter x:Key="SToImage"
+											 x:Name="SToImage" />
+	</Page.Resources>
+
+	<!--quick and dirty, reimplement in layout-adaptive way-->
+	<Grid>
+		<Grid ColumnSpacing="20"
+			  Margin="20, 40">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Image Grid.Column="0"
+				   VerticalAlignment="Center"
+				   HorizontalAlignment="Center"
+				   Stretch="Uniform"
+				   Source="{x:Bind BookInfoViewModel.CoverpageBase64Image, Converter={StaticResource SToImage}}">
+			</Image>
+			<Grid Grid.Column="1">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<rtv:RichTextView Grid.Row="0"
+								  x:Name="descriptionViewPort"
+								  RichTextContent="{x:Bind BookInfoViewModel.ChaptersContent, Mode=OneWay}"
+								  ShowProgress="False"
+								  ShowLoading="False"
+								  PageMargin="5"
+								  HorizontalAlignment="Stretch"
+								  VerticalAlignment="Center"
+								  HyperlinkActivated="BookInfo_HyperlinkActivated">
+				</rtv:RichTextView>
+				<Button Grid.Row="1"
+						CornerRadius="90"
+						HorizontalAlignment="Right"
+						Width="54"
+						Height="54"
+						Click="OnReadButton_Click">
+					<FontIcon FontFamily="Segoe MDL2 Assets"
+							  Glyph="&#xE736;"
+							  FontSize="26"
+							  HorizontalAlignment="Center"
+							  VerticalAlignment="Center" />
+				</Button>
+			</Grid>
+		</Grid>
+	</Grid>
+</Page>
