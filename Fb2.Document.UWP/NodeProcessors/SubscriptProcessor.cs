@@ -10,19 +10,17 @@ namespace Fb2.Document.UWP.NodeProcessors
 {
     public class SubscriptProcessor : RewrapNodeProcessorBase
     {
-        public override List<TextElement> Process(IRenderingContext context)
+        public override List<TextElement> Process(RenderingContext context)
         {
-            var rewrappedNode = RewrapNode(context);
-
-            var inlines = rewrappedNode != null ? ElementSelector(rewrappedNode, context) : base.Process(context);
-            var normalizedInlines = context.Utils.Paragraphize(inlines);
+            var normalizedContent = base.Process(context);
 
             var txtb = new RichTextBlock
             {
                 FontSize = context.RenderingConfig.BaseFontSize,
-                Margin = new Thickness(0, 9, 0, -9)
+                Margin = new Thickness(0, 1, 0, -10),
+                Padding = new Thickness(0, 0, 0, 1)
             };
-            txtb.Blocks.AddRange(normalizedInlines);
+            txtb.Blocks.AddRange(normalizedContent);
 
             var inlineContainer = AddContainer(txtb);
 

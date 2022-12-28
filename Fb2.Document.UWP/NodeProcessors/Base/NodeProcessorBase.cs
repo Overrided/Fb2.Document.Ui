@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Fb2.Document.Constants;
 using Fb2.Document.Models.Base;
@@ -12,53 +13,53 @@ namespace Fb2.Document.UWP.NodeProcessors.Base
 {
     public abstract class NodeProcessorBase
     {
-        private HashSet<string> PageStarterTypeNames = new HashSet<string>
-        {
-            ElementNames.BookBody,
-            ElementNames.BookBodySection,
-            ElementNames.Coverpage
-        };
+        private const string TagSeparator = "|";
 
-        public abstract List<TextElement> Process(IRenderingContext context);
+        public abstract List<TextElement> Process(RenderingContext context);
 
-        public List<TextElement> ElementSelector(Fb2Node node, IRenderingContext context)
+        public List<TextElement> ElementSelector(Fb2Node node, RenderingContext context)
         {
             context.UpdateNode(node);
 
             var processor = context.ProcessorFactory.GetNodeProcessor(node);
             var result = processor.Process(context);
 
-            if (result?.Any() ?? false)
-            {
+            var shouldApplyStyles = context.RenderingConfig.UseStyles && (result?.Any() ?? false);
+            if (shouldApplyStyles)
                 context.Styler.ApplyStyle(context, result);
-                TagElements(context, result);
-            }
 
             context.Backtrack();
 
             return result;
         }
 
-        protected void SetTooltip(DependencyObject target, string tooltipText)
+        protected static void SetTooltip(DependencyObject target, string tooltipText)
         {
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+
             if (string.IsNullOrWhiteSpace(tooltipText))
-                return;
+                throw new ArgumentNullException(nameof(tooltipText));
 
             ToolTip toolTip = new ToolTip { Content = tooltipText };
             ToolTipService.SetToolTip(target, toolTip);
         }
 
-        private void TagElements(IRenderingContext context, List<TextElement> elements)
+        protected static bool TagElement(DependencyObject element, string tag)
         {
-            var currentNode = context.Node;
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            if (currentNode.TryGetAttribute(AttributeNames.Id, true, out var idAttr))
-                context.DependencyPropertyManager.AddOrUpdateProperty(elements.First(), idAttr.Key, idAttr.Value);
+            if (string.IsNullOrEmpty(tag))
+                throw new ArgumentNullException(nameof(tag));
 
-            var currentNodeName = currentNode.Name;
+            if (!(element is FrameworkElement frameworkElement))
+                return false;
 
-            if (PageStarterTypeNames.Contains(currentNodeName))
-                context.DependencyPropertyManager.AddOrUpdateProperty(elements.First(), Fb2UIConstants.ContainerTypeAttributeName, currentNodeName);
+            var existingTag = frameworkElement.Tag?.ToString();
+            var newTag = string.IsNullOrEmpty(existingTag) ? tag : $"{existingTag}{TagSeparator}{tag}";
+            frameworkElement.Tag = newTag;
+            return true;
         }
     }
 }

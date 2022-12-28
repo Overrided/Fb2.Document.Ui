@@ -1,165 +1,116 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Fb2.Document.Models.Base;
+using System.Threading;
 using Fb2.Document.Models;
-using Windows.UI.Xaml.Documents;
+using Fb2.Document.Models.Base;
 using Fb2.Document.UWP.Entities;
 using Windows.Foundation;
-using Fb2.Document.UWP.Common;
+using Windows.UI.Xaml.Documents;
 
 namespace Fb2.Document.UWP
 {
+    // TODO : make static/singletone? 
+    // TODO : add table of contents?? (or on app level?)
     public class Fb2Mapper
     {
-        public List<Fb2ContentPage> MapDocument(Fb2Document document, Size viewPortSize, Fb2MappingConfig config = null)
+        private static readonly Lazy<Fb2Mapper> instance = new Lazy<Fb2Mapper>(() => new Fb2Mapper(), LazyThreadSafetyMode.ExecutionAndPublication);
+
+        public static Fb2Mapper Instance => instance.Value;
+
+        private Fb2Mapper() { }
+
+        public IEnumerable<Fb2ContentPage> MapDocument(Fb2Document document, Size viewPortSize, Fb2DocumentMappingConfig config = null)
         {
-            var context = new RenderingContext<Fb2Document>(document, viewPortSize, config);
+            var docConfig = config ?? new Fb2DocumentMappingConfig();
 
-            var contentWatch = Stopwatch.StartNew();
+            var mapWholeDoc = docConfig.MapWholeDocument;
 
-            var renderableNodes = GetRenderableNodes(context);
+            var wholeDocNodes = new List<Fb2Node>(1) { document.Book };
+            var context = new RenderingContext(wholeDocNodes, viewPortSize, docConfig);
 
-            // TODO: look into it better, it's another way of paginating content
-            //var prePaginateContent = PaginateContent(renderableNodes);
-            //var preBuildNodes = prePaginateContent.Select((page) => // works but breaks styles (((
-            //{
-            //    //if (context.ParentNodes.Any())
-            //    //    while (context.ParentNodes.Any())
-            //    //        context.Backtrack();
+            var renderableNodes = mapWholeDoc ?
+                wholeDocNodes :
+                GetRenderableNodes(document);
 
-            //    //context.UpdateNode(new BodySection());
-
-            //    var pageTe = BuildNodes(page, context);
-
-            //    //context.Backtrack();
-
-            //    return new Fb2ContentPage(pageTe);
-            //}).ToList();
-
-            //return preBuildNodes;
-
-            var buildNodes = BuildNodes(renderableNodes, context);
-
-            var dataPages = PaginateContent(buildNodes, context);
-
-            Debug.WriteLine($"Data preparations: {contentWatch.Elapsed}");
-
-            return dataPages;
+            return MapContent(renderableNodes, context);
         }
 
-        public List<Fb2ContentPage> MapNode(Fb2Node node, Size viewPortSize, Fb2MappingConfig config = null)
-        {
-            if (node == null)
-                throw new ArgumentNullException(nameof(node));
-
-            var context = new RenderingContext<Fb2Node>(node, viewPortSize, config);
-
-            var textNodes = BuildNode(node, context);
-            var dataPages = PaginateContent(textNodes, context);
-            return dataPages;
-        }
-
-        public List<Fb2ContentPage> MapNodes(IEnumerable<Fb2Node> nodes, Size viewPortSize, Fb2MappingConfig config = null)
+        public IEnumerable<Fb2ContentPage> MapNodes(IEnumerable<Fb2Node> nodes, Size viewPortSize, Fb2MappingConfig config = null)
         {
             if (nodes == null || !nodes.Any())
                 throw new ArgumentNullException(nameof(nodes));
 
-            var context = new RenderingContext<IEnumerable<Fb2Node>>(nodes, viewPortSize, config);
+            var context = new RenderingContext(nodes, viewPortSize, config);
 
-            var buildNodes = BuildNodes(nodes, context);
-            var dataPages = PaginateContent(buildNodes, context);
-            return dataPages;
+            return MapContent(nodes, context);
         }
 
-        private List<TextElement> BuildNodes(IEnumerable<Fb2Node> nodes, IRenderingContext context) =>
-            nodes.Select(n => BuildNode(n, context))
+        public IEnumerable<Fb2ContentPage> MapNode(Fb2Node node, Size viewPortSize, Fb2MappingConfig config = null)
+        {
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+
+
+            var nodesToMap = new List<Fb2Node>(1) { node };
+            var context = new RenderingContext(nodesToMap, viewPortSize, config);
+
+            return MapContent(nodesToMap, context);
+        }
+
+        private IEnumerable<Fb2ContentPage> MapContent(IEnumerable<Fb2Node> nodes, RenderingContext renderingContext)
+        {
+            var dataPages = PaginateContent(nodes);
+            var textNodes = dataPages.Select(dp =>
+            {
+                var buildNodes = BuildNodes(dp, renderingContext);
+                return new Fb2ContentPage(buildNodes);
+            });
+
+            return textNodes;
+        }
+
+        private List<TextElement> BuildNodes(IEnumerable<Fb2Node> nodes, RenderingContext context) =>
+            nodes.Select(n => context.ProcessorFactory.DefaultProcessor.ElementSelector(n, context))
                  .OfType<List<TextElement>>()
                  .SelectMany(l => l).ToList();
 
-        private List<TextElement> BuildNode(Fb2Node node, IRenderingContext context) =>
-            context.ProcessorFactory.DefaultProcessor.ElementSelector(node, context);
-
-        private List<Fb2Node> GetRenderableNodes(RenderingContext<Fb2Document> context)
+        private List<Fb2Node> GetRenderableNodes(Fb2Document document)
         {
             var renderableNodes = new List<Fb2Node>();
 
-            // TODO : use TryGetFirstDescendant once new version of lib is compatible
-            var coverpage = context.Data.Book.GetFirstDescendant<Coverpage>();
-            if (coverpage != null)
+            if (document.Book?.TryGetFirstDescendant<Coverpage>(out var coverpage) ?? false)
                 renderableNodes.Add(coverpage);
 
-            renderableNodes.AddRange(context.Data.Bodies);
-
+            renderableNodes.AddRange(document.Bodies);
             return renderableNodes;
         }
 
-        // TODO : take a look into it, alternating way of "content pagination"
-        // TODO : pass "parent" of element as a parameter, and return tuple if element matches?
-        // so each time we need to render we know what parent it was and can establish styles
-        //private List<IEnumerable<Fb2Node>> PaginateContent(List<Fb2Node> nodes) // is not compatible with newest fb2.document
-        //{
-        //    var result = new List<IEnumerable<Fb2Node>>();
-        //    var currentPage = new List<Fb2Node>();
-
-        //    for (int i = 0; i < nodes.Count; i++)
-        //    {
-        //        var node = nodes[i];
-
-        //        if (node is BookBody || node is BodySection)
-        //        {
-        //            if (currentPage.Any())
-        //            {
-        //                result.Add(currentPage);
-        //                currentPage = new List<Fb2Node>();
-        //            }
-
-        //            var bodyContent = PaginateContent((node as Fb2Container).Content);
-        //            if (bodyContent != null && bodyContent.Any())
-        //                result.AddRange(bodyContent);
-        //        }
-        //        else
-        //            currentPage.Add(node);
-        //    }
-
-        //    if (currentPage.Any())
-        //        result.Add(currentPage);
-
-        //    return result;
-        //}
-
-        private List<Fb2ContentPage> PaginateContent(List<TextElement> elements, IRenderingContext context)
+        private List<List<Fb2Node>> PaginateContent(IEnumerable<Fb2Node> nodes)
         {
-            var result = new List<Fb2ContentPage>();
+            var result = new List<List<Fb2Node>>();
+            var currentPage = new List<Fb2Node>();
 
-            var currentPageData = new Fb2ContentPage();
-
-            for (int i = 0; i < elements.Count; i++)
+            foreach (var node in nodes)
             {
-                var element = elements[i];
-
-                if (i == 0)
+                if (node is BookBody || node is BodySection || node is Coverpage)
                 {
-                    currentPageData.Add(element);
-                    continue;
-                }
+                    if (currentPage.Any())
+                    {
+                        result.Add(currentPage);
+                        currentPage = new List<Fb2Node>();
+                    }
 
-                var containerType = context.DependencyPropertyManager.GetProperty(element, Fb2UIConstants.ContainerTypeAttributeName);
-
-                if (!string.IsNullOrWhiteSpace(containerType))
-                {
-                    result.Add(currentPageData);
-                    currentPageData = new Fb2ContentPage { element };
+                    var bodyContent = PaginateContent((node as Fb2Container).Content);
+                    if (bodyContent != null && bodyContent.Any())
+                        result.AddRange(bodyContent);
                 }
-                else  // not a container at all
-                    currentPageData.Add(element);
+                else
+                    currentPage.Add(node);
             }
 
-            if (currentPageData.Any())
-                result.Add(currentPageData);
+            if (currentPage.Any())
+                result.Add(currentPage);
 
             return result;
         }

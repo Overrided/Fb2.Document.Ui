@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Documents;
 
@@ -9,18 +10,24 @@ namespace Fb2.Document.UWP.Common
 {
     public class Utils
     {
+        private static readonly Lazy<Utils> instance = new Lazy<Utils>(() => new Utils(), LazyThreadSafetyMode.ExecutionAndPublication);
+
+        public static Utils Instance => instance.Value;
+
+        private Utils() { }
+
         public List<TextElement> Paragraphize(params TextElement[] elements)
         {
             if (elements == null || !elements.Any())
                 throw new ArgumentNullException(nameof(elements));
 
+            // TODO : use OfType<TextElement> ?
             return Paragraphize(elements.Where(e => e != null));
         }
 
         public List<TextElement> Paragraphize(IEnumerable<TextElement> elements)
         {
             Paragraph actualParagraph = null;
-
             var result = new List<TextElement>();
 
             foreach (var element in elements)

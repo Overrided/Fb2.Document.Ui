@@ -10,67 +10,46 @@ using Windows.Foundation;
 
 namespace Fb2.Document.UWP.Entities
 {
-    public class RenderingContext<T> : IRenderingContext where T : class
+    public class RenderingContext
     {
         //TODO: remove test config
         //private Config defaultConfig = new Config(poemConfig:
         //    new PoemConfig(dateHorizontalAlignment: TextAlignment.Center,
         //        textAuthorHorizontalAlignment: TextAlignment.Left));
-        //private Fb2MappingConfig defaultConfig = new Fb2MappingConfig();
+        private Fb2MappingConfig defaultConfig = new Fb2MappingConfig();
 
-        public RenderingContext(T data, Size viewPortSize, Fb2MappingConfig config = null)
+        internal RenderingContext(IEnumerable<Fb2Node> data, Size viewPortSize, Fb2MappingConfig config = null)
         {
             Data = data;
-            RenderingConfig = config ?? new Fb2MappingConfig();
+            RenderingConfig = config ?? defaultConfig;
             ViewPortSize = viewPortSize;
-
-            Styler = new ElementStyler();
-            Utils = new Utils();
-
-            // test part begins here
-            ProcessorFactory = new NodeProcessorFactory();
-            DependencyPropertyManager = new DependencyPropertyManager();
         }
 
         // Services, half of them should not be there)
-        public ElementStyler Styler { get; }
+        public ElementStyler Styler => ElementStyler.Instance;
 
-        public Utils Utils { get; }
+        public Utils Utils => Utils.Instance;
 
-        public NodeProcessorFactory ProcessorFactory { get; }
-
-        public DependencyPropertyManager DependencyPropertyManager { get; }
+        public NodeProcessorFactory ProcessorFactory => NodeProcessorFactory.Instance;
 
         //Data
         public Fb2MappingConfig RenderingConfig { get; }
 
-        public T Data { get; } = null;
+        public IEnumerable<Fb2Node> Data { get; } = null;
 
         public Size ViewPortSize { get; } = Size.Empty;
 
         //State
-        public Fb2Node Node { get; private set; } = null;
-
-        public Stack<Fb2Node> ParentNodes { get; private set; } = new Stack<Fb2Node>();
-
-        #region State Methods
+        public Fb2Node CurrentNode { get; private set; } = null;
 
         public void UpdateNode(Fb2Node node)
         {
-            if (Node != null)
-                ParentNodes.Push(Node);
-
-            Node = node;
+            CurrentNode = node;
         }
 
         public void Backtrack()
         {
-            if (ParentNodes.Any())
-                Node = ParentNodes.Pop();
-            else if (Node != null)
-                Node = null;
+            CurrentNode = CurrentNode?.Parent;
         }
-
-        #endregion
     }
 }

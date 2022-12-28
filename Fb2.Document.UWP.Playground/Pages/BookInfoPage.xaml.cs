@@ -1,27 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Fb2.Document.Constants;
-using Fb2.Document.Models.Base;
 using Fb2.Document.Models;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Fb2.Document.Models.Base;
+using Fb2.Document.UWP.Entities;
+using Fb2.Document.UWP.Playground.Common;
+using Fb2.Document.UWP.Playground.Models;
+using Fb2.Document.UWP.Playground.Services;
+using RichTextView.UWP.DTOs;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Documents;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Fb2.Document.UWP.Playground.Common;
-using Fb2.Document.UWP.Entities;
-using Fb2.Document.UWP.Playground.Models;
-using RichTextView.UWP.DTOs;
-using Fb2.Document.UWP.Playground.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -65,7 +57,7 @@ namespace Fb2.Document.UWP.Playground.Pages
     /// </summary>
     public sealed partial class BookInfoPage : Page
     {
-        private Fb2Mapper fb2MappingService = new Fb2Mapper();
+        //private Fb2Mapper fb2MappingService = new Fb2Mapper();
         private Fb2MappingConfig defaultMappingConfig = new Fb2MappingConfig();
         public BookInfoViewModel BookInfoViewModel { get; private set; } = new BookInfoViewModel();
         private BookModel bookModel = null;
@@ -105,7 +97,7 @@ namespace Fb2.Document.UWP.Playground.Pages
                 BookInfoViewModel = null;
             }
 
-            fb2MappingService = null;
+            //fb2MappingService = null;
             bookModel = null;
         }
 
@@ -142,7 +134,7 @@ namespace Fb2.Document.UWP.Playground.Pages
                 nodes.Add(annotation);
 
             var size = descriptionViewPort.GetViewHostSize();
-            var descriptionText = fb2MappingService.MapNodes(nodes, size);
+            var descriptionText = Fb2Mapper.Instance.MapNodes(nodes, size).ToList();
 
             // we have had sequence info mapped before
             // use Remove api once new lib is hooked
@@ -150,7 +142,7 @@ namespace Fb2.Document.UWP.Playground.Pages
             if (publishInfo != null && publishInfo.Content.Any())
             {
                 publishInfo.Content.RemoveAll(n => n is SequenceInfo);
-                var publishInfoPage = fb2MappingService.MapNode(publishInfo, size);
+                var publishInfoPage = Fb2Mapper.Instance.MapNode(publishInfo, size);
                 if (publishInfoPage != null && publishInfoPage.Any())
                     descriptionText.AddRange(publishInfoPage);
             }
@@ -158,7 +150,7 @@ namespace Fb2.Document.UWP.Playground.Pages
             var customInfo = bookModel.Fb2Document.CustomInfo;
             if (customInfo != null)
             {
-                var customInfoPage = fb2MappingService.MapNode(customInfo, size);
+                var customInfoPage = Fb2Mapper.Instance.MapNode(customInfo, size);
                 if (customInfoPage != null && customInfoPage.Any())
                     descriptionText.AddRange(customInfoPage);
             }

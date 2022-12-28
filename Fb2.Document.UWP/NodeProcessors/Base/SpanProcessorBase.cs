@@ -7,7 +7,7 @@ namespace Fb2.Document.UWP.NodeProcessors.Base
 {
     public abstract class SpanProcessorBase<T> : DefaultNodeProcessor where T : Span, new()
     {
-        public override List<TextElement> Process(IRenderingContext context)
+        public override List<TextElement> Process(RenderingContext context)
         {
             var inlines = base.Process(context);
 

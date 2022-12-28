@@ -85,26 +85,33 @@ namespace Fb2.Document.UWP.Entities
     // TODO : add bool UseStyles / UseDefaultStyles
     public class Fb2MappingConfig
     {
-        public int BaseFontSize { get; }
+        public int BaseFontSize { get; set; } = 18;
 
-        public double ParagraphIndent { get; }
+        public double ParagraphIndent { get; set; } = 20;
 
-        public bool HighlightUnsafe { get; }
+        public bool HighlightUnsafe { get; set; } = false;
 
-        public PoemConfig Poem { get; }
+        public bool UseStyles { get; set; } = true;
 
-        public ConfigBase Body { get; }
+        public PoemConfig Poem { get; set; } = new PoemConfig();
 
-        public SectionConfig Section { get; }
+        public ConfigBase Body { get; set; } = new ConfigBase();
 
-        public QuoteConfig Quote { get; }
+        public SectionConfig Section { get; set; } = new SectionConfig();
 
-        public AnnotationConfig Annotation { get; }
+        public QuoteConfig Quote { get; set; } = new QuoteConfig();
+
+        public AnnotationConfig Annotation { get; set; } = new AnnotationConfig();
+
+        public Fb2MappingConfig()
+        {
+        }
 
         public Fb2MappingConfig(
             int baseFontSize = 18,
             double paragraphIndent = 20,
             bool highlightUnsafe = false,
+            bool useStyles = true,
             PoemConfig poemConfig = null,
             ConfigBase bodyConfig = null,
             SectionConfig bodySectionConfig = null,
@@ -114,12 +121,46 @@ namespace Fb2.Document.UWP.Entities
             BaseFontSize = baseFontSize;
             ParagraphIndent = paragraphIndent;
             HighlightUnsafe = highlightUnsafe;
+            UseStyles = useStyles;
 
             Poem = poemConfig ?? new PoemConfig();
             Body = bodyConfig ?? new ConfigBase();
             Section = bodySectionConfig ?? new SectionConfig();
             Quote = citeConfig ?? new QuoteConfig();
             Annotation = annotation ?? new AnnotationConfig();
+        }
+    }
+
+    public class Fb2DocumentMappingConfig : Fb2MappingConfig
+    {
+        public bool MapWholeDocument { get; } = false;
+
+        public Fb2DocumentMappingConfig()
+        {
+        }
+
+        public Fb2DocumentMappingConfig(
+            bool mapWholeDocument = false,
+            int baseFontSize = 18,
+            double paragraphIndent = 20,
+            bool highlightUnsafe = false,
+            bool useStyles = true,
+            PoemConfig poemConfig = null,
+            ConfigBase bodyConfig = null,
+            SectionConfig bodySectionConfig = null,
+            QuoteConfig citeConfig = null,
+            AnnotationConfig annotation = null) : base(
+                baseFontSize,
+                paragraphIndent,
+                highlightUnsafe,
+                useStyles,
+                poemConfig,
+                bodyConfig,
+                bodySectionConfig,
+                citeConfig,
+                annotation)
+        {
+            MapWholeDocument = mapWholeDocument;
         }
     }
 }

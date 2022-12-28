@@ -7,7 +7,7 @@ namespace Fb2.Document.UWP.NodeProcessors
 {
     public class ParagraphProcessor : DefaultNodeProcessor
     {
-        public override List<TextElement> Process(IRenderingContext context)
+        public override List<TextElement> Process(RenderingContext context)
         {
             var inlines = base.Process(context);
 

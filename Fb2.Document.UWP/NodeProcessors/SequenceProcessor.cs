@@ -8,13 +8,13 @@ namespace Fb2.Document.UWP.NodeProcessors
 {
     public class SequenceProcessor : DefaultNodeProcessor
     {
-        public override List<TextElement> Process(IRenderingContext context)
+        public override List<TextElement> Process(RenderingContext context)
         {
-            var node = context.Node;
+            var node = context.CurrentNode;
 
             var result = node.TryGetAttribute(AttributeNames.Name, true, out var seqNameKvp) ?
                     seqNameKvp.Value :
-                    string.Empty; ;
+                    string.Empty;
 
             if (node.TryGetAttribute(AttributeNames.Number, true, out var seqNumberKvps))
                 result = string.IsNullOrEmpty(result) ? seqNumberKvps.Value : $"{result} {seqNumberKvps.Value}";

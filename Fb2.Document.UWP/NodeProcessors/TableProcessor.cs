@@ -17,9 +17,9 @@ namespace Fb2.Document.UWP.NodeProcessors
 {
     public class TableProcessor : NodeProcessorBase
     {
-        public override List<TextElement> Process(IRenderingContext context)
+        public override List<TextElement> Process(RenderingContext context)
         {
-            var table = context.Node as Table;
+            var table = context.CurrentNode as Table;
 
             var content = table.Content;
 
@@ -167,7 +167,7 @@ namespace Fb2.Document.UWP.NodeProcessors
             return cellContainer;
         }
 
-        private RichTextBlock CreateCellContentPresenter(Fb2Node cellModel, IRenderingContext context)
+        private RichTextBlock CreateCellContentPresenter(Fb2Node cellModel, RenderingContext context)
         {
             var textPresenter = new RichTextBlock
             {

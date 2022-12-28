@@ -1,24 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Fb2.Document.UWP.Entities;
 using Fb2.Document.UWP.Playground.Common;
 using Fb2.Document.UWP.Playground.Models;
 using RichTextView.UWP.DTOs;
 using RichTextView.UWP.EventArguments;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Documents;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -96,7 +87,7 @@ namespace Fb2.Document.UWP.Playground.Pages
     public sealed partial class ReadPage : Page
     {
         private Fb2Document selectedFb2Document = null;
-        private Fb2Mapper fb2MappingService = null;
+        //private Fb2Mapper fb2MappingService = null;
         private Fb2MappingConfig defaultMappingConfig = new Fb2MappingConfig();
 
         public ReadViewModel ReadViewModel { get; private set; }
@@ -107,7 +98,7 @@ namespace Fb2.Document.UWP.Playground.Pages
 
             viewPort.Loaded += ViewPort_Loaded;
 
-            fb2MappingService = new Fb2Mapper();
+            //fb2MappingService = new Fb2Mapper();
 
             ReadViewModel = new ReadViewModel
             {
@@ -148,7 +139,7 @@ namespace Fb2.Document.UWP.Playground.Pages
                 ReadViewModel = null;
             }
 
-            fb2MappingService = null;
+            //fb2MappingService = null;
             selectedFb2Document = null;
         }
 
@@ -159,7 +150,7 @@ namespace Fb2.Document.UWP.Playground.Pages
             var actualViewHostSize = viewPort.GetViewHostSize();
             //var smallFontConfig = new Fb2MappingConfig(14);
             //var unsafeMappingConfig = new Fb2MappingConfig(highlightUnsafe: true);
-            var uiContent = fb2MappingService.MapDocument(selectedFb2Document, actualViewHostSize, defaultMappingConfig);
+            var uiContent = Fb2Mapper.Instance.MapDocument(selectedFb2Document, actualViewHostSize, new Fb2DocumentMappingConfig());
 
             stop.Stop();
 

@@ -124,12 +124,10 @@
     <Compile Include="Common\Utils.cs" />
     <Compile Include="Entities\Fb2ContentPage.cs" />
     <Compile Include="Entities\Fb2MappingConfig.cs" />
-    <Compile Include="Entities\IRenderingContext.cs" />
     <Compile Include="Entities\RenderingContext.cs" />
     <Compile Include="Extensions\InlineCollectionExtensions.cs" />
     <Compile Include="Fb2Mapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\DependencyPropertyManager.cs" />
     <Compile Include="Services\ElementStyler.cs" />
     <Compile Include="Services\NodeProcessorFactory.cs" />
     <EmbeddedResource Include="Properties\Fb2.Document.UWP.rd.xml" />
