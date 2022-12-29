@@ -35,7 +35,7 @@ namespace Fb2.Document.UWP.Playground.Pages
     {
         private const int EditingDistanceThreshold = 3;
 
-        public ObservableCollection<BookModel> selectedBooks = new ObservableCollection<BookModel> { BookModel.AddBookModel };
+        public ObservableCollection<BookModel> selectedBooks = new ObservableCollection<BookModel>();
 
         public ObservableCollection<BookModel> SelectedBooks { get { return selectedBooks; } }
 
@@ -217,13 +217,13 @@ namespace Fb2.Document.UWP.Playground.Pages
             {
                 var bookModel = (BookModel)e.ClickedItem;
 
-                if (bookModel.Equals(BookModel.AddBookModel))
-                    await AddBooks();
-                else
-                {
-                    NavigationService.Instance.NavigateContentFrame(typeof(BookInfoPage), bookModel);
-                    UpdateLayout();
-                }
+                //if (bookModel.Equals(BookModel.AddBookModel))
+                //    await AddBooks();
+                //else
+                //{
+                NavigationService.Instance.NavigateContentFrame(typeof(BookInfoPage), bookModel);
+                //UpdateLayout();
+                //}
             }
             catch (Exception)
             {
@@ -242,6 +242,11 @@ namespace Fb2.Document.UWP.Playground.Pages
                 return;
 
             NavigationService.Instance.NavigateContentFrame(typeof(ReadPage), bookModel);
+        }
+
+        private async void AddBooksButtonClick(object sender, RoutedEventArgs e)
+        {
+            await AddBooks();
         }
     }
 }

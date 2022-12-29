@@ -12,9 +12,7 @@
 	  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
 	<Page.Resources>
-		<converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"
-											  x:Name="BoolToVisibilityConverter" />
-
+		
 		<converters:CountToVisibilityInvertedConverter x:Name="CountToVisibilityInvertedConverter"
 													   x:Key="CountToVisibilityInvertedConverter" />
 
