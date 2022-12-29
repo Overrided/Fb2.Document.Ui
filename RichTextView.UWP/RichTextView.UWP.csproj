@@ -122,7 +122,7 @@
   <ItemGroup>
     <Compile Include="Common\PaginationUtils.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="DTOs\ChaptersContent.cs" />
+    <Compile Include="DTOs\RichContent.cs" />
     <Compile Include="EventArguments\BookProgressChangedEventArgs.cs" />
     <Compile Include="EventArguments\RichHyperlinkActivatedEventArgs.cs" />
     <Compile Include="Extensions\BlockCollectionExtensions.cs" />

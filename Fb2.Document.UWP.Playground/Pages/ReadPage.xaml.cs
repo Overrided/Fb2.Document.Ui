@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Fb2.Document.UWP.Entities;
+using Fb2.Document.UWP.NodeProcessors;
 using Fb2.Document.UWP.Playground.Common;
 using Fb2.Document.UWP.Playground.Models;
 using RichTextView.UWP.DTOs;
@@ -23,7 +25,7 @@ namespace Fb2.Document.UWP.Playground.Pages
 
         private Thickness pageMargin;
 
-        private ChaptersContent chaptersContent;
+        private RichContent chaptersContent;
 
         public bool ShowBookProgress
         {
@@ -53,7 +55,7 @@ namespace Fb2.Document.UWP.Playground.Pages
             }
         }
 
-        public ChaptersContent ChaptersContent
+        public RichContent ChaptersContent
         {
             get { return chaptersContent; }
             set
@@ -65,7 +67,7 @@ namespace Fb2.Document.UWP.Playground.Pages
         }
 
         public ReadViewModel(
-            ChaptersContent chaptersContent = null,
+            RichContent chaptersContent = null,
             Thickness? suggestedPageMargin = null,
             bool? showBookProgress = null)
         {
@@ -158,7 +160,7 @@ namespace Fb2.Document.UWP.Playground.Pages
 
             //var content = new ChaptersContent(UiContent, pagePadding: defaultMappingConfig.PagePadding);
             var contentPages = uiContent.Select(p => new RichContentPage(p));
-            var content = new ChaptersContent(contentPages);
+            var content = new RichContent(contentPages, new HashSet<string> { ImageProcessor.NotInlineImageTag });
             //var content = new ChaptersContent(contentPages, 71406.8);
 
             ReadViewModel.ChaptersContent = content;

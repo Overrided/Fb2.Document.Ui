@@ -42,11 +42,8 @@ namespace RichTextView.UWP
         private const string ViewPortContainerName = "viewPortContainer";
 
         // private members
-        private HashSet<double> previousWidths = new HashSet<double>();
         private ScrollViewer scrollHost = null;
-        //private ItemsControl itemsHost = null;
         private Grid viewPortContainer = null;
-        private ProgressBar bookProgressBar = null;
         private TappedEventHandler defaultLinkClickEventHandler;
         private MenuFlyout menuFlyout = null;
 
@@ -59,67 +56,17 @@ namespace RichTextView.UWP
         public ObservableCollection<RichTextBlock> Pages { get; private set; } = new ObservableCollection<RichTextBlock>();
         public bool IsRendered { get; private set; } = false;
 
-        // ctor + OnApplyTemplate init
-        public RichTextView()
-        {
-            DefaultStyleKey = typeof(RichTextView);
-            defaultLinkClickEventHandler = new TappedEventHandler(HyperlinkBtn_Tapped);
-            Unloaded += RichTextView_Unloaded;
-        }
-
-        protected override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            InitElementHost();
-            menuFlyout = BuildMenuFlyout();
-        }
-
-        // public methods
-        public Size GetViewHostSize()
-        {
-            var originalSize = viewPortContainer.ActualSize.ToSize();
-            var expectedWidth = originalSize.Width - (PageMargin.Left + PageMargin.Right);
-
-            var result = new Size
-            {
-                Height = originalSize.Height,
-                Width = Math.Max(expectedWidth, 0)
-            };
-            return result;
-        }
-
-        public async Task ResetView()
-        {
-            IsRendered = false;
-            BookRendered?.Invoke(this, IsRendered);
-            previousWidths.Clear();
-
-            if (Pages.Any())
-            {
-                foreach (var page in Pages)
-                {
-                    page.Loaded -= RichTextBlock_Loaded;
-                    //page.EffectiveViewportChanged -= RichTextBlock_EffectiveViewportChanged;
-                    page.ClearValue(ContextFlyoutProperty);
-                }
-                Pages.Clear();
-            }
-
-            await GoToVisualStateAsync("Empty");
-            GC.Collect();
-        }
-
         // Dependency properties
-        public ChaptersContent RichTextContent
+        public RichContent RichTextContent
         {
-            get { return (ChaptersContent)GetValue(RichTextContentProperty); }
+            get { return (RichContent)GetValue(RichTextContentProperty); }
             set { SetValue(RichTextContentProperty, value); }
         }
 
         public static readonly DependencyProperty RichTextContentProperty =
             DependencyProperty.Register(
                 nameof(RichTextContent),
-                typeof(ChaptersContent),
+                typeof(RichContent),
                 typeof(RichTextView),
                 new PropertyMetadata(null, new PropertyChangedCallback(RichTextContent_PropertyChangedCallback)));
 
@@ -129,12 +76,7 @@ namespace RichTextView.UWP
         {
             Debug.WriteLine("Chapters_PropertyChangedCallback");
 
-            // debatable
-            if (args.NewValue == null)
-                return;
-
-            var chaptersContent = args.NewValue as ChaptersContent;
-
+            var chaptersContent = args.NewValue as RichContent;
             if (chaptersContent?.IsEmpty() ?? true)
                 return;
 
@@ -183,6 +125,57 @@ namespace RichTextView.UWP
                 typeof(RichTextView),
                 new PropertyMetadata(true));
 
+        // ctor + OnApplyTemplate init
+        public RichTextView()
+        {
+            DefaultStyleKey = typeof(RichTextView);
+            defaultLinkClickEventHandler = new TappedEventHandler(HyperlinkBtn_Tapped);
+            Unloaded += RichTextView_Unloaded;
+        }
+
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            InitElementHost();
+            menuFlyout = BuildMenuFlyout();
+        }
+
+        // public methods
+        public Size GetViewHostSize()
+        {
+            if (viewPortContainer == null)
+                return Size.Empty;
+
+            var originalSize = viewPortContainer.ActualSize.ToSize();
+            var expectedWidth = originalSize.Width - (PageMargin.Left + PageMargin.Right);
+
+            var result = new Size
+            {
+                Height = originalSize.Height,
+                Width = Math.Max(expectedWidth, 0)
+            };
+            return result;
+        }
+
+        public async Task ResetView()
+        {
+            IsRendered = false;
+            BookRendered?.Invoke(this, IsRendered);
+
+            if (Pages.Any())
+            {
+                foreach (var page in Pages)
+                {
+                    page.Loaded -= RichTextBlock_Loaded;
+                    page.ClearValue(ContextFlyoutProperty);
+                }
+                Pages.Clear();
+            }
+
+            await GoToVisualStateAsync("Empty");
+            //GC.Collect();
+        }
+
         // init stuff
         private void InitElementHost()
         {
@@ -191,14 +184,13 @@ namespace RichTextView.UWP
                 throw new Exception($"Template {ViewPortContainerName} is missing!");
 
             viewPortContainer = viewPortContainerElement;
-            viewPortContainer.SizeChanged += ItemsHost_SizeChanged;
         }
 
         private void InitScrollViewer()
         {
             var scrollViewer = viewPortContainer.FindVisualChild<ScrollViewer>(); // hmmmm
             if (scrollViewer == null)
-                throw new Exception("template scrollHost is missing!");
+                throw new Exception("template scrollViewer is missing!");
 
             scrollHost = scrollViewer;
             scrollHost.ViewChanged += ScrollHost_ViewChanged;
@@ -210,15 +202,6 @@ namespace RichTextView.UWP
             var scrollableHeight = scrollHost.ScrollableHeight;
 
             this.BookProgressChanged?.Invoke(this, new BookProgressChangedEventArgs(verticalOffset, scrollableHeight));
-        }
-
-        private void InitProgressBar()
-        {
-            var progressBar = viewPortContainer.FindVisualChild<ProgressBar>(); // hmmmm
-            if (progressBar == null)
-                throw new Exception("template progressBar is missing!");
-
-            bookProgressBar = progressBar;
         }
 
         private MenuFlyout BuildMenuFlyout()
@@ -245,22 +228,9 @@ namespace RichTextView.UWP
         }
 
         // inner events handlers
-        private void ItemsHost_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (!IsRendered)
-                return;
-
-            var actualSize = GetViewHostSize();
-
-            SaveScreenWidth(actualSize);
-        }
-
         private void RichTextView_Unloaded(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("RichTextView_Unloaded");
-
-            previousWidths.Clear();
-            //previousWidths = null;
 
             if (Pages.Count > 0)
             {
@@ -277,25 +247,29 @@ namespace RichTextView.UWP
                 Pages = null;
             }
 
-            bookProgressBar = null;
-            scrollHost = null;
+            //bookProgressBar.ValueChanged -= BookProgressBar_ValueChanged;
+            //bookProgressBar = null;
+            if (scrollHost != null)
+            {
+                scrollHost.ViewChanged -= ScrollHost_ViewChanged;
+                scrollHost = null;
+            }
 
-            viewPortContainer.SizeChanged -= ItemsHost_SizeChanged;
-
+            //viewPortContainer.SizeChanged -= ItemsHost_SizeChanged;
             viewPortContainer = null;
 
             Unloaded -= RichTextView_Unloaded;
 
-            var uiThreadBytes = GC.GetAllocatedBytesForCurrentThread();
-            var allAllocatedBytes = GC.GetTotalMemory(true);
-            var totalMemotyAllocation = uiThreadBytes + allAllocatedBytes;
+            //var uiThreadBytes = GC.GetAllocatedBytesForCurrentThread();
+            //var allAllocatedBytes = GC.GetTotalMemory(true);
+            //var totalMemotyAllocation = uiThreadBytes + allAllocatedBytes;
 
-            GC.AddMemoryPressure(totalMemotyAllocation);
-            GC.Collect();
+            //GC.AddMemoryPressure(totalMemotyAllocation);
+            //GC.Collect();
         }
 
         // rendering
-        private async Task RenderContent(bool shouldResetView, ChaptersContent chaptersContent)
+        private async Task RenderContent(bool shouldResetView, RichContent chaptersContent)
         {
             if (shouldResetView)
                 await ResetView();
@@ -310,8 +284,6 @@ namespace RichTextView.UWP
                 var size = GetViewHostSize();
                 var contentPages = chaptersContent.RichContentPages;
 
-                SaveScreenWidth(size);
-
                 var result = contentPages.Select((section, i) =>
                 {
                     Debug.WriteLine("instantiating rich text block");
@@ -324,6 +296,7 @@ namespace RichTextView.UWP
                 await this.FinishLayoutAsync();
             });
 
+
             renderStopwatch.Stop();
 
             if ((chaptersContent?.LeftOffPosition ?? 0) > 0)
@@ -332,7 +305,7 @@ namespace RichTextView.UWP
             await GoToVisualStateAsync("Rendered");
 
             InitScrollViewer();
-            InitProgressBar();
+            //InitProgressBar();
 
             IsRendered = true;
             BookRendered?.Invoke(this, IsRendered);
@@ -371,7 +344,7 @@ namespace RichTextView.UWP
         // rendered page events
         private async void RichTextBlock_Loaded(object sender, RoutedEventArgs e)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 var richTextBlock = sender as RichTextBlock;
                 UpdateVisiblePage(richTextBlock, GetViewHostSize(), true, true, false);
@@ -381,7 +354,7 @@ namespace RichTextView.UWP
 
         private async void RichTextBlock_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 var richTextBlock = (RichTextBlock)sender;
                 if (args.BringIntoViewDistanceY < richTextBlock.ActualHeight && richTextBlock.IsLoaded)
@@ -394,7 +367,7 @@ namespace RichTextView.UWP
 
         private async void RichTextBlock_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 var richTextBlock = (RichTextBlock)sender;
 
@@ -522,8 +495,7 @@ namespace RichTextView.UWP
             richTextBlock.UpdateLayout();
         }
 
-        // hacky af
-        // look for elements that are bigger than screen and tag those, resize & repeat)
+        // look for elements that are bigger than screen and resize)
         private void TryResizeNotInlineImages(RichTextBlock richTextBlock, Size actualSize)
         {
             var anyImages = richTextBlock.FindVisualChildren<Image>();
@@ -532,55 +504,46 @@ namespace RichTextView.UWP
                 return;
 
             var actualWidth = actualSize.Width;
+            var notInlineImageTags = RichTextContent.NotInlineImageTags;
 
             // TODO : break it up & refactor!
-            Func<FrameworkElement, bool> predicate = (fe) =>
+            //Func<FrameworkElement, bool> imagePredicate = notInlineImageTags != null && notInlineImageTags.Any() ?
+            //    (fe) => fe.Tag != null && notInlineImageTags.Any(tag => fe.Tag.ToString().Contains(tag)) :
+            //    (fe) => fe.ActualWidth >= actualWidth;
+
+            Func<FrameworkElement, bool> imagePredicate = (fe) =>
             {
-                var elementWidth = fe.ActualWidth;
-                return elementWidth >= actualWidth ||
-                       (elementWidth < actualWidth && fe.Tag != null && fe.Tag.ToString().Equals("fullWidthImage")) ||
-                       previousWidths.Any(s => s <= elementWidth);
+                var haveNotInlineImageTag = notInlineImageTags != null && notInlineImageTags.Any();
+                if (haveNotInlineImageTag)
+                    return fe.Tag != null && notInlineImageTags.Any(tag => fe.Tag.ToString().Contains(tag));
+
+                return fe.ActualWidth >= actualWidth;
             };
 
-            var parentsByImage = anyImages
-                .SelectMany(im => im.GetVisualParents()) // hacky af
-                .OfType<FrameworkElement>()
-                .Where(predicate)
-                .ToList();
-
-            var imagesToResize = anyImages.Where(predicate);
-
-            if (imagesToResize.Any())
-                parentsByImage.AddRange(imagesToResize);
-
-            if (!parentsByImage.Any())
+            var elementsToResize = anyImages.Where(imagePredicate).ToList();
+            if (elementsToResize.Count == 0)
                 return;
 
-            foreach (var pbi in parentsByImage)
-            {
-                if (pbi.Tag == null)
-                    pbi.Tag = "fullWidthImage";
+            var parentsByImage = elementsToResize
+                .SelectMany(im => im.GetVisualParents())
+                .OfType<FrameworkElement>()
+                .ToList();
 
+            if (parentsByImage.Count > 0)
+                elementsToResize.AddRange(parentsByImage);
+
+            foreach (var pbi in elementsToResize)
+            {
                 pbi.Width = actualWidth;
                 pbi.UpdateLayout();
             }
         }
 
-        private void SaveScreenWidth(Size actualSize)
-        {
-            if (!previousWidths.Contains(actualSize.Width))
-                previousWidths.Add(actualSize.Width);
-        }
-
         // miscellaneous
         private async Task GoToVisualStateAsync(string stateName)
         {
-            Func<Task> hideProgress = async () =>
-            {
-                VisualStateManager.GoToState(this, stateName, false);
-                await this.FinishLayoutAsync();
-            };
-            await hideProgress();
+            VisualStateManager.GoToState(this, stateName, false);
+            await this.FinishLayoutAsync();
         }
     }
 }

@@ -38,9 +38,9 @@ namespace Fb2.Document.UWP.Playground.Pages
             }
         }
 
-        private ChaptersContent chaptersContent;
+        private RichContent chaptersContent;
 
-        public ChaptersContent ChaptersContent
+        public RichContent ChaptersContent
         {
             get { return chaptersContent; }
             set
@@ -156,7 +156,7 @@ namespace Fb2.Document.UWP.Playground.Pages
             }
 
             var contentPages = descriptionText.Select(p => new RichContentPage(p));
-            var content = new ChaptersContent(contentPages);
+            var content = new RichContent(contentPages);
             BookInfoViewModel.ChaptersContent = content;
         }
 

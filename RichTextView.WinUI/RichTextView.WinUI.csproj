@@ -8,6 +8,9 @@
 		<Version>0.0.1</Version>
 		<SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Common\ObservableObject.cs" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.2.221209.1" />

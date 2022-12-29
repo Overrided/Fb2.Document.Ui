@@ -35,7 +35,7 @@
 												  VerticalAlignment="Stretch"
 												  HorizontalContentAlignment="Stretch"
 												  VerticalContentAlignment="Stretch"
-												  IsDeferredScrollingEnabled="True">
+												  CanContentRenderOutsideBounds="True">
 										<ItemsPresenter />
 									</ScrollViewer>
 									<ProgressBar x:Name="progressIndicator"
@@ -51,8 +51,8 @@
 							<ItemsPanelTemplate x:Key="ItemsHostPanelTemplate">
 								<ItemsStackPanel Orientation="Vertical"
 												 CacheMode="BitmapCache"
-												 CacheLength="6.0"
-												 VirtualizingStackPanel.VirtualizationMode="Standard" />
+												 CacheLength="4.0"
+												 VirtualizingStackPanel.VirtualizationMode="Recycling" />
 							</ItemsPanelTemplate>
 
 						</Border.Resources>
@@ -92,7 +92,7 @@
 										  ItemsPanel="{StaticResource ItemsHostPanelTemplate}">
 								<ItemsControl.ItemContainerTransitions>
 									<TransitionCollection>
-										<EntranceThemeTransition IsStaggeringEnabled="True" />
+										<EntranceThemeTransition IsStaggeringEnabled="False" />
 									</TransitionCollection>
 								</ItemsControl.ItemContainerTransitions>
 							</ItemsControl>
@@ -111,4 +111,5 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+
 </ResourceDictionary>
