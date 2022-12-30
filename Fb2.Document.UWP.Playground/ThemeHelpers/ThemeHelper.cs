@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
@@ -80,17 +81,17 @@ namespace Fb2.Document.UWP.Playground.ThemeHelpers
             uiSettings.ColorValuesChanged += UiSettings_ColorValuesChanged;
         }
 
-        private static void UiSettings_ColorValuesChanged(UISettings sender, object args)
+        private static async void UiSettings_ColorValuesChanged(UISettings sender, object args)
         {
-            //// Make sure we have a reference to our window so we dispatch a UI change
-            //if (CurrentApplicationWindow != null)
-            //{
-            //// Dispatch on UI thread so that we have a current appbar to access and change
-            //CurrentApplicationWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-            //{
-            //    //UpdateSystemCaptionButtonColors();
-            //});
-            //}
+            // Make sure we have a reference to our window so we dispatch a UI change
+            if (CurrentApplicationWindow != null)
+            {
+                // Dispatch on UI thread so that we have a current appbar to access and change
+                await CurrentApplicationWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                {
+                    //UpdateSystemCaptionButtonColors();
+                });
+            }
         }
 
         public static bool IsDarkTheme()
@@ -101,20 +102,18 @@ namespace Fb2.Document.UWP.Playground.ThemeHelpers
             }
             return RootTheme == ElementTheme.Dark;
         }
+        public static void UpdateSystemCaptionButtonColors()
+        {
+            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
-        // WUT ?
-        //public static void UpdateSystemCaptionButtonColors()
-        //{
-        //    ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
-
-        //    if (ThemeHelper.IsDarkTheme())
-        //    {
-        //        titleBar.ButtonForegroundColor = Colors.White;
-        //    }
-        //    else
-        //    {
-        //        titleBar.ButtonForegroundColor = Colors.Black;
-        //    }
-        //}
+            if (ThemeHelper.IsDarkTheme())
+            {
+                titleBar.ButtonForegroundColor = Colors.White;
+            }
+            else
+            {
+                titleBar.ButtonForegroundColor = Colors.Black;
+            }
+        }
     }
 }

@@ -43,6 +43,22 @@ namespace Fb2.Document.WinUI.Playground.Pages
             this.SizeChanged += BookInfoPage_SizeChanged;
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            var model = e.Parameter as BookModel;
+            //if (model == null)
+            //    return;
+
+            bookModel = model;
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+        }
+
         private void BookInfoPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (StandardPopup.IsOpen)
@@ -80,22 +96,6 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
                 return vm;
             })?.ToList();
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-
-            var model = e.Parameter as BookModel;
-            //if (model == null)
-            //    return;
-
-            bookModel = model;
-        }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            base.OnNavigatedFrom(e);
         }
 
         private void OnReadButton_Click(object sender, RoutedEventArgs e)

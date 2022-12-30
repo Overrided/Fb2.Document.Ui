@@ -60,4 +60,17 @@ namespace Fb2.Document.UWP.Playground.Converters
             throw new NotImplementedException();
         }
     }
+
+    internal class ValueToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return value == null ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

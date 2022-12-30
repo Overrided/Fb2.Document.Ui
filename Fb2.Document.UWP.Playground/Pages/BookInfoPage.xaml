@@ -6,6 +6,8 @@
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	  xmlns:rtv="using:RichTextView.UWP"
+	  xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+	  xmlns:locl="using:Fb2.Document.UWP.Playground.Controls"
 	  mc:Ignorable="d"
 	  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -14,48 +16,116 @@
 											 x:Name="SToImage" />
 	</Page.Resources>
 
-	<!--quick and dirty, reimplement in layout-adaptive way-->
-	<Grid>
-		<Grid ColumnSpacing="20"
-			  Margin="20, 40">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*" />
-				<ColumnDefinition Width="*" />
-			</Grid.ColumnDefinitions>
-			<Image Grid.Column="0"
-				   VerticalAlignment="Center"
-				   HorizontalAlignment="Center"
-				   Stretch="Uniform"
-				   Source="{x:Bind BookInfoViewModel.CoverpageBase64Image, Converter={StaticResource SToImage}}">
-			</Image>
-			<Grid Grid.Column="1">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*" />
-					<RowDefinition Height="Auto" />
-				</Grid.RowDefinitions>
-				<rtv:RichTextView Grid.Row="0"
-								  x:Name="descriptionViewPort"
-								  RichTextContent="{x:Bind BookInfoViewModel.ChaptersContent, Mode=OneWay}"
-								  ShowProgress="False"
-								  ShowLoading="False"
-								  PageMargin="5"
-								  HorizontalAlignment="Stretch"
-								  VerticalAlignment="Center"
-								  HyperlinkActivated="BookInfo_HyperlinkActivated">
-				</rtv:RichTextView>
-				<Button Grid.Row="1"
-						CornerRadius="90"
-						HorizontalAlignment="Right"
-						Width="54"
-						Height="54"
-						Click="OnReadButton_Click">
-					<FontIcon FontFamily="Segoe MDL2 Assets"
-							  Glyph="&#xE736;"
-							  FontSize="26"
-							  HorizontalAlignment="Center"
-							  VerticalAlignment="Center" />
-				</Button>
-			</Grid>
+	<Grid x:Name="OuterGrid"
+		  ColumnSpacing="12"
+		  Margin="16">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<Image Grid.Column="0"
+			   VerticalAlignment="Center"
+			   HorizontalAlignment="Center"
+			   Stretch="Uniform"
+			   Source="{x:Bind BookInfoViewModel.CoverpageBase64Image, Converter={StaticResource SToImage}, Mode=OneWay}">
+		</Image>
+
+		<Grid Grid.Column="1">
+
+			<ScrollViewer HorizontalAlignment="Stretch"
+						  HorizontalContentAlignment="Stretch"
+						  VerticalAlignment="Stretch"
+						  VerticalContentAlignment="Stretch"
+						  Padding="0,0,12,56">
+
+				<StackPanel HorizontalAlignment="Stretch"
+							VerticalAlignment="Stretch">
+
+					<locl:TitleInfoBaseRenderer TitleInfo="{x:Bind BookInfoViewModel.TitleInfo, Mode=OneWay}"
+												Margin="0,0,0,10"
+												Visibility="{x:Bind BookInfoViewModel.TitleInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+					</locl:TitleInfoBaseRenderer>
+
+					<muxc:Expander Margin="0, 10, 0, 0"
+								   IsExpanded="False"
+								   ExpandDirection="Down"
+								   HorizontalAlignment="Stretch"
+								   HorizontalContentAlignment="Stretch"
+								   VerticalAlignment="Top"
+								   VerticalContentAlignment="Stretch"
+								   Header="Source Title Info"
+								   Visibility="{x:Bind BookInfoViewModel.SrcTitleInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+						<muxc:Expander.Content>
+							<locl:TitleInfoBaseRenderer TitleInfo="{x:Bind BookInfoViewModel.SrcTitleInfo, Mode=OneWay}">
+							</locl:TitleInfoBaseRenderer>
+						</muxc:Expander.Content>
+					</muxc:Expander>
+
+					<muxc:Expander Margin="0, 10, 0, 0"
+								   IsExpanded="False"
+								   ExpandDirection="Down"
+								   HorizontalAlignment="Stretch"
+								   HorizontalContentAlignment="Stretch"
+								   VerticalAlignment="Top"
+								   VerticalContentAlignment="Stretch"
+								   Header="Publish Info"
+								   Visibility="{x:Bind BookInfoViewModel.PublishInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+						<muxc:Expander.Content>
+							<locl:PublishInfoRenderer PublishInfo="{x:Bind BookInfoViewModel.PublishInfo, Mode=OneWay}">
+							</locl:PublishInfoRenderer>
+						</muxc:Expander.Content>
+					</muxc:Expander>
+
+					<muxc:Expander Margin="0, 10, 0, 0"
+								   IsExpanded="False"
+								   ExpandDirection="Down"
+								   HorizontalAlignment="Stretch"
+								   HorizontalContentAlignment="Stretch"
+								   VerticalAlignment="Top"
+								   VerticalContentAlignment="Stretch"
+								   Header="Document Info"
+								   Visibility="{x:Bind BookInfoViewModel.DocumentInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+						<muxc:Expander.Content>
+							<locl:DocumentInfoRenderer DocumentInfo="{x:Bind BookInfoViewModel.DocumentInfo, Mode=OneWay}">
+							</locl:DocumentInfoRenderer>
+						</muxc:Expander.Content>
+					</muxc:Expander>
+
+					<muxc:Expander Margin="0, 10, 0, 0"
+								   IsExpanded="False"
+								   ExpandDirection="Down"
+								   HorizontalAlignment="Stretch"
+								   HorizontalContentAlignment="Stretch"
+								   VerticalAlignment="Top"
+								   VerticalContentAlignment="Stretch"
+								   Header="Custom Info"
+								   Visibility="{x:Bind BookInfoViewModel.CustomInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+						<muxc:Expander.Content>
+							<locl:CustomInfoRenderer CustomInfo="{x:Bind BookInfoViewModel.CustomInfo, Mode=OneWay}">
+							</locl:CustomInfoRenderer>
+						</muxc:Expander.Content>
+					</muxc:Expander>
+
+				</StackPanel>
+
+			</ScrollViewer>
+
+			<Button CornerRadius="90"
+					HorizontalAlignment="Right"
+					VerticalAlignment="Bottom"
+					Width="54"
+					Height="54"
+					Click="OnReadButton_Click">
+				<FontIcon FontFamily="Segoe MDL2 Assets"
+						  Glyph="&#xE736;"
+						  FontSize="26"
+						  HorizontalAlignment="Center"
+						  VerticalAlignment="Center" />
+			</Button>
+
 		</Grid>
+
 	</Grid>
+
 </Page>

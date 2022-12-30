@@ -4,7 +4,6 @@
 	  xmlns:local="using:Fb2.Document.UWP.Playground.Pages"
 	  xmlns:converters="using:Fb2.Document.UWP.Playground.Converters"
 	  xmlns:models="using:Fb2.Document.UWP.Playground.Models"
-	  xmlns:templateSelectors="using:Fb2.Document.UWP.Playground.TemplateSelectors"
 	  xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
 	  xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -16,34 +15,9 @@
 	<Page.Resources>
 		<converters:String64ToImageConverter x:Key="SToImage"
 											 x:Name="SToImage" />
-		<!--<converters:BoolToVisibilityConverter x:Key="BtVC"
-											  x:Name="BtVC" />-->
 
-		<DataTemplate x:Key="AddBookTemplate"
-					  x:DataType="models:BookModel">
-			<Grid HorizontalAlignment="Stretch"
-				  VerticalAlignment="Stretch">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="3*" />
-					<RowDefinition Height="*" />
-				</Grid.RowDefinitions>
-				<FontIcon Grid.Row="0"
-						  FontFamily="Segoe MDL2 Assets"
-						  Glyph="&#xE710;"
-						  FontSize="86"
-						  FontWeight="ExtraBlack"
-						  Opacity="0.6"
-						  HorizontalAlignment="Center"
-						  VerticalAlignment="Center" />
-				<TextBlock Grid.Row="1"
-						   Text="Add Book(s)"
-						   FontSize="24"
-						   FontWeight="Bold"
-						   Opacity="0.6"
-						   VerticalAlignment="Center"
-						   HorizontalAlignment="Center" />
-			</Grid>
-		</DataTemplate>
+		<converters:CountToVisibilityInvertedConverter x:Name="CountToVisibilityInvertedConverter"
+													   x:Key="CountToVisibilityInvertedConverter" />
 
 		<DataTemplate x:Key="RecentBookTemplate"
 					  x:DataType="models:BookModel">
@@ -75,7 +49,7 @@
 				</Grid.RowDefinitions>
 
 				<Border Grid.Row="0"
-						Height="206"
+						Height="190"
 						HorizontalAlignment="Stretch"
 						Background="Transparent"
 						IsHitTestVisible="True">
@@ -296,18 +270,14 @@
 			<Setter Property="VerticalContentAlignment"
 					Value="Stretch" />
 			<Setter Property="Height"
-					Value="262" />
+					Value="250" />
 			<Setter Property="Width"
-					Value="238" />
+					Value="220" />
 			<Setter Property="Margin"
 					Value="4" />
 			<Setter Property="Padding"
 					Value="6" />
 		</Style>
-
-		<!--<templateSelectors:BookTemplateSelector x:Key="BookTemplateSelector"
-												AddBookTemplate="{StaticResource AddBookTemplate}"
-												ViewBookTemplate="{StaticResource RecentBookTemplate}" />-->
 
 	</Page.Resources>
 	<Grid>
@@ -346,7 +316,14 @@
 				</ItemsPanelTemplate>
 			</GridView.ItemsPanel>
 		</GridView>
-		
+
+		<TextBlock Text="no books yet"
+				   VerticalAlignment="Center"
+				   HorizontalAlignment="Center"
+				   Opacity="0.5"
+				   Style="{ThemeResource HeaderTextBlockStyle}"
+				   Visibility="{x:Bind SelectedBooks.Count, Mode=OneWay, Converter={StaticResource CountToVisibilityInvertedConverter}}" />
+
 		<Button CornerRadius="90"
 				HorizontalAlignment="Right"
 				VerticalAlignment="Bottom"

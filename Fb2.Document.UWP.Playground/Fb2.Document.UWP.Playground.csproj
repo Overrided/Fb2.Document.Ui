@@ -121,6 +121,10 @@
     </Compile>
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\ObservableObject.cs" />
+    <Compile Include="Controls\CustomInfoRenderer.cs" />
+    <Compile Include="Controls\DocumentInfoRenderer.cs" />
+    <Compile Include="Controls\PublishInfoRenderer.cs" />
+    <Compile Include="Controls\TitleInfoBaseRenderer.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\String64ToImageConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -183,6 +187,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Fb2.Document">
@@ -190,6 +198,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.14</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.UI.Xaml">
+      <Version>2.8.2-prerelease.220830001</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
       <Version>2.0.1</Version>
