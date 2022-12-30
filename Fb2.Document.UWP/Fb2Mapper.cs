@@ -58,7 +58,7 @@ namespace Fb2.Document.UWP
             return MapContent(nodesToMap, context);
         }
 
-        private IEnumerable<Fb2ContentPage> MapContent(IEnumerable<Fb2Node> nodes, RenderingContext renderingContext)
+        private static IEnumerable<Fb2ContentPage> MapContent(IEnumerable<Fb2Node> nodes, RenderingContext renderingContext)
         {
             var dataPages = PaginateContent(nodes);
             var textNodes = dataPages.Select(dp =>
@@ -70,12 +70,12 @@ namespace Fb2.Document.UWP
             return textNodes;
         }
 
-        private List<TextElement> BuildNodes(IEnumerable<Fb2Node> nodes, RenderingContext context) =>
+        private static List<TextElement> BuildNodes(IEnumerable<Fb2Node> nodes, RenderingContext context) =>
             nodes.Select(n => context.ProcessorFactory.DefaultProcessor.ElementSelector(n, context))
                  .OfType<List<TextElement>>()
                  .SelectMany(l => l).ToList();
 
-        private List<Fb2Node> GetRenderableNodes(Fb2Document document)
+        private static List<Fb2Node> GetRenderableNodes(Fb2Document document)
         {
             var renderableNodes = new List<Fb2Node>();
 
@@ -86,7 +86,7 @@ namespace Fb2.Document.UWP
             return renderableNodes;
         }
 
-        private List<List<Fb2Node>> PaginateContent(IEnumerable<Fb2Node> nodes)
+        private static List<List<Fb2Node>> PaginateContent(IEnumerable<Fb2Node> nodes)
         {
             var result = new List<List<Fb2Node>>();
             var currentPage = new List<Fb2Node>();

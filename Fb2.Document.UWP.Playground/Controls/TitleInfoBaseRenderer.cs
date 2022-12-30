@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Fb2.Document.Constants;
-using Fb2.Document.Models.Base;
 using Fb2.Document.Models;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml;
-using Windows.Foundation;
-using RichTextView.UWP.DTOs;
+using Fb2.Document.Models.Base;
 using Fb2.Document.UWP.Playground.Common;
+using RichTextView.UWP.DTOs;
+using Windows.Foundation;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace Fb2.Document.UWP.Playground.Controls
 {
@@ -214,7 +212,7 @@ namespace Fb2.Document.UWP.Playground.Controls
             var subTitle = titleInfo.GetFirstDescendant<SubTitle>();
             var annotation = titleInfo.GetFirstDescendant<Annotation>();
             //var sequences = titleInfo.GetDescendants<SequenceInfo>().Where(s => s != null && !s.IsEmpty && s.HasAttributes);
-            var sequences = titleInfo.GetDescendants<SequenceInfo>().Where(s => s != null && !s.IsEmpty);
+            var sequences = titleInfo.GetDescendants<SequenceInfo>().Where(s => s != null && s.Attributes.Count != 0);
             var keywords = titleInfo.GetDescendants<Keywords>().Where(k => k != null && !k.IsEmpty);
 
             var nodes = new List<Fb2Node>();

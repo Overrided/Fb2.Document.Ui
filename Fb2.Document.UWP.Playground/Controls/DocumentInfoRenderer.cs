@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Fb2.Document.Models;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml;
-using RichTextView.UWP.DTOs;
-using Fb2.Document.UWP.Playground.Common;
-using Windows.Foundation;
-using Fb2.Document.UWP.Entities;
 using Fb2.Document.Constants;
+using Fb2.Document.Models;
+using Fb2.Document.UWP.Entities;
+using Fb2.Document.UWP.Playground.Common;
+using RichTextView.UWP.DTOs;
+using Windows.Foundation;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace Fb2.Document.UWP.Playground.Controls
 {
