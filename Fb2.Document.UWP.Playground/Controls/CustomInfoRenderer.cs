@@ -1,6 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Fb2.Document.Models;
 using Fb2.Document.UWP.Entities;
 using Fb2.Document.UWP.Playground.Common;
@@ -71,16 +70,25 @@ namespace Fb2.Document.UWP.Playground.Controls
             if (customInfo == null)
                 return;
 
-            var mappedNodes = Fb2Mapper.Instance.MapNode(
-                customInfo,
-                Size.Empty,
-                new Fb2MappingConfig(useStyles: false));
+            var customInfoContent = customInfo.Content.Trim();
+            var run = new Run { Text = customInfoContent };
+            var paragraph = new Windows.UI.Xaml.Documents.Paragraph();
+            paragraph.Inlines.Add(run);
 
-            var normalizedContent = mappedNodes.SelectMany(uic => uic);
-
-            var contentPage = new RichContentPage(normalizedContent);
+            var contentPage = new RichContentPage(new List<TextElement>(1) { paragraph });
             var content = new RichContent(new List<RichContentPage>(1) { contentPage });
             sender.ViewModel.CustomInfoContent = content;
+
+            //var mappedNodes = Fb2Mapper.Instance.MapNode(
+            //    customInfo,
+            //    Size.Empty,
+            //    new Fb2MappingConfig(useStyles: false));
+
+            //var normalizedContent = mappedNodes.SelectMany(uic => uic);
+
+            //var contentPage = new RichContentPage(normalizedContent);
+            //var content = new RichContent(new List<RichContentPage>(1) { contentPage });
+            //sender.ViewModel.CustomInfoContent = content;
         }
     }
 }
