@@ -77,7 +77,19 @@ public class AnnotationConfig
     }
 }
 
-// TODO : add bool UseStyles / UseDefaultStyles
+public class ImageConfig
+{
+    public string NonInlineImageTag { get; set; }
+    public string? NonInlineImageContainerTag { get; set; }
+
+    public ImageConfig(string nonInlineImageTag = "NotInlineFb2ImageTag", string? nonInlineImageContainerTag = null)
+    {
+        NonInlineImageTag = nonInlineImageTag;
+        NonInlineImageContainerTag = nonInlineImageContainerTag;
+    }
+}
+
+// TODO : add bool/enum UseStyles / UseDefaultStyles
 public class Fb2MappingConfig
 {
     public int BaseFontSize { get; set; } = 18;
@@ -98,6 +110,8 @@ public class Fb2MappingConfig
 
     public AnnotationConfig Annotation { get; set; } = new();
 
+    public ImageConfig Image { get; set; } = new();
+
     public Fb2MappingConfig()
     {
     }
@@ -111,7 +125,8 @@ public class Fb2MappingConfig
         ConfigBase? bodyConfig = null,
         SectionConfig? bodySectionConfig = null,
         QuoteConfig? citeConfig = null,
-        AnnotationConfig? annotation = null)
+        AnnotationConfig? annotation = null,
+        ImageConfig? imageConfig = null)
     {
         BaseFontSize = baseFontSize;
         ParagraphIndent = paragraphIndent;
@@ -123,6 +138,7 @@ public class Fb2MappingConfig
         Section = bodySectionConfig ?? new SectionConfig();
         Quote = citeConfig ?? new QuoteConfig();
         Annotation = annotation ?? new AnnotationConfig();
+        Image = imageConfig ?? new();
     }
 }
 
@@ -144,7 +160,8 @@ public class Fb2DocumentMappingConfig : Fb2MappingConfig
         ConfigBase? bodyConfig = null,
         SectionConfig? bodySectionConfig = null,
         QuoteConfig? citeConfig = null,
-        AnnotationConfig? annotation = null) : base(
+        AnnotationConfig? annotationConfig = null,
+        ImageConfig? imageConfig = null) : base(
             baseFontSize,
             paragraphIndent,
             highlightUnsafe,
@@ -153,7 +170,8 @@ public class Fb2DocumentMappingConfig : Fb2MappingConfig
             bodyConfig,
             bodySectionConfig,
             citeConfig,
-            annotation)
+            annotationConfig,
+            imageConfig)
     {
         MapWholeDocument = mapWholeDocument;
     }

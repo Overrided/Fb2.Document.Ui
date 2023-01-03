@@ -2,7 +2,6 @@
 using Fb2.Document.Models.Base;
 using Fb2.Document.WinUI.Common;
 using Fb2.Document.WinUI.Services;
-using Windows.Foundation;
 
 namespace Fb2.Document.WinUI.Entities
 {
@@ -13,12 +12,10 @@ namespace Fb2.Document.WinUI.Entities
         //    new PoemConfig(dateHorizontalAlignment: TextAlignment.Center,
         //        textAuthorHorizontalAlignment: TextAlignment.Left));
         private Fb2MappingConfig defaultConfig = new Fb2MappingConfig();
-
-        internal RenderingContext(IEnumerable<Fb2Node> data, Size viewPortSize, Fb2MappingConfig? config = null)
+        internal RenderingContext(IEnumerable<Fb2Node> data, Fb2MappingConfig? config = null)
         {
             Data = data;
             RenderingConfig = config ?? defaultConfig;
-            ViewPortSize = viewPortSize;
         }
 
         // Services, half of them should not be there)
@@ -31,9 +28,7 @@ namespace Fb2.Document.WinUI.Entities
         //Data
         public Fb2MappingConfig RenderingConfig { get; }
 
-        public IEnumerable<Fb2Node> Data { get; } = null;
-
-        public Size ViewPortSize { get; } = Size.Empty;
+        public IEnumerable<Fb2Node>? Data { get; } = null;
 
         //State
         public Fb2Node? CurrentNode { get; private set; } = null;

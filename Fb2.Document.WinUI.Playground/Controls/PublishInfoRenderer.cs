@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Fb2.Document.Models;
-using Fb2.Document.WinUI;
 using Fb2.Document.WinUI.Playground.Common;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using RichTextView.WinUI.DTOs;
-using Windows.Foundation;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -79,7 +77,6 @@ public sealed class PublishInfoRenderer : Control
 
         var mappedNodes = Fb2Mapper.Instance.MapNode(
             publishInfo,
-            Size.Empty,
             new(useStyles: false));
 
         var normalizedContent = mappedNodes.SelectMany(uic => uic);

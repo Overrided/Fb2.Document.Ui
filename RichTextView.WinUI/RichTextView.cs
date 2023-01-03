@@ -349,8 +349,7 @@ namespace RichTextView.WinUI
             q.TryEnqueue(() =>
             {
                 var richTextBlock = sender as RichTextBlock;
-                UpdateVisiblePage(richTextBlock, GetViewHostSize(), true, true, false);
-                Debug.WriteLine($"{nameof(RichTextBlock_Loaded)} on {richTextBlock.Tag}");
+                UpdateVisiblePage(richTextBlock!, true, true, false);
             });
         }
 
@@ -362,10 +361,7 @@ namespace RichTextView.WinUI
             {
                 var richTextBlock = (RichTextBlock)sender;
                 if (args.BringIntoViewDistanceY < richTextBlock.ActualHeight && richTextBlock.IsLoaded)
-                {
-                    UpdateVisiblePage(richTextBlock, GetViewHostSize(), false, true, true);
-                    Debug.WriteLine($"{nameof(RichTextBlock_EffectiveViewportChanged)} on {richTextBlock.Tag}");
-                }
+                    UpdateVisiblePage(richTextBlock, false, true, true);
             });
         }
 
@@ -376,9 +372,7 @@ namespace RichTextView.WinUI
             q.TryEnqueue(() =>
             {
                 var richTextBlock = (RichTextBlock)sender;
-
-                UpdateVisiblePage(richTextBlock, GetViewHostSize(), false, true, true);
-                Debug.WriteLine($"{nameof(RichTextBlock_SizeChanged)} on {richTextBlock.Tag}");
+                UpdateVisiblePage(richTextBlock, false, true, true);
             });
         }
 
@@ -416,13 +410,11 @@ namespace RichTextView.WinUI
         // hyperlinks events
         private void HyperText_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
-            Debug.WriteLine("hyperlink clicked");
             HyperlinkActivated?.Invoke(this, new RichHyperlinkActivatedEventArgs(sender, args));
         }
 
         private void HyperlinkBtn_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Debug.WriteLine("hyperlink button tapped");
             HyperlinkActivated?.Invoke(this, new RichHyperlinkActivatedEventArgs(sender, e));
         }
 
@@ -439,7 +431,6 @@ namespace RichTextView.WinUI
         // page state & updates
         private void UpdateVisiblePage(
             RichTextBlock richTextBlock,
-            Size viewHostSize,
             bool shouldOverrideContextMenu,
             bool shouldHandleHyperlinks,
             bool shouldAlignImages)
@@ -494,27 +485,27 @@ namespace RichTextView.WinUI
             }
 
             if (shouldAlignImages)
-            {
-                TryResizeNotInlineImages(richTextBlock, viewHostSize);
-            }
+                TryResizeNotInlineImages(richTextBlock);
 
             richTextBlock.UpdateLayout();
         }
 
         // look for elements that are bigger than screen and resize)
-        private void TryResizeNotInlineImages(RichTextBlock richTextBlock, Size actualSize)
+        private void TryResizeNotInlineImages(RichTextBlock richTextBlock)
         {
             var anyImages = richTextBlock.FindVisualChildren<Image>();
 
             if (!anyImages.Any())
                 return;
 
+            var actualSize = GetViewHostSize();
+
             var actualWidth = actualSize.Width;
             var notInlineImageTags = RichTextContent.NotInlineImageTags;
 
             // TODO : break it up & refactor!
             Func<FrameworkElement, bool> imagePredicate = notInlineImageTags != null && notInlineImageTags.Any() ?
-                (fe) => fe.Tag != null && notInlineImageTags.Any(tag => fe.Tag.ToString().Contains(tag)) :
+                (fe) => fe.Tag != null && notInlineImageTags.Any(tag => fe.Tag!.ToString()!.Contains(tag)) :
                 (fe) => fe.ActualWidth >= actualWidth;
 
             var elementsToResize = anyImages.Where(imagePredicate).ToList();

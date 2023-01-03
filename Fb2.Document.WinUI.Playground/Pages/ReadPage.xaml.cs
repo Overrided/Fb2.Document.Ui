@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Fb2.Document.WinUI;
 using Fb2.Document.WinUI.Entities;
-using Fb2.Document.WinUI.NodeProcessors;
 using Fb2.Document.WinUI.Playground.Models;
 using Fb2.Document.WinUI.Playground.Services;
 using Fb2.Document.WinUI.Playground.ViewModels;
@@ -34,7 +32,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
         public ReadPage()
         {
             this.InitializeComponent();
-            viewPort.Loaded += ViewPort_Loaded;
+            this.Loaded += ReadPage_Loaded;
 
             ReadViewModel = new ReadViewModel
             {
@@ -43,27 +41,16 @@ namespace Fb2.Document.WinUI.Playground.Pages
             };
         }
 
-        private void ViewPort_Loaded(object sender, RoutedEventArgs e)
+        private void ReadPage_Loaded(object sender, RoutedEventArgs e)
         {
-            var stop = Stopwatch.StartNew();
-
-            //var actualViewHostSize = viewPort.GetViewHostSize();
-            //var smallFontConfig = new Fb2MappingConfig(14);
-            //var unsafeMappingConfig = new Fb2MappingConfig(highlightUnsafe: true);
-            //var uiContent = fb2MappingService.MapDocument(selectedFb2Document, actualViewHostSize, defaultMappingConfig);
-
-            var uiContent = Fb2Mapper.Instance.MapDocument(selectedFb2Document, viewPort.GetViewHostSize(), defaultMappingConfig);
-
-            stop.Stop();
+            var uiContent = Fb2Mapper.Instance.MapDocument(selectedFb2Document, defaultMappingConfig);
 
             var resplitContent = uiContent
                 .SelectMany(uic => uic.Chunk(50))
                 .Select(rp => new RichContentPage(rp))
                 .ToList();
 
-            Debug.WriteLine($"UI Mapping elapsed: {stop.Elapsed}");
-
-            var content = new RichContent(resplitContent, new HashSet<string> { ImageProcessor.NotInlineImageTag });
+            var content = new RichContent(resplitContent, new HashSet<string> { defaultMappingConfig.Image.NonInlineImageTag });
 
             ReadViewModel.ChaptersContent = content;
         }

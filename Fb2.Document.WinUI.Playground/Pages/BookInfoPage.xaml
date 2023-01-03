@@ -80,9 +80,9 @@
 											  Margin="0"
 											  Padding="0"
 											  HorizontalAlignment="Stretch"
-											  HorizontalContentAlignment="Stretch"
 											  VerticalAlignment="Stretch"
-											  VerticalContentAlignment="Stretch">
+											  HorizontalContentAlignment="Center"
+											  VerticalContentAlignment="Center">
 									<Image Source="{x:Bind Content, Converter={StaticResource SToImage}}"
 										   Stretch="None"
 										   HorizontalAlignment="Center"

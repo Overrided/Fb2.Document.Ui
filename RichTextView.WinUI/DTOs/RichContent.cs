@@ -15,7 +15,7 @@ namespace RichTextView.WinUI.DTOs
 
         public double LeftOffPosition { get; }
 
-        public HashSet<string> NotInlineImageTags { get; } = new();
+        public HashSet<string>? NotInlineImageTags { get; } = new();
 
         public RichContent(IEnumerable<RichContentPage> content) : this(content, new()) { }
 

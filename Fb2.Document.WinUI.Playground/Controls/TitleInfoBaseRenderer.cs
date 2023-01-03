@@ -6,12 +6,10 @@ using System.Threading;
 using Fb2.Document.Constants;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
-using Fb2.Document.WinUI;
 using Fb2.Document.WinUI.Playground.Common;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using RichTextView.WinUI.DTOs;
-using Windows.Foundation;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -234,7 +232,7 @@ public sealed class TitleInfoBaseRenderer : Control
 
         nodes.AddRange(keywords.Where(k => k != null && k.HasContent));
 
-        var mappedNodes = Fb2Mapper.Instance.MapNodes(nodes, Size.Empty);
+        var mappedNodes = Fb2Mapper.Instance.MapNodes(nodes);
 
         var normalizedContent = mappedNodes.SelectMany(uic => uic);
 

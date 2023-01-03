@@ -8,36 +8,36 @@
 	  NavigationCacheMode="Disabled"
 	  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-	<Grid>
-		<Grid Margin="20,10">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="*" />
-			</Grid.RowDefinitions>
-			<TextBlock Grid.Row="0"
-					   Style="{StaticResource TitleTextBlockStyle}"
-					   FontWeight="Normal"
-					   Text="Theme Mode" />
-			<StackPanel x:Name="ThemePanel"
-						Grid.Row="1">
-				<RadioButton Tag="Light"
-							 Checked="OnThemeRadioButtonChecked"
-							 Content="Light" />
-				<RadioButton Tag="Dark"
-							 Checked="OnThemeRadioButtonChecked"
-							 Content="Dark" />
-				<RadioButton Tag="Default"
-							 Checked="OnThemeRadioButtonChecked"
-							 Content="Use system setting" />
-			</StackPanel>
-		</Grid>
+	<!--<Grid>-->
+	<Grid Margin="20,10">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<TextBlock Grid.Row="0"
+				   Style="{StaticResource TitleTextBlockStyle}"
+				   FontWeight="Normal"
+				   Text="Theme" />
+		<StackPanel x:Name="ThemePanel"
+					Grid.Row="1">
+			<RadioButton Tag="Light"
+						 Checked="OnThemeRadioButtonChecked"
+						 Content="Light" />
+			<RadioButton Tag="Dark"
+						 Checked="OnThemeRadioButtonChecked"
+						 Content="Dark" />
+			<RadioButton Tag="Default"
+						 Checked="OnThemeRadioButtonChecked"
+						 Content="Use system setting" />
+		</StackPanel>
+	</Grid>
 
-		<!--<ToggleSwitch Header="Theme"
+	<!--<ToggleSwitch Header="Theme"
                       VerticalAlignment="Top"
                       Margin="30"
                       OnContent="Light" 
                       OffContent="Dark"
                       Toggled="ToggleSwitch_Toggled" 
                       Loaded="ToggleSwitch_Loaded"/>-->
-	</Grid>
+	<!--</Grid>-->
 </Page>

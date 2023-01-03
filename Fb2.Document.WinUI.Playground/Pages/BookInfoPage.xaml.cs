@@ -129,11 +129,8 @@ namespace Fb2.Document.WinUI.Playground.Pages
         private async void ExportImageButtonClicked(object sender, RoutedEventArgs e)
         {
             var selectedItem = FullScreenImagesContainer.SelectedItem as BinaryImageViewModel;
-            if (selectedItem == null ||
-                string.IsNullOrEmpty(selectedItem.Content))
-            {
+            if (selectedItem == null || string.IsNullOrEmpty(selectedItem.Content))
                 return;
-            }
 
             var contentType = string.IsNullOrEmpty(selectedItem.ContentType) ?
                 TryGetContentTypeFromBase64Content(selectedItem.Content) :
