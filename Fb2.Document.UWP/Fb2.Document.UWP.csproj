@@ -120,7 +120,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Common\Fb2UIConstants.cs" />
     <Compile Include="Common\Utils.cs" />
     <Compile Include="Entities\Fb2ContentPage.cs" />
     <Compile Include="Entities\Fb2MappingConfig.cs" />

@@ -90,23 +90,32 @@ namespace Fb2.Document.UWP.Playground.Pages
     {
         private Fb2Document selectedFb2Document = null;
         //private Fb2Mapper fb2MappingService = null;
-        private Fb2MappingConfig defaultMappingConfig = new Fb2MappingConfig();
+        private Fb2DocumentMappingConfig defaultMappingConfig = new Fb2DocumentMappingConfig();
 
         public ReadViewModel ReadViewModel { get; private set; }
 
         public ReadPage()
         {
             this.InitializeComponent();
-
-            viewPort.Loaded += ViewPort_Loaded;
-
-            //fb2MappingService = new Fb2Mapper();
+            this.Loaded += ReadPage_Loaded;
 
             ReadViewModel = new ReadViewModel
             {
                 ShowBookProgress = true,
                 PageMargin = new Thickness(20)
             };
+        }
+
+        private void ReadPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            var uiContent = Fb2Mapper.Instance.MapDocument(selectedFb2Document, defaultMappingConfig);
+
+            //var content = new ChaptersContent(UiContent, pagePadding: defaultMappingConfig.PagePadding);
+            var contentPages = uiContent.Select(p => new RichContentPage(p));
+            var content = new RichContent(contentPages, new HashSet<string> { defaultMappingConfig.Image.NonInlineImageTag });
+            //var content = new ChaptersContent(contentPages, 71406.8);
+
+            ReadViewModel.ChaptersContent = content;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -124,7 +133,7 @@ namespace Fb2.Document.UWP.Playground.Pages
         {
             base.OnNavigatedFrom(e);
 
-            viewPort.Loaded -= ViewPort_Loaded;
+            //viewPort.Loaded -= ViewPort_Loaded;
             viewPort.HyperlinkActivated -= RichTextView_HyperlinkActivated;
             viewPort.BookProgressChanged -= RichTextView_OnProgress;
             viewPort.BookRendered -= OnBookRendered;
@@ -143,27 +152,6 @@ namespace Fb2.Document.UWP.Playground.Pages
 
             //fb2MappingService = null;
             selectedFb2Document = null;
-        }
-
-        private void ViewPort_Loaded(object sender, RoutedEventArgs e)
-        {
-            var stop = Stopwatch.StartNew();
-
-            var actualViewHostSize = viewPort.GetViewHostSize();
-            //var smallFontConfig = new Fb2MappingConfig(14);
-            //var unsafeMappingConfig = new Fb2MappingConfig(highlightUnsafe: true);
-            var uiContent = Fb2Mapper.Instance.MapDocument(selectedFb2Document, actualViewHostSize, new Fb2DocumentMappingConfig());
-
-            stop.Stop();
-
-            Debug.WriteLine($"UI Mapping elapsed: {stop.Elapsed}");
-
-            //var content = new ChaptersContent(UiContent, pagePadding: defaultMappingConfig.PagePadding);
-            var contentPages = uiContent.Select(p => new RichContentPage(p));
-            var content = new RichContent(contentPages, new HashSet<string> { ImageProcessor.NotInlineImageTag });
-            //var content = new ChaptersContent(contentPages, 71406.8);
-
-            ReadViewModel.ChaptersContent = content;
         }
 
         private async void RichTextView_HyperlinkActivated(object sender, RichHyperlinkActivatedEventArgs e)

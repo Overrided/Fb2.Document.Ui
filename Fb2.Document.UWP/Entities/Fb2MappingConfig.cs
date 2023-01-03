@@ -82,6 +82,20 @@ namespace Fb2.Document.UWP.Entities
         }
     }
 
+    public class ImageConfig
+    {
+        public string NonInlineImageTag { get; set; }
+
+        // for future use, not utilized yet
+        public string NonInlineImageContainerTag { get; set; }
+
+        public ImageConfig(string nonInlineImageTag = "NotInlineFb2ImageTag", string nonInlineImageContainerTag = null)
+        {
+            NonInlineImageTag = nonInlineImageTag;
+            NonInlineImageContainerTag = nonInlineImageContainerTag;
+        }
+    }
+
     // TODO : add bool UseStyles / UseDefaultStyles
     public class Fb2MappingConfig
     {
@@ -103,6 +117,8 @@ namespace Fb2.Document.UWP.Entities
 
         public AnnotationConfig Annotation { get; set; } = new AnnotationConfig();
 
+        public ImageConfig Image { get; set; } = new ImageConfig();
+
         public Fb2MappingConfig()
         {
         }
@@ -116,7 +132,8 @@ namespace Fb2.Document.UWP.Entities
             ConfigBase bodyConfig = null,
             SectionConfig bodySectionConfig = null,
             QuoteConfig citeConfig = null,
-            AnnotationConfig annotation = null)
+            AnnotationConfig annotationConfig = null,
+            ImageConfig imageConfig = null)
         {
             BaseFontSize = baseFontSize;
             ParagraphIndent = paragraphIndent;
@@ -127,7 +144,8 @@ namespace Fb2.Document.UWP.Entities
             Body = bodyConfig ?? new ConfigBase();
             Section = bodySectionConfig ?? new SectionConfig();
             Quote = citeConfig ?? new QuoteConfig();
-            Annotation = annotation ?? new AnnotationConfig();
+            Annotation = annotationConfig ?? new AnnotationConfig();
+            Image = imageConfig ?? new ImageConfig();
         }
     }
 
@@ -149,7 +167,8 @@ namespace Fb2.Document.UWP.Entities
             ConfigBase bodyConfig = null,
             SectionConfig bodySectionConfig = null,
             QuoteConfig citeConfig = null,
-            AnnotationConfig annotation = null) : base(
+            AnnotationConfig annotationConfig = null,
+            ImageConfig imageConfig = null) : base(
                 baseFontSize,
                 paragraphIndent,
                 highlightUnsafe,
@@ -158,7 +177,8 @@ namespace Fb2.Document.UWP.Entities
                 bodyConfig,
                 bodySectionConfig,
                 citeConfig,
-                annotation)
+                annotationConfig,
+                imageConfig)
         {
             MapWholeDocument = mapWholeDocument;
         }

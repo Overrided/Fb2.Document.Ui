@@ -89,7 +89,6 @@ namespace Fb2.Document.UWP.Playground.Controls
 
             var mappedNodes = Fb2Mapper.Instance.MapNode(
                 documentInfo,
-                Size.Empty,
                 new Fb2MappingConfig(useStyles: false));
 
             var normalizedContent = mappedNodes.SelectMany(uic => uic);

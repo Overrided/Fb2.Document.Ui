@@ -74,11 +74,8 @@ namespace Fb2.Document.UWP.Playground.Controls
                 return;
             }
 
-            //var mappedNodes = new Fb2Mapper().MapNode(publishInfo, Size.Empty);
-
             var mappedNodes = Fb2Mapper.Instance.MapNode(
                 publishInfo,
-                Size.Empty,
                 new Fb2MappingConfig(useStyles: false));
 
             var normalizedContent = mappedNodes.SelectMany(uic => uic);

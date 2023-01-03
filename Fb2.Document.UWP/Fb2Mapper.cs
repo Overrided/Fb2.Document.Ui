@@ -5,12 +5,10 @@ using System.Threading;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
 using Fb2.Document.UWP.Entities;
-using Windows.Foundation;
 using Windows.UI.Xaml.Documents;
 
 namespace Fb2.Document.UWP
 {
-    // TODO : make static/singletone? 
     // TODO : add table of contents?? (or on app level?)
     public class Fb2Mapper
     {
@@ -20,14 +18,14 @@ namespace Fb2.Document.UWP
 
         private Fb2Mapper() { }
 
-        public IEnumerable<Fb2ContentPage> MapDocument(Fb2Document document, Size viewPortSize, Fb2DocumentMappingConfig config = null)
+        public IEnumerable<Fb2ContentPage> MapDocument(Fb2Document document, Fb2DocumentMappingConfig config = null)
         {
             var docConfig = config ?? new Fb2DocumentMappingConfig();
 
             var mapWholeDoc = docConfig.MapWholeDocument;
 
             var wholeDocNodes = new List<Fb2Node>(1) { document.Book };
-            var context = new RenderingContext(wholeDocNodes, viewPortSize, docConfig);
+            var context = new RenderingContext(wholeDocNodes, docConfig);
 
             var renderableNodes = mapWholeDoc ?
                 wholeDocNodes :
@@ -36,24 +34,24 @@ namespace Fb2.Document.UWP
             return MapContent(renderableNodes, context);
         }
 
-        public IEnumerable<Fb2ContentPage> MapNodes(IEnumerable<Fb2Node> nodes, Size viewPortSize, Fb2MappingConfig config = null)
+        public IEnumerable<Fb2ContentPage> MapNodes(IEnumerable<Fb2Node> nodes, Fb2MappingConfig config = null)
         {
             if (nodes == null || !nodes.Any())
                 throw new ArgumentNullException(nameof(nodes));
 
-            var context = new RenderingContext(nodes, viewPortSize, config);
+            var context = new RenderingContext(nodes, config);
 
             return MapContent(nodes, context);
         }
 
-        public IEnumerable<Fb2ContentPage> MapNode(Fb2Node node, Size viewPortSize, Fb2MappingConfig config = null)
+        public IEnumerable<Fb2ContentPage> MapNode(Fb2Node node, Fb2MappingConfig config = null)
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
 
 
             var nodesToMap = new List<Fb2Node>(1) { node };
-            var context = new RenderingContext(nodesToMap, viewPortSize, config);
+            var context = new RenderingContext(nodesToMap, config);
 
             return MapContent(nodesToMap, context);
         }

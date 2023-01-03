@@ -347,8 +347,7 @@ namespace RichTextView.UWP
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 var richTextBlock = sender as RichTextBlock;
-                UpdateVisiblePage(richTextBlock, GetViewHostSize(), true, true, false);
-                Debug.WriteLine($"{nameof(RichTextBlock_Loaded)} on {richTextBlock.Tag}");
+                UpdateVisiblePage(richTextBlock, true, true, false);
             });
         }
 
@@ -359,8 +358,7 @@ namespace RichTextView.UWP
                 var richTextBlock = (RichTextBlock)sender;
                 if (args.BringIntoViewDistanceY < richTextBlock.ActualHeight && richTextBlock.IsLoaded)
                 {
-                    UpdateVisiblePage(richTextBlock, GetViewHostSize(), false, true, true);
-                    Debug.WriteLine($"{nameof(RichTextBlock_EffectiveViewportChanged)} on {richTextBlock.Tag}");
+                    UpdateVisiblePage(richTextBlock, false, true, true);
                 }
             });
         }
@@ -370,9 +368,7 @@ namespace RichTextView.UWP
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 var richTextBlock = (RichTextBlock)sender;
-
-                UpdateVisiblePage(richTextBlock, GetViewHostSize(), false, true, true);
-                Debug.WriteLine($"{nameof(RichTextBlock_SizeChanged)} on {richTextBlock.Tag}");
+                UpdateVisiblePage(richTextBlock, false, true, true);
             });
         }
 
@@ -410,13 +406,11 @@ namespace RichTextView.UWP
         // hyperlinks events
         private void HyperText_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
-            Debug.WriteLine("hyperlink clicked");
             HyperlinkActivated?.Invoke(this, new RichHyperlinkActivatedEventArgs(sender, args));
         }
 
         private void HyperlinkBtn_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Debug.WriteLine("hyperlink button tapped");
             HyperlinkActivated?.Invoke(this, new RichHyperlinkActivatedEventArgs(sender, e));
         }
 
@@ -426,14 +420,11 @@ namespace RichTextView.UWP
             var hyperlinkButton = (HyperlinkButton)sender;
             hyperlinkButton.RemoveHandler(TappedEvent, defaultLinkClickEventHandler);
             hyperlinkButton.Unloaded -= HyperlinkBtn_Unloaded;
-
-            Debug.WriteLine("Hyperlink unloaded");
         }
 
         // page state & updates
         private void UpdateVisiblePage(
             RichTextBlock richTextBlock,
-            Size viewHostSize,
             bool shouldOverrideContextMenu,
             bool shouldHandleHyperlinks,
             bool shouldAlignImages)
@@ -489,20 +480,21 @@ namespace RichTextView.UWP
 
             if (shouldAlignImages)
             {
-                TryResizeNotInlineImages(richTextBlock, viewHostSize);
+                TryResizeNotInlineImages(richTextBlock);
             }
 
             richTextBlock.UpdateLayout();
         }
 
         // look for elements that are bigger than screen and resize)
-        private void TryResizeNotInlineImages(RichTextBlock richTextBlock, Size actualSize)
+        private void TryResizeNotInlineImages(RichTextBlock richTextBlock)
         {
             var anyImages = richTextBlock.FindVisualChildren<Image>();
 
             if (!anyImages.Any())
                 return;
 
+            var actualSize = GetViewHostSize();
             var actualWidth = actualSize.Width;
             var notInlineImageTags = RichTextContent.NotInlineImageTags;
 

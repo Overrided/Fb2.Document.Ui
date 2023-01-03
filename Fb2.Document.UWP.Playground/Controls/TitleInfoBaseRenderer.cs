@@ -231,7 +231,7 @@ namespace Fb2.Document.UWP.Playground.Controls
 
             nodes.AddRange(keywords.Where(k => k != null && !k.IsEmpty));
 
-            var mappedNodes = Fb2Mapper.Instance.MapNodes(nodes, Size.Empty);
+            var mappedNodes = Fb2Mapper.Instance.MapNodes(nodes);
 
             var normalizedContent = mappedNodes.SelectMany(uic => uic);
 

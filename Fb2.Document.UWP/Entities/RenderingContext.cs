@@ -18,11 +18,10 @@ namespace Fb2.Document.UWP.Entities
         //        textAuthorHorizontalAlignment: TextAlignment.Left));
         private Fb2MappingConfig defaultConfig = new Fb2MappingConfig();
 
-        internal RenderingContext(IEnumerable<Fb2Node> data, Size viewPortSize, Fb2MappingConfig config = null)
+        internal RenderingContext(IEnumerable<Fb2Node> data, Fb2MappingConfig config = null)
         {
             Data = data;
             RenderingConfig = config ?? defaultConfig;
-            ViewPortSize = viewPortSize;
         }
 
         // Services, half of them should not be there)
@@ -36,8 +35,6 @@ namespace Fb2.Document.UWP.Entities
         public Fb2MappingConfig RenderingConfig { get; }
 
         public IEnumerable<Fb2Node> Data { get; } = null;
-
-        public Size ViewPortSize { get; } = Size.Empty;
 
         //State
         public Fb2Node CurrentNode { get; private set; } = null;
