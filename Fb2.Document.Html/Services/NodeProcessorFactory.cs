@@ -36,30 +36,36 @@ public class NodeProcessorFactory
         //{ typeof(CustomInfo), new CustomInfoProcessor() }
     };
 
-    //private readonly HashSet<Type> paragraphElements = new HashSet<Type>
-    //{
-    //    typeof(Fb2Paragraph),
-    //    typeof(StanzaVerse),
-    //    typeof(Poem),
-    //    typeof(Epigraph),
-    //    typeof(Quote),
-    //    typeof(TextAuthor),
-    //    typeof(SubTitle),
-    //    typeof(Title),
-    //    typeof(BookTitle),
-    //    typeof(BookName),
-    //    typeof(Date),
-    //    typeof(PublishInfo),
-    //    typeof(Publisher),
-    //    typeof(City),
-    //    typeof(Year),
-    //    typeof(ISBNInfo)
-    //};
+    private readonly HashSet<Type> paragraphElements = new HashSet<Type>
+    {
+        //    typeof(Fb2Paragraph),
+        //    typeof(StanzaVerse),
+        //    typeof(Poem),
+        //    typeof(Epigraph),
+        //    typeof(Quote),
+        typeof(TextAuthor),
+        typeof(StanzaVerse)
+        //    typeof(SubTitle),
+        //    typeof(Title),
+        //    typeof(BookTitle),
+        //    typeof(BookName),
+        //    typeof(Date),
+        //    typeof(PublishInfo),
+        //    typeof(Publisher),
+        //    typeof(City),
+        //    typeof(Year),
+        //    typeof(ISBNInfo)
+    };
 
     private readonly HashSet<Type> divElements = new HashSet<Type>
     {
         typeof(BodySection),
-        typeof(BookBody)
+        typeof(BookBody),
+        typeof(Coverpage),
+        typeof(Epigraph),
+        typeof(Poem),
+        typeof(Stanza)
+        //typeof(TextAuthor)
         //typeof(Code),
         //typeof(TableCell),
         //typeof(TableHeader),
@@ -71,7 +77,7 @@ public class NodeProcessorFactory
         //typeof(HomePage)
     };
 
-    //public ParagraphProcessor ParagraphProcessor { get; }
+    public ParagraphProcessor ParagraphProcessor { get; }
 
     //public SpanProcessor SpanProcessor { get; }
 
@@ -81,7 +87,7 @@ public class NodeProcessorFactory
 
     private NodeProcessorFactory()
     {
-        //ParagraphProcessor = new ParagraphProcessor();
+        ParagraphProcessor = new ParagraphProcessor();
         //SpanProcessor = new SpanProcessor();
         DefaultProcessor = new DefaultFb2HtmlNodeProcessor();
         DivFb2HtmlProcessor = new DivFb2HtmlProcessor();
@@ -93,6 +99,9 @@ public class NodeProcessorFactory
 
         if (divElements.Contains(currentNodeType))
             return DivFb2HtmlProcessor;
+
+        if (paragraphElements.Contains(currentNodeType))
+            return ParagraphProcessor;
 
         if (nodeMap.ContainsKey(currentNodeType))
             return nodeMap[currentNodeType];

@@ -9,6 +9,7 @@ using Fb2.Document.Models.Base;
 using Fb2.Document.Models;
 using Fb2.Document.Constants;
 using System.Net;
+using System.Security.AccessControl;
 
 namespace Fb2.Document.Html.NodeProcessors;
 
@@ -27,7 +28,7 @@ public class ImageProcessor : DefaultFb2HtmlNodeProcessor
 
     private const int EditingDistanceThreshold = 3;
 
-    //public override string CorrespondingHtmlTag => string.Empty; // whatewer
+    public override string CorrespondingHtmlTag => "img"; // whatewer
 
     public override string Process(RenderingContext context)
     {
@@ -44,26 +45,32 @@ public class ImageProcessor : DefaultFb2HtmlNodeProcessor
         if (bestMatchImage == null)
             return string.Empty;
 
-        var contentType = bestMatchImage.TryGetAttribute(AttributeNames.ContentType, out var contentTypeAttr) ?
-                                contentTypeAttr!.Value :
-                                string.Empty;
+        var contentType = bestMatchImage.TryGetAttribute(
+            AttributeNames.ContentType, out var contentTypeAttr) ?
+                contentTypeAttr!.Value :
+                string.Empty;
 
         var finalContentType = string.IsNullOrEmpty(contentType) ?
             TryGetContentTypeFromBase64Content(bestMatchImage.Content) :
             contentType;
 
-        var centerForNotInlineImages = "style=\"margin: auto;display: block; max-width:100%\"";
-        var srcData = $"src=\"data:{finalContentType};base64, {bestMatchImage.Content}\"";
+        //var centerForNotInlineImages = "style=\"margin:auto;display:block;max-width:100%\"";
+        var attributes = ProcessAttributes(
+            context,
+            CorrespondingHtmlTag,
+            (a) =>
+            {
+                var attributeKey = a.Key;
+                return !attributeKey.Equals(AttributeNames.XHref, StringComparison.InvariantCultureIgnoreCase) &&
+                       !attributeKey.Equals(AttributeNames.Type, StringComparison.InvariantCultureIgnoreCase);
+            });
+        var srcData = $"src=\"data:{finalContentType};base64,{bestMatchImage.Content}\"";
 
         var isImageInline = imageNode.IsInline;
 
-        var result = isImageInline ?
-            $"<img {srcData} />" :
-            $"<img {centerForNotInlineImages} {srcData} />";
+        var result = $"<{CorrespondingHtmlTag} {attributes} {srcData}>";
 
-        var htmlEncoded = WebUtility.HtmlEncode(result);
-
-        return result;
+        return isImageInline ? result : $"{Environment.NewLine}{result}";
     }
 
     private string TryGetContentTypeFromBase64Content(string base64Content)

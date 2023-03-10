@@ -1,0 +1,29 @@
+﻿@page "/readBook"
+@using Fb2.Document.Html;
+@using Fb2.Document.MAUI.Blazor.Playground.Data;
+@using Fb2.Document.MAUI.Blazor.Playground.Services;
+@using System.Text;
+
+@inject AppStateService AppStateService
+
+@*<h3>ReadBook</h3>*@
+
+<div>@bookContents</div>
+
+@code {
+    private MarkupString bookContents;
+    public BookModel BookModel { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        BookModel = AppStateService.CurrentBookModel;
+        var sb = new StringBuilder();
+        var mappedResult = Fb2HtmlMapper.MapDocument(BookModel.Fb2Document);
+        sb.AppendJoin(Environment.NewLine, mappedResult);
+
+        var joinedStringContent = sb.ToString();
+        bookContents = new MarkupString(joinedStringContent);
+    }
+}

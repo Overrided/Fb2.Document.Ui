@@ -1,0 +1,256 @@
+﻿@*@page "/bookshelf"*@
+@page "/"
+@using Fb2.Document.Constants;
+@using Fb2.Document.MAUI.Blazor.Playground.Data
+@using Fb2.Document.MAUI.Blazor.Playground.Services;
+@using Fb2.Document.Models;
+@using Fb2Image = Fb2.Document.Models.Image;
+@using System.Text;
+@using System.Diagnostics;
+
+@inject NavigationManager NavManager
+@inject AppStateService AppStateService
+
+@*<style>
+
+</style>*@
+
+@*<div class="container p-0">*@
+<div class="pageContainer p-0">
+    @if (allBooks == null || allBooks.Count == 0)
+    {
+        <p><em>no books yet</em></p>
+    }
+    else
+    {
+        <div class="booksContainer pb-4">
+            @foreach (var book in allBooks)
+            {
+                <div class="book px-3 pt-2" @onclick="(e) => OnBookClick(book, e)">
+                    <div class="coverpageContainer">
+                        <img class="bookCoverpage" src="@book.CoverpageBase64Image" />
+                        <div class="hoverOverlay">
+                            <button class="readBookBtn p-3"
+                            @onclick:stopPropagation="true"
+                            @onclick="(e) => OnBookReadClick(book, e)">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
+                                    <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="h5 m-0 p-0 text-truncate" title="@book.BookName">@book.BookName</div>
+                    <div class="text-truncate" title="@book.BookAuthor">@book.BookAuthor</div>
+                </div>
+            }
+        </div>
+    }
+
+    <button class="btn btn-primary addBookBtn" @onclick="AddBooks">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
+        </svg>
+        @*<span class="oi oi-plus"></span>*@
+    </button>
+</div>
+
+@code {
+    private List<BookModel> allBooks = new();
+
+    private const int EditingDistanceThreshold = 3;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        if (AppStateService.AllBooks.Any())
+        {
+            allBooks = AppStateService.AllBooks.ToList();
+        }
+    }
+
+    private async Task AddBooks()
+    {
+        var result = await FilePicker.PickMultipleAsync();
+
+        if (result.Any())
+        {
+            var allParsedFiles = (await Task.WhenAll(result.Select(ParseFile))).OfType<BookModel>();
+
+            foreach (var bookModel in allParsedFiles)
+                AppStateService.AllBooks.Add(bookModel);
+
+            allBooks.AddRange(allParsedFiles);
+        }
+    }
+
+    private void OnBookClick(BookModel book, MouseEventArgs e)
+    {
+        AppStateService.CurrentBookModel = book;
+        NavManager.NavigateTo("/bookInfo", false, false);
+        Debug.WriteLine("OnBookClick");
+    }
+
+    private void OnBookReadClick(BookModel book, MouseEventArgs e)
+    {
+        AppStateService.CurrentBookModel = book;
+        NavManager.NavigateTo("/readBook", false, false);
+    }
+
+    private async Task<BookModel> ParseFile(FileResult storageFile)
+    {
+        try
+        {
+            var fb2Doc = new Fb2Document();
+            long fileSizeBytes = 0;
+            using (var dataStream = await storageFile.OpenReadAsync())
+            {
+                fileSizeBytes = dataStream.Length;
+                await fb2Doc.LoadAsync(dataStream);
+
+                dataStream.Close();
+                dataStream.Dispose();
+            }
+
+            var result = new BookModel
+                {
+                    FileName = storageFile.FileName,
+                    FilePath = storageFile.FullPath,
+                    FileSizeInBytes = fileSizeBytes,
+                    Fb2Document = fb2Doc
+                };
+
+            // move to method
+            var bookName = fb2Doc.Book.GetFirstDescendant<BookName>()?.Content;
+            var firstBookTitle = fb2Doc.Book.GetFirstDescendant<BookTitle>()?.Content;
+
+            if (!string.IsNullOrEmpty(firstBookTitle) || !string.IsNullOrEmpty(bookName))
+                result.BookName = string.IsNullOrEmpty(firstBookTitle) ? bookName : firstBookTitle;
+
+            // move to method
+            var authorString = GetStringnifiedAuthor(fb2Doc);
+            if (!string.IsNullOrEmpty(authorString))
+                result.BookAuthor = authorString;
+
+            // move to method
+            var firstCoverpageImage = GetCoverpage(fb2Doc)?.GetFirstChild<Fb2Image>();
+            if (firstCoverpageImage == null)
+                return result;
+
+            if (!firstCoverpageImage.TryGetAttribute(AttributeNames.XHref, true, out var xHref)) // if value (linked image id) was String.Empty
+                return result;
+
+            if (fb2Doc.BinaryImages == null || !fb2Doc.BinaryImages.Any())
+                return result;
+
+            var bestMatch = GetBestMatchImage(fb2Doc.BinaryImages, xHref.Value);
+
+            if (bestMatch == null)
+                return result;
+
+            var contentType = bestMatch.TryGetAttribute(AttributeNames.ContentType, out var contentTypeAttr) ?
+                contentTypeAttr!.Value :
+                string.Empty;
+
+            result.CoverpageBase64Image = $"data:{contentType};base64,{bestMatch.Content}";
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+    }
+
+    private Coverpage GetCoverpage(Fb2Document document)
+    {
+        var coverpage = document.Title?.GetFirstDescendant<Coverpage>();
+        return coverpage;
+    }
+
+    private string GetStringnifiedAuthor(Fb2Document fb2Document)
+    {
+        var authors = fb2Document.Title?.GetChildren<Author>() ?? fb2Document.SourceTitle?.GetChildren<Author>();
+
+        if (authors == null || !authors.Any())
+            return string.Empty;
+
+        return string.Join(", ", authors.Select(a =>
+        {
+            var sb = new StringBuilder();
+
+            var fName = a.GetFirstChild<FirstName>();
+            if (fName != null)
+                sb.Append(fName.Content);
+
+            var mName = a.GetFirstChild<MiddleName>();
+            if (mName != null)
+                sb.Append($" {mName.Content}");
+
+            var lName = a.GetFirstChild<LastName>();
+            if (lName != null)
+                sb.Append($" {lName.Content}");
+
+            return sb.ToString();
+        }));
+    }
+
+    private BinaryImage GetBestMatchImage(IEnumerable<BinaryImage> linkedBinaries, string xHref)
+    {
+        var imageDistances = linkedBinaries.Select(im =>
+                new
+                {
+                    Image = im,
+                    Distance = GetEditingDistance(xHref, im.GetAttribute(AttributeNames.Id, true).Value)
+                });
+
+        // check for distinction
+        var distinctDistances = imageDistances.Select(t => t.Distance).Distinct();
+
+        // we have 12 images, with same distances, so distinct instance.count will be 1.
+        // so if we have only 1 image at all it will still work
+        if (distinctDistances.Count() == 1 && linkedBinaries.Count() != 1)
+            return null; // we are fucked up - all referenes are equally good or bad at same time
+
+        var bestMatch = imageDistances
+            .OrderBy(t => t.Distance)
+            .FirstOrDefault(); // choose the shortest distance
+
+        if (bestMatch.Distance > EditingDistanceThreshold)
+            return null;
+
+        return bestMatch.Image;
+    }
+
+    private static int GetEditingDistance(string source, string target)
+    {
+        // corner cases
+        if (source == target ||
+            string.IsNullOrWhiteSpace(source) && string.IsNullOrWhiteSpace(target)) return 0;
+
+        if (source.Length == 0) return target.Length;
+        if (target.Length == 0) return source.Length;
+
+        int sourceCharCount = source.Length;
+        int targetCharCount = target.Length;
+
+        int[,] distance = new int[sourceCharCount + 1, targetCharCount + 1];
+
+        // Step 2
+        for (int i = 0; i <= sourceCharCount; distance[i, 0] = i++) ;
+        for (int j = 0; j <= targetCharCount; distance[0, j] = j++) ;
+
+        for (int i = 1; i <= sourceCharCount; i++)
+        {
+            for (int j = 1; j <= targetCharCount; j++)
+            {
+                // Step 3
+                int cost = (target[j - 1] == source[i - 1]) ? 0 : 1;
+
+                // Step 4
+                distance[i, j] = Math.Min(Math.Min(distance[i - 1, j] + 1, distance[i, j - 1] + 1), distance[i - 1, j - 1] + cost);
+            }
+        }
+
+        return distance[sourceCharCount, targetCharCount];
+    }
+}

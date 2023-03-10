@@ -1,0 +1,77 @@
+﻿.pageContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    text-align: center;
+    justify-content: center;
+    /*background-color: red;*/
+}
+
+.booksContainer {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100%;
+    /*background-color: DodgerBlue;*/
+    gap: 20px;
+}
+
+.book {
+    position: relative;
+    background-color: #f1f1f1;
+    width: 220px;
+    height: 250px;
+    text-align: center;
+    /*padding-top: 8px;*/
+}
+
+    .book:hover {
+        /*background-color: red;*/
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.75) !important;
+    }
+
+        .book:hover .hoverOverlay {
+            display: inline-block;
+        }
+
+.bookCoverpage {
+    height: 190px;
+    max-width: 190px;
+}
+
+.hoverOverlay {
+    display: none;
+    position: absolute;
+    /*    top: 50%;
+    left: 50%;*/
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+    /*transform: translate(-50%, -50%);*/
+    transition: .5s ease;
+    /*transform: translate(-50%, -50%);*/
+    /*-ms-transform: translate(-50%, -50%);*/
+    /*background-image: radial-gradient(white 15%, black 15%, white);*/
+    background-image: radial-gradient(white 15%, black 15%, black 18%, #ffffff44 100%);
+}
+
+    .hoverOverlay:hover {
+        display: block;
+    }
+
+.addBookBtn {
+    border-radius: 90px;
+    height: 60px;
+    width: 60px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.readBookBtn {
+    border-radius: 90px;
+    height: 70px;
+    width: 70px;
+    margin-top: 90px;
+}

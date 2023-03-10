@@ -8,8 +8,6 @@ namespace Fb2.Document.UWP.Playground.Models
 {
     public class BookModel
     {
-        //private const string system = "book_model_system";
-
         public string FileName { get; set; }
         public string FilePath { get; set; }
         public long FileSizeInBytes { get; set; }
@@ -17,20 +15,6 @@ namespace Fb2.Document.UWP.Playground.Models
         public string BookName { get; set; }
         public string BookAuthor { get; set; }
         public Fb2Document Fb2Document { get; set; }
-
-        //public static BookModel AddBookModel;
-
-        //static BookModel()
-        //{
-        //    AddBookModel = new BookModel
-        //    {
-        //        FileName = system,
-        //        FilePath = system,
-        //        FileSizeInBytes = -1,
-        //        BookName = system,
-        //        BookAuthor = system
-        //    };
-        //}
 
         public override bool Equals(object obj)
         {

@@ -16,7 +16,7 @@ public class EmptyLineProcessor : DefaultFb2HtmlNodeProcessor
         //var currentNode = context.CurrentNode as Fb2Element;
         //var content = currentNode?.Content ?? string.Empty;
         //return content;
-        return $"</br>{Environment.NewLine}";
+        return $"<br>{Environment.NewLine}";
 
         //return base.Process(context);
     }

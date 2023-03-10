@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 xmlns:localConverters="clr-namespace:Fb2.Document.MAUI.Playground.Converters"
+			 xmlns:local="clr-namespace:Fb2.Document.MAUI.Playground"
 			 x:Class="Fb2.Document.MAUI.Playground.MainPage"
+			 xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
 			 Title="Bookshelf">
 	<ContentPage.Resources>
 		<localConverters:Base64StringToImageConverter x:Key="SToImage"
@@ -21,16 +23,32 @@
 							SelectionChanged="OnSelectedBook_ChangedEvent">
 				<CollectionView.ItemTemplate>
 					<DataTemplate>
-						<Border Stroke="#666"
-								StrokeThickness="1"
-								HorizontalOptions="Center"
+						<Border HorizontalOptions="Center"
 								Margin="8"
 								Padding="0,6,0,6"
 								MaximumWidthRequest="250"
 								MaximumHeightRequest="300"
 								MinimumWidthRequest="180"
 								MinimumHeightRequest="200">
+							<!--<Border.Behaviors>-->
+							<!--<local:NumericValidationBehavior />-->
+							<!--<toolkit:EventToCommandBehavior EventName="Focused">
 
+								</toolkit:EventToCommandBehavior>-->
+							<!--</Border.Behaviors>-->
+							<!--<Border.Triggers>
+								<Trigger TargetType="Border"
+										 Property="Border.IsFocused"
+										 Value="True">
+									<Trigger.EnterActions>
+										<local:FadeTriggerAction StartsFrom="0" />
+									</Trigger.EnterActions>
+
+									<Trigger.ExitActions>
+										<local:FadeTriggerAction StartsFrom="1" />
+									</Trigger.ExitActions>
+								</Trigger>
+							</Border.Triggers>-->
 							<Grid>
 								<Grid.RowDefinitions>
 									<RowDefinition Height="*" />
@@ -38,7 +56,11 @@
 								</Grid.RowDefinitions>
 								<Image Grid.Row="0"
 									   Source="{Binding CoverpageBase64Image, Converter={StaticResource SToImage}}"
-									   Aspect="AspectFit" />
+									   Aspect="AspectFit"
+									   MaximumWidthRequest="250"
+									   MaximumHeightRequest="150"
+									   MinimumWidthRequest="80"
+									   MinimumHeightRequest="100" />
 
 								<VerticalStackLayout Grid.Row="1">
 									<Label Text="{Binding BookName}"
@@ -61,7 +83,7 @@
 		</ScrollView>
 		<Label x:Name="emptyStateLabel"
 			   FontSize="36"
-			   Opacity="0.5"
+			   Opacity="0.75"
 			   Text="no books yet"
 			   VerticalOptions="Center"
 			   HorizontalOptions="Center" />

@@ -396,6 +396,27 @@
 						</Expander.Content>
 					</Expander>
 
+					<TextBlock Text="{x:Bind BookInfoViewModel.FullFilePath, Mode=OneWay}"
+							   Visibility="{x:Bind BookInfoViewModel.FullFilePath, Mode=OneWay, Converter={StaticResource VtvConterter}}" />
+
+					<TextBlock Text="{x:Bind BookInfoViewModel.FileSize, Mode=OneWay}"
+							   Visibility="{x:Bind BookInfoViewModel.FileSize, Mode=OneWay, Converter={StaticResource VtvConterter}}" />
+
+					<!--<Expander Margin="0, 10, 0, 0"
+							  IsExpanded="False"
+							  ExpandDirection="Down"
+							  HorizontalAlignment="Stretch"
+							  HorizontalContentAlignment="Stretch"
+							  VerticalAlignment="Top"
+							  VerticalContentAlignment="Stretch"
+							  Header="File Info"
+							  Visibility="{x:Bind BookInfoViewModel.FileInfoViewModel, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+						<Expander.Content>
+							<locl:FileInfoRenderer MyPropertyFileInfo="{x:Bind BookInfoViewModel.FileInfoViewModel}">
+							</locl:FileInfoRenderer>
+						</Expander.Content>
+					</Expander>-->
+
 				</StackPanel>
 			</ScrollViewer>
 

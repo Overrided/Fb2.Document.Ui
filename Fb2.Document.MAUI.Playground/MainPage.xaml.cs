@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using CommunityToolkit.Maui.Behaviors;
 using Fb2.Document.Constants;
 using Fb2.Document.LoadingOptions;
 using Fb2.Document.MAUI.Playground.Pages;
@@ -11,6 +12,58 @@ using Microsoft.Maui.Controls;
 using Fb2Image = Fb2.Document.Models.Image;
 
 namespace Fb2.Document.MAUI.Playground;
+
+//public class FadeTriggerAction : TriggerAction<VisualElement>
+//{
+//    public int StartsFrom { get; set; }
+
+//    protected override void Invoke(VisualElement sender)
+//    {
+//        sender.Animate("FadeTriggerAction", new Animation((d) =>
+//        {
+//            //var val = StartsFrom == 1 ? d : 1 - d;
+//            //sender.BackgroundColor = Color;
+
+//            sender.BackgroundColor = StartsFrom == 1 ? Colors.Red : Colors.Green;
+//        }),
+//        length: 1000, // milliseconds
+//        easing: Easing.Linear);
+//    }
+//}
+
+public class NumericValidationBehavior : Behavior<Border>
+{
+    protected override void OnAttachedTo(Border entry)
+    {
+        entry.Focused += Entry_Focused;
+        entry.Unfocused += Entry_Unfocused;
+        base.OnAttachedTo(entry);
+    }
+
+    private void Entry_Unfocused(object sender, FocusEventArgs e)
+    {
+        (sender as Border).Stroke = Colors.Green;
+    }
+
+    private void Entry_Focused(object sender, FocusEventArgs e)
+    {
+        (sender as Border).Stroke = Colors.Red;
+    }
+
+    protected override void OnDetachingFrom(Border entry)
+    {
+        entry.Focused -= Entry_Focused;
+        entry.Unfocused -= Entry_Unfocused;
+        base.OnDetachingFrom(entry);
+    }
+
+    //void OnEntryTextChanged(object sender, TextChangedEventArgs args)
+    //{
+    //    double result;
+    //    bool isValid = double.TryParse(args.NewTextValue, out result);
+    //    ((Entry)sender).TextColor = isValid ? Colors.Black : Colors.Red;
+    //}
+}
 
 public class BookModel
 {
@@ -108,6 +161,12 @@ public partial class MainPage : ContentPage
             Books.Add(book);
             Debug.WriteLine($"Added book '{book.BookName}'");
         }
+
+        //var behavior = new EventToCommandBehavior
+        //{
+        //    EventName = nameof(Button.Clicked),
+        //    Command = new Command()
+        //};
 
         activityIndicator.IsRunning = false;
         activityIndicator.IsVisible = false;
@@ -300,16 +359,15 @@ public partial class MainPage : ContentPage
 
         this.BooksCollectionView.SelectedItem = null;
         this.BooksCollectionView.SelectedItems.Clear();
-
-        //await Shell.Current.GoToAsync(new ShellNavigationState("MainPage/Read"), true);
-        //await Shell.Current.GoToAsync("../Read", true);
-        //Shell.Current.CurrentItem = new ReadPage();
-
-        //Shell.Current.CurrentItem = 
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
+    }
+
+    private void Border_Focused(object sender, FocusEventArgs e)
+    {
+        Debug.WriteLine("Border_Focused");
     }
 }

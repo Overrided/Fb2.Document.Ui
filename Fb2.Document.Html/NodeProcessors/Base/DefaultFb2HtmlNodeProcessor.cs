@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Text;
+using Fb2.Document.Constants;
 using Fb2.Document.Html.Entities;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
@@ -65,7 +67,10 @@ public class DefaultFb2HtmlNodeProcessor : Fb2HtmlNodeProcessorBase
         return sb.ToString();
     }
 
-    protected override string ProcessAttributes(RenderingContext context, string htmlTag)
+    protected override string ProcessAttributes(
+        RenderingContext context,
+        string htmlTag,
+        Func<Fb2Attribute, bool>? attributePredicate = null)
     {
         var currentNode = context.CurrentNode;
         if (currentNode == null)
@@ -75,13 +80,15 @@ public class DefaultFb2HtmlNodeProcessor : Fb2HtmlNodeProcessorBase
         var style = context.ElementStyler.GetInlineStyles(context, htmlTag);
 
         if (!string.IsNullOrEmpty(style))
-            sb.Append($"{style} ");
+            sb.Append(style);
 
         var hasAtributes = currentNode.HasAttributes;
         if (!hasAtributes)
             return sb.ToString();
 
-        var nodeAttributes = currentNode.Attributes;
+        var nodeAttributes = attributePredicate != null ?
+            currentNode.Attributes.Where(a => attributePredicate(a)).ToList() :
+            currentNode.Attributes.ToList();
 
         var attributeStrings = nodeAttributes
             .Select(a => $"{a.Key}=\"{a.Value}\"")

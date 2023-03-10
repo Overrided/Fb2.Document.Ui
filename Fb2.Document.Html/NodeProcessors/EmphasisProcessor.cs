@@ -9,5 +9,5 @@ namespace Fb2.Document.Html.NodeProcessors;
 
 public class EmphasisProcessor : DefaultFb2HtmlNodeProcessor
 {
-    public override string CorrespondingHtmlTag => "em";
+    public override string CorrespondingHtmlTag => "i";
 }

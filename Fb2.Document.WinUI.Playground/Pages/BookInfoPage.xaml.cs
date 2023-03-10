@@ -70,7 +70,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
         private void BookInfoPage_Loaded(object sender, RoutedEventArgs e)
         {
-            var fb2Document = bookModel?.Fb2Document;
+            var fb2Document = bookModel!.Fb2Document;
 
             BookInfoViewModel.TitleInfo = GetFb2NodeOrDefault(fb2Document?.Title);
             BookInfoViewModel.SrcTitleInfo = GetFb2NodeOrDefault(fb2Document?.SourceTitle);
@@ -96,6 +96,9 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
                 return vm;
             })?.ToList();
+
+            BookInfoViewModel.FullFilePath = bookModel?.FilePath;
+            BookInfoViewModel.FileSize = bookModel?.FileSizeInBytes;
         }
 
         private void OnReadButton_Click(object sender, RoutedEventArgs e)

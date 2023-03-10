@@ -1,0 +1,113 @@
+﻿@using Fb2.Document.Html;
+@using Fb2.Document.MAUI.Blazor.Playground.Data;
+@using Fb2.Document.MAUI.Blazor.Playground.Services;
+@using Fb2.Document.Models;
+@using Fb2.Document.Models.Base;
+@using System.Text;
+
+@inject AppStateService AppStateService
+
+@page "/bookInfo"
+
+<style>
+    .pageContainer {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        text-align: center;
+        justify-content: center;
+        /*background-color: red;*/
+    }
+</style>
+
+@if (SelectedBook != null)
+{
+    @*<div class="container-fluid pb-3">*@
+    <div class="pageContainer px-0 pt-0 pb-3">
+        <div class="row h-100 m-0 g-0" style="border: 1px solid green">
+            <!--coverpage-->
+            @*<div class="col h-100 d-flex flex-wrap" style="border: 1px solid red">*@
+            <div class="col d-flex flex-wrap" style="border: 1px solid red">
+                <img class="img-fluid mx-auto my-auto d-block" src="@SelectedBook.CoverpageBase64Image" />
+            </div>
+
+            <div class="col" style="border: 1px solid blue">
+                @if (titleInfo.Value != null && titleInfo.Value.Length > 0)
+                {
+                    <div class="row">
+                        @titleInfo
+                    </div>
+                }
+
+                @if (srcTitleInfo.Value != null && srcTitleInfo.Value.Length > 0)
+                {
+                    <div class="row">
+                        @srcTitleInfo
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private BookModel SelectedBook = null;
+
+    //private TitleInfoBase TitleInfo;
+
+    //private TitleInfoBase SrcTitleInfo;
+
+    //private PublishInfo PublishInfo;
+
+    private MarkupString titleInfo;
+    private MarkupString srcTitleInfo;
+    private MarkupString publishInfo;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        SelectedBook = AppStateService.CurrentBookModel;
+
+        var doc = SelectedBook.Fb2Document;
+
+        //var titleInfoNode = GetFb2NodeOrDefault(doc?.Title);
+        //var srcTitleInfoNode = GetFb2NodeOrDefault(doc?.SourceTitle);
+        //var publishInfoNode = GetFb2NodeOrDefault(doc?.PublishInfo);
+
+        if (TryGetFb2NodeOrDefault(doc?.Title, out var titleResult))
+        {
+            titleInfo = MapFb2Node(titleResult);
+        }
+
+        if (TryGetFb2NodeOrDefault(doc?.SourceTitle, out var srcTitileResult))
+        {
+            srcTitleInfo = MapFb2Node(srcTitileResult);
+        }
+
+
+        //var publishInfoNode = TryGetFb2NodeOrDefault(doc?.PublishInfo, out var publishInfoNodeResult);
+    }
+
+    private bool TryGetFb2NodeOrDefault<T>(T instance, out T result) where T : Fb2Node
+    {
+        if (instance == null || !instance.HasContent && !instance.HasAttributes)
+        {
+            result = null;
+            return false;
+        }
+
+        result = instance;
+        return true;
+    }
+
+    private MarkupString MapFb2Node(Fb2Node node)
+    {
+        var sb = new StringBuilder();
+        var mappedResult = Fb2HtmlMapper.MapNode(node);
+        sb.AppendJoin(Environment.NewLine, mappedResult);
+
+        var joinedStringContent = sb.ToString();
+        var markupContent = new MarkupString(joinedStringContent);
+        return markupContent;
+    }
+}

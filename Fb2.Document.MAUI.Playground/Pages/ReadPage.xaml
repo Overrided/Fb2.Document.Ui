@@ -3,23 +3,53 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 x:Class="Fb2.Document.MAUI.Playground.Pages.ReadPage"
 			 Title="ReadPage">
-	<!--<VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>-->
+
+	<!--<Grid x:Name="OuterContainer"
+		  HorizontalOptions="FillAndExpand"
+		  VerticalOptions="FillAndExpand"
+		  IsClippedToBounds="False">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<ScrollView x:Name="BookViewportContainerScroll"
+					Grid.Row="0"
+					HorizontalOptions="FillAndExpand"
+					VerticalOptions="FillAndExpand"
+					HorizontalScrollBarVisibility="Never"
+					IsClippedToBounds="False">
+			<Grid x:Name="BookViewportContainer"
+				  HorizontalOptions="FillAndExpand"
+				  VerticalOptions="FillAndExpand"
+				  MinimumHeightRequest="500"
+				  IsClippedToBounds="False">
+			</Grid>
+		</ScrollView>
+	</Grid>-->
+
 	<Grid HorizontalOptions="FillAndExpand"
 		  VerticalOptions="FillAndExpand">
 		<WebView x:Name="HtmlWebView"
 				 HorizontalOptions="FillAndExpand"
 				 VerticalOptions="FillAndExpand">
 		</WebView>
-		<ActivityIndicator x:Name="activityIndicator"
-						   IsRunning="False"
-						   IsEnabled="False"
-						   IsVisible="False"
-						   VerticalOptions="Center"
-						   HorizontalOptions="Center" />
 	</Grid>
+	<!--<Grid>
+		<CollectionView x:Name="BookViewport"
+						HorizontalOptions="FillAndExpand"
+						VerticalOptions="FillAndExpand"
+						Margin="8"
+						SelectionMode="None">
+			<CollectionView.ItemTemplate>
+				<DataTemplate>
+					<Grid>
+						<WebView HorizontalOptions="FillAndExpand"
+								 VerticalOptions="FillAndExpand"
+								 Source="{Binding}">
+						</WebView>
+					</Grid>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+	</Grid>-->
 </ContentPage>

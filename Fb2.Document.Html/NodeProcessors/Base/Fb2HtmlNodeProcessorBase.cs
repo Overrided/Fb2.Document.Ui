@@ -14,14 +14,15 @@ public abstract class Fb2HtmlNodeProcessorBase
 {
     //private const string TagSeparator = "|";
 
-    //public abstract string CorrespondingHtmlTag { get; protected set; }
     public abstract string CorrespondingHtmlTag { get; }
 
     // later reimplement into byte[]
-    //public abstract string Process(RenderingContext context);
     public abstract string Process(RenderingContext context);
 
-    protected abstract string ProcessAttributes(RenderingContext context, string htmlTag);
+    protected abstract string ProcessAttributes(
+        RenderingContext context,
+        string htmlTag,
+        Func<Fb2Attribute, bool>? attributePredicate = null);
 
     // later reimplement into byte[]
     public string ElementSelector(Fb2Node node, RenderingContext context)

@@ -30,7 +30,7 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
 
     public class BookInfoViewModel : ObservableObject
     {
-        private string? coverpageBase64Image = string.Empty;
+        private string? coverpageBase64Image;
 
         public string? CoverpageBase64Image
         {
@@ -140,5 +140,36 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
             }
         }
 
+
+        private string? fullFilePath;
+
+        public string? FullFilePath
+        {
+            get { return fullFilePath; }
+            set
+            {
+                if (fullFilePath != value)
+                {
+                    OnPropertyChanging();
+                    fullFilePath = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private long? fileSize;
+        public long? FileSize
+        {
+            get { return fileSize; }
+            set
+            {
+                if (fileSize != value)
+                {
+                    OnPropertyChanging();
+                    fileSize = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
     }
 }

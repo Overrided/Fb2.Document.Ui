@@ -30,6 +30,15 @@ public class ElementStyler
         { ElementNames.SubTitle, (context, htmlTag) =>
         {
             return "style=\"text-align: center;\"";
+        }},
+        { ElementNames.Image, (context, tag) =>
+        {
+            var node = context.CurrentNode;
+            var isInlineImage = node.IsInline;
+            if(isInlineImage)
+                return string.Empty;
+
+            return "style=\"margin:auto;display:block;max-width:100%\"";
         }}
     };
 
