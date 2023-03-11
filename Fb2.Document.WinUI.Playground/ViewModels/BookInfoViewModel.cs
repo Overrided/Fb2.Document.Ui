@@ -28,6 +28,26 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
         }
     }
 
+    public class FileInfoViewModel
+    {
+        public string FilePath { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
+        public long FileSizeInBytes { get; set; } = 0;
+
+        public override bool Equals(object? obj)
+        {
+            return obj is FileInfoViewModel model &&
+                   FilePath == model.FilePath &&
+                   FileName == model.FileName &&
+                   FileSizeInBytes == model.FileSizeInBytes;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(FilePath, FileName, FileSizeInBytes);
+        }
+    }
+
     public class BookInfoViewModel : ObservableObject
     {
         private string? coverpageBase64Image;
@@ -141,35 +161,49 @@ namespace Fb2.Document.WinUI.Playground.ViewModels
         }
 
 
-        private string? fullFilePath;
-
-        public string? FullFilePath
+        private FileInfoViewModel? fileInfo;
+        public FileInfoViewModel? FileInfo
         {
-            get { return fullFilePath; }
+            get { return fileInfo; }
             set
             {
-                if (fullFilePath != value)
+                if (fileInfo != value)
                 {
                     OnPropertyChanging();
-                    fullFilePath = value;
+                    fileInfo = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private long? fileSize;
-        public long? FileSize
-        {
-            get { return fileSize; }
-            set
-            {
-                if (fileSize != value)
-                {
-                    OnPropertyChanging();
-                    fileSize = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        //private string? fullFilePath;
+        //public string? FullFilePath
+        //{
+        //    get { return fullFilePath; }
+        //    set
+        //    {
+        //        if (fullFilePath != value)
+        //        {
+        //            OnPropertyChanging();
+        //            fullFilePath = value;
+        //            OnPropertyChanged();
+        //        }
+        //    }
+        //}
+
+        //private long? fileSize;
+        //public long? FileSize
+        //{
+        //    get { return fileSize; }
+        //    set
+        //    {
+        //        if (fileSize != value)
+        //        {
+        //            OnPropertyChanging();
+        //            fileSize = value;
+        //            OnPropertyChanged();
+        //        }
+        //    }
+        //}
     }
 }

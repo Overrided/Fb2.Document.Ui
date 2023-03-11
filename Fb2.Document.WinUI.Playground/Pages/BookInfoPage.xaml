@@ -16,6 +16,9 @@
 		<converters:String64ToImageConverter x:Key="SToImage"
 											 x:Name="SToImage" />
 
+		<converters:FileSizeInBytesToHumanReadableStringConverter x:Key="FsTHRS"
+																  x:Name="FsTHRS" />
+
 	</Page.Resources>
 
 	<Grid x:Name="OuterGrid"
@@ -69,7 +72,7 @@
 						  HorizontalAlignment="Stretch"
 						  HorizontalContentAlignment="Stretch"
 						  VerticalContentAlignment="Stretch"
-						  UseTouchAnimationsForAllNavigation="True"
+						  UseTouchAnimationsForAllNavigation="False"
 						  CornerRadius="0"
 						  ItemsSource="{x:Bind BookInfoViewModel.BookImages, Mode=OneWay}">
 					<FlipView.ItemTemplate>
@@ -396,13 +399,7 @@
 						</Expander.Content>
 					</Expander>
 
-					<TextBlock Text="{x:Bind BookInfoViewModel.FullFilePath, Mode=OneWay}"
-							   Visibility="{x:Bind BookInfoViewModel.FullFilePath, Mode=OneWay, Converter={StaticResource VtvConterter}}" />
-
-					<TextBlock Text="{x:Bind BookInfoViewModel.FileSize, Mode=OneWay}"
-							   Visibility="{x:Bind BookInfoViewModel.FileSize, Mode=OneWay, Converter={StaticResource VtvConterter}}" />
-
-					<!--<Expander Margin="0, 10, 0, 0"
+					<Expander Margin="0, 10, 0, 0"
 							  IsExpanded="False"
 							  ExpandDirection="Down"
 							  HorizontalAlignment="Stretch"
@@ -410,12 +407,18 @@
 							  VerticalAlignment="Top"
 							  VerticalContentAlignment="Stretch"
 							  Header="File Info"
-							  Visibility="{x:Bind BookInfoViewModel.FileInfoViewModel, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+							  Visibility="{x:Bind BookInfoViewModel.FileInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
 						<Expander.Content>
-							<locl:FileInfoRenderer MyPropertyFileInfo="{x:Bind BookInfoViewModel.FileInfoViewModel}">
-							</locl:FileInfoRenderer>
+							<StackPanel>
+								<TextBlock Text="{x:Bind BookInfoViewModel.FileInfo.FileName, Mode=OneWay}"
+										   Visibility="{x:Bind BookInfoViewModel.FileInfo.FileName, Mode=OneWay, Converter={StaticResource VtvConterter}}" />
+								<TextBlock Text="{x:Bind BookInfoViewModel.FileInfo.FilePath, Mode=OneWay}"
+										   Visibility="{x:Bind BookInfoViewModel.FileInfo.FilePath, Mode=OneWay, Converter={StaticResource VtvConterter}}" />
+								<TextBlock Text="{x:Bind BookInfoViewModel.FileInfo.FileSizeInBytes, Mode=OneWay, Converter={StaticResource FsTHRS}}"
+										   Visibility="{x:Bind BookInfoViewModel.FileInfo.FileSizeInBytes, Mode=OneWay, Converter={StaticResource CtVConterter}}" />
+							</StackPanel>
 						</Expander.Content>
-					</Expander>-->
+					</Expander>
 
 				</StackPanel>
 			</ScrollViewer>

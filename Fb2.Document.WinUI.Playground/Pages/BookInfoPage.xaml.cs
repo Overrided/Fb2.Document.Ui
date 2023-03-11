@@ -97,8 +97,12 @@ namespace Fb2.Document.WinUI.Playground.Pages
                 return vm;
             })?.ToList();
 
-            BookInfoViewModel.FullFilePath = bookModel?.FilePath;
-            BookInfoViewModel.FileSize = bookModel?.FileSizeInBytes;
+            BookInfoViewModel.FileInfo = new FileInfoViewModel
+            {
+                FileName = bookModel.FileName,
+                FilePath = bookModel.FilePath,
+                FileSizeInBytes = bookModel.FileSizeInBytes
+            };
         }
 
         private void OnReadButton_Click(object sender, RoutedEventArgs e)
