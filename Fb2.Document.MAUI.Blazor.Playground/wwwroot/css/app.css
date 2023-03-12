@@ -25,6 +25,8 @@ a, .btn-link {
     display: flex;
     flex-direction: column;
     height: 100%;
+    /*overflow: hidden;*/
+    /*background-color: aquamarine;*/
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -37,6 +39,14 @@ a, .btn-link {
 
 .validation-message {
     color: red;
+}
+
+.appContainer {
+    /*display: flex;
+    flex-direction: column;*/
+    height: 100%;
+    text-align: center;
+    justify-content: center;
 }
 
 #blazor-error-ui {

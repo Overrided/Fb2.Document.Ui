@@ -1,0 +1,44 @@
+﻿@using Fb2.Document.Constants;
+@using Fb2.Document.MAUI.Blazor.Playground.Components.Base;
+@using Fb2.Document.Models;
+@using static Fb2.Document.MAUI.Blazor.Playground.Pages.BookInfo;
+
+@namespace Fb2.Document.MAUI.Blazor.Playground.Components
+
+@inherits BookInfoRendererBase
+
+@renderedResult
+
+@code {
+
+    [Parameter]
+    public FileInfoViewModel? FileInfo { get; set; } = null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (FileInfo == null)
+        {
+            return;
+        }
+
+        var fileName = $"<p>{FileInfo.FileName}</p>";
+        var filePath = $"<p>{FileInfo.FilePath}</p>";
+        var fileSize = $"<p>{FileSizeInBytesToHumanReadableLabel(FileInfo.FileSizeInBytes)}</p>";
+
+        var joinedContents = string.Join(Environment.NewLine, fileName, filePath, fileSize);
+        renderedResult = new MarkupString(joinedContents);
+    }
+
+    private string FileSizeInBytesToHumanReadableLabel(long byteCount)
+    {
+        string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
+        if (byteCount == 0)
+            return "0" + suf[0];
+        long bytes = Math.Abs(byteCount);
+        int place = System.Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+        double num = Math.Round(bytes / Math.Pow(1024, place), 2);
+        return (Math.Sign(byteCount) * num).ToString() + suf[place];
+    }
+}

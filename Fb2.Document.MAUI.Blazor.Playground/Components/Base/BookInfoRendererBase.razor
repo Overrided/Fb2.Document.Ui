@@ -1,0 +1,29 @@
+﻿@using Fb2.Document.Html;
+@using Fb2.Document.Models.Base;
+@using System.Text;
+
+@code {
+    protected MarkupString? renderedResult = null;
+
+    protected MarkupString MapFb2Nodes(List<Fb2Node> nodes)
+    {
+        var sb = new StringBuilder();
+        var mappedResult = Fb2HtmlMapper.MapNodes(nodes);
+        sb.AppendJoin(Environment.NewLine, mappedResult);
+
+        var joinedStringContent = sb.ToString();
+        var markupContent = new MarkupString(joinedStringContent);
+        return markupContent;
+    }
+
+    protected MarkupString MapFb2Node(Fb2Node node)
+    {
+        var sb = new StringBuilder();
+        var mappedResult = Fb2HtmlMapper.MapNode(node);
+        sb.AppendJoin(Environment.NewLine, mappedResult);
+
+        var joinedStringContent = sb.ToString();
+        var markupContent = new MarkupString(joinedStringContent);
+        return markupContent;
+    }
+}

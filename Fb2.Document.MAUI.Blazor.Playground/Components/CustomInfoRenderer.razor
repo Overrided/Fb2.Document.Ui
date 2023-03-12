@@ -1,0 +1,61 @@
+﻿@using Fb2.Document.Constants;
+@using Fb2.Document.MAUI.Blazor.Playground.Components.Base;
+@using Fb2.Document.Models;
+
+@namespace Fb2.Document.MAUI.Blazor.Playground.Components
+
+@inherits BookInfoRendererBase
+
+@renderedResult
+
+@code {
+
+    [Parameter]
+    public CustomInfo? CustomInfo { get; set; } = null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (CustomInfo == null)
+            return;
+
+        var contents = new List<string>();
+        var trimmedContent = CustomInfo.Content.Trim();
+
+        if (!string.IsNullOrEmpty(trimmedContent))
+        {
+            contents.Add(trimmedContent);
+        }
+
+        //var customInfoContent = ;
+        //var attributes =
+        //    CustomInfo.Attributes.Any() ?
+        //        string.Join(Environment.NewLine, CustomInfo.Attributes.Select(a => $"{a.Key} {a.Value}")) :
+        //        null;
+
+        if (CustomInfo.Attributes.Any())
+        {
+            contents.AddRange(CustomInfo.Attributes.Select(a => $"{a.Key} {a.Value}"));
+        }
+
+        if (contents.Count == 0)
+        {
+            return;
+        }
+
+        //var customInfoContent = string.Join(Environment.NewLine, contents);
+
+        var results = string.Join(Environment.NewLine, contents.Where(s => !string.IsNullOrEmpty(s)).Select(s => $"<p>{s}</p>"));
+        renderedResult = new MarkupString(results);
+
+        //var run = new Run { Text = customInfoContent };
+        //var paragraph = new Microsoft.UI.Xaml.Documents.Paragraph();
+        //paragraph.Inlines.Add(run); // dirty trick
+
+        //var contentPage = new RichContentPage(new List<TextElement>(1) { paragraph });
+        //var content = new RichContent(new List<RichContentPage>(1) { contentPage });
+        //sender.ViewModel.CustomInfoContent = content;
+    }
+
+}

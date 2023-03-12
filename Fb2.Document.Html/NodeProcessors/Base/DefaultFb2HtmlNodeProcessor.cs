@@ -28,7 +28,9 @@ public class DefaultFb2HtmlNodeProcessor : Fb2HtmlNodeProcessorBase
 
         var attributesString = ProcessAttributes(context, htmlTag);
 
-        var openingTag = string.IsNullOrEmpty(attributesString) ? $"<{htmlTag}>" : $"<{htmlTag} {attributesString}>";
+        var openingTag = string.IsNullOrEmpty(attributesString) ?
+            $"<{htmlTag}>" :
+            $"<{htmlTag} {attributesString}>";
         var closingTag = $"</{htmlTag}>";
 
         if (currentNode is Fb2Container containerNode)

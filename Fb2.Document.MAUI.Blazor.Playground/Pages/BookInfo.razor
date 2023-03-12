@@ -1,9 +1,11 @@
-﻿@using Fb2.Document.Html;
+﻿@using Fb2.Document.Constants;
+@using Fb2.Document.Html;
 @using Fb2.Document.MAUI.Blazor.Playground.Data;
 @using Fb2.Document.MAUI.Blazor.Playground.Services;
 @using Fb2.Document.Models;
 @using Fb2.Document.Models.Base;
 @using System.Text;
+@using Fb2.Document.MAUI.Blazor.Playground.Components;
 
 @inject AppStateService AppStateService
 
@@ -13,101 +15,272 @@
     .pageContainer {
         display: flex;
         flex-direction: column;
-        min-height: 100%;
+        height: 100%;
         text-align: center;
         justify-content: center;
+        /*overflow: hidden;*/
         /*background-color: red;*/
     }
+
+    .infoCol {
+        /*overflow-y: scroll;*/
+        /*background-color: chartreuse;*/
+    }
+
+    .btn[aria-expanded=false] .infoExpanded {
+        display: none;
+    }
+
+    .btn[aria-expanded=true] .infoCollapsed {
+        display: none;
+    }
+
+    .btn:focus {
+        outline: none !important;
+    }
+
+        .btn:focus:not(:focus-visible) {
+            outline: 0;
+            box-shadow: none;
+        }
+
 </style>
 
 @if (SelectedBook != null)
 {
-    @*<div class="container-fluid pb-3">*@
     <div class="pageContainer px-0 pt-0 pb-3">
         <div class="row h-100 m-0 g-0" style="border: 1px solid green">
             <!--coverpage-->
-            @*<div class="col h-100 d-flex flex-wrap" style="border: 1px solid red">*@
-            <div class="col d-flex flex-wrap" style="border: 1px solid red">
+            <div class="col-md-6 d-flex flex-wrap" style="border: 1px solid red">
                 <img class="img-fluid mx-auto my-auto d-block" src="@SelectedBook.CoverpageBase64Image" />
             </div>
 
-            <div class="col" style="border: 1px solid blue">
-                @if (titleInfo.Value != null && titleInfo.Value.Length > 0)
+            <div class="infoCol col-md-6 p-2" style="border: 1px solid blue">
+                @if (TitleInfo != null)
                 {
-                    <div class="row">
-                        @titleInfo
+                    <div class="card-body">
+                        <TitleInfoBaseRenderer TitleInfo="TitleInfo" />
                     </div>
                 }
 
-                @if (srcTitleInfo.Value != null && srcTitleInfo.Value.Length > 0)
+                @if (SrcTitleInfo != null)
                 {
-                    <div class="row">
-                        @srcTitleInfo
+                    <div class="card my-2">
+                        <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
+                            <button class="btn float-start"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#srcTitleInfoCollapse"
+                                    aria-expanded="false"
+                                    aria-controls="srcTitleInfoCollapse">
+
+                                <span class="infoExpanded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </span>
+                                <span class="infoCollapsed">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </span>
+
+                                <span>Source Title Info</span>
+                            </button>
+                        </div>
+
+                        <div class="card-body collapse" id="srcTitleInfoCollapse">
+                            <TitleInfoBaseRenderer TitleInfo="SrcTitleInfo" />
+                        </div>
                     </div>
                 }
+
+                @if (PublishInfo != null)
+                {
+                    <div class="card my-2">
+                        <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
+                            <button class="btn float-start"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#publishInfoCollapse"
+                                    aria-expanded="false"
+                                    aria-controls="publishInfoCollapse">
+
+                                <span class="infoExpanded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </span>
+                                <span class="infoCollapsed">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </span>
+
+                                <span>Publish Info</span>
+                            </button>
+
+                        </div>
+
+                        <div class="card-body collapse" id="publishInfoCollapse">
+                            <PublishInfoRenderer PublishInfo="PublishInfo" />
+                        </div>
+                    </div>
+                }
+
+                @if (DocumentInfo != null)
+                {
+                    <div class="card my-2">
+                        <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
+                            <button class="btn float-start"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#documentInfoCollapse"
+                                    aria-expanded="false"
+                                    aria-controls="documentInfoCollapse">
+
+                                <span class="infoExpanded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </span>
+                                <span class="infoCollapsed">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </span>
+
+                                <span>Document Info</span>
+                            </button>
+                        </div>
+
+                        <div class="card-body collapse" id="documentInfoCollapse">
+                            <DocumentInfoRenderer DocumentInfo="DocumentInfo" />
+                        </div>
+                    </div>
+                }
+
+                @if (CustomInfo != null)
+                {
+                    <div class="card my-2">
+                        <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
+                            <button class="btn float-start"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#customInfoCollapse"
+                                    aria-expanded="false"
+                                    aria-controls="customInfoCollapse">
+
+                                <span class="infoExpanded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </span>
+                                <span class="infoCollapsed">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </span>
+
+                                <span>Custom Info</span>
+                            </button>
+                        </div>
+
+                        <div class="card-body collapse" id="customInfoCollapse">
+                            <CustomInfoRenderer CustomInfo="CustomInfo" />
+                        </div>
+                    </div>
+                }
+
+                @if (FileInfo != null)
+                {
+                    <div class="card my-2">
+                        <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
+                            <button class="btn float-start"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#fileInfoCollapse"
+                                    aria-expanded="false"
+                                    aria-controls="fileInfoCollapse">
+
+                                <span class="infoExpanded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </span>
+                                <span class="infoCollapsed">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </span>
+
+                                <span>File Info</span>
+                            </button>
+                        </div>
+
+                        <div class="card-body collapse" id="fileInfoCollapse">
+                            @*<CustomInfoRenderer CustomInfo="CustomInfo" />*@
+                            <FileInfoRenderer FileInfo="FileInfo" />
+                        </div>
+                    </div>
+                }
+
+
             </div>
         </div>
     </div>
 }
 
 @code {
-    private BookModel SelectedBook = null;
+    public class FileInfoViewModel
+    {
+        public string FilePath { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
+        public long FileSizeInBytes { get; set; } = 0;
 
-    //private TitleInfoBase TitleInfo;
+        public override bool Equals(object? obj)
+        {
+            return obj is FileInfoViewModel model &&
+                   FilePath == model.FilePath &&
+                   FileName == model.FileName &&
+                   FileSizeInBytes == model.FileSizeInBytes;
+        }
 
-    //private TitleInfoBase SrcTitleInfo;
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(FilePath, FileName, FileSizeInBytes);
+        }
+    }
 
-    //private PublishInfo PublishInfo;
+    private BookModel? SelectedBook = null;
 
-    private MarkupString titleInfo;
-    private MarkupString srcTitleInfo;
-    private MarkupString publishInfo;
+    private TitleInfoBase? TitleInfo = null;
+    private TitleInfoBase? SrcTitleInfo = null;
+    private PublishInfo? PublishInfo = null;
+    private DocumentInfo? DocumentInfo = null;
+    private CustomInfo? CustomInfo = null;
+    private FileInfoViewModel? FileInfo = null;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         SelectedBook = AppStateService.CurrentBookModel;
 
+        if (SelectedBook == null)
+            return;
+
         var doc = SelectedBook.Fb2Document;
 
-        //var titleInfoNode = GetFb2NodeOrDefault(doc?.Title);
-        //var srcTitleInfoNode = GetFb2NodeOrDefault(doc?.SourceTitle);
-        //var publishInfoNode = GetFb2NodeOrDefault(doc?.PublishInfo);
-
-        if (TryGetFb2NodeOrDefault(doc?.Title, out var titleResult))
-        {
-            titleInfo = MapFb2Node(titleResult);
-        }
-
-        if (TryGetFb2NodeOrDefault(doc?.SourceTitle, out var srcTitileResult))
-        {
-            srcTitleInfo = MapFb2Node(srcTitileResult);
-        }
-
-
-        //var publishInfoNode = TryGetFb2NodeOrDefault(doc?.PublishInfo, out var publishInfoNodeResult);
-    }
-
-    private bool TryGetFb2NodeOrDefault<T>(T instance, out T result) where T : Fb2Node
-    {
-        if (instance == null || !instance.HasContent && !instance.HasAttributes)
-        {
-            result = null;
-            return false;
-        }
-
-        result = instance;
-        return true;
-    }
-
-    private MarkupString MapFb2Node(Fb2Node node)
-    {
-        var sb = new StringBuilder();
-        var mappedResult = Fb2HtmlMapper.MapNode(node);
-        sb.AppendJoin(Environment.NewLine, mappedResult);
-
-        var joinedStringContent = sb.ToString();
-        var markupContent = new MarkupString(joinedStringContent);
-        return markupContent;
+        TitleInfo = doc.Title;
+        SrcTitleInfo = doc.SourceTitle;
+        PublishInfo = doc.PublishInfo;
+        DocumentInfo = doc.DocumentInfo;
+        CustomInfo = doc.CustomInfo;
+        FileInfo = new FileInfoViewModel
+            {
+                FileName = SelectedBook.FileName,
+                FilePath = SelectedBook.FilePath,
+                FileSizeInBytes = SelectedBook.FileSizeInBytes
+            };
     }
 }

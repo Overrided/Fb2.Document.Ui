@@ -17,6 +17,9 @@
 	<Page.Resources>
 		<converters:String64ToImageConverter x:Key="SToImage"
 											 x:Name="SToImage" />
+
+		<converters:FileSizeInBytesToHumanReadableStringConverter x:Key="FsTHRS"
+																  x:Name="FsTHRS" />
 	</Page.Resources>
 
 	<Grid x:Name="OuterGrid"
@@ -395,6 +398,28 @@
 								</ListView.ItemTemplate>
 							</ListView>
 						</muxc:Expander.Content>
+					</muxc:Expander>
+
+					<muxc:Expander Margin="0, 10, 0, 0"
+								   IsExpanded="False"
+								   ExpandDirection="Down"
+								   HorizontalAlignment="Stretch"
+								   HorizontalContentAlignment="Stretch"
+								   VerticalAlignment="Top"
+								   VerticalContentAlignment="Stretch"
+								   Header="File Info"
+								   Visibility="{x:Bind BookInfoViewModel.FileInfo, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+						<muxc:Expander.Content>
+							<StackPanel>
+								<TextBlock Text="{x:Bind BookInfoViewModel.FileInfo.FileName, Mode=OneWay}"
+										   Visibility="{x:Bind BookInfoViewModel.FileInfo.FileName, Mode=OneWay, Converter={StaticResource VtvConterter}}" />
+								<TextBlock Text="{x:Bind BookInfoViewModel.FileInfo.FilePath, Mode=OneWay}"
+										   Visibility="{x:Bind BookInfoViewModel.FileInfo.FilePath, Mode=OneWay, Converter={StaticResource VtvConterter}}" />
+								<TextBlock Text="{x:Bind BookInfoViewModel.FileInfo.FileSizeInBytes, Mode=OneWay, Converter={StaticResource FsTHRS}}"
+										   Visibility="{x:Bind BookInfoViewModel.FileInfo.FileSizeInBytes, Mode=OneWay, Converter={StaticResource CtVConterter}}" />
+							</StackPanel>
+						</muxc:Expander.Content>
+
 					</muxc:Expander>
 
 				</StackPanel>

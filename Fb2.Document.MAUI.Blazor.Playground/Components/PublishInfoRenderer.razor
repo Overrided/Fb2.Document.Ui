@@ -1,0 +1,24 @@
+﻿@using Fb2.Document.MAUI.Blazor.Playground.Components.Base;
+@using Fb2.Document.Models;
+
+@namespace Fb2.Document.MAUI.Blazor.Playground.Components
+
+@inherits BookInfoRendererBase
+
+@renderedResult
+
+@code {
+
+    [Parameter]
+    public PublishInfo? PublishInfo { get; set; } = null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (PublishInfo == null)
+            return;
+
+        renderedResult = MapFb2Node(PublishInfo);
+    }
+}

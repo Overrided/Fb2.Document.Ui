@@ -43,6 +43,26 @@ namespace Fb2.Document.UWP.Playground.Pages
         }
     }
 
+    public class FileInfoViewModel
+    {
+        public string FilePath { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
+        public long FileSizeInBytes { get; set; } = 0;
+
+        public override bool Equals(object obj)
+        {
+            return obj is FileInfoViewModel model &&
+                   FilePath == model.FilePath &&
+                   FileName == model.FileName &&
+                   FileSizeInBytes == model.FileSizeInBytes;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(FilePath, FileName, FileSizeInBytes);
+        }
+    }
+
     // TODO : move to view models
     public class BookInfoViewModel : ObservableObject
     {
@@ -156,6 +176,21 @@ namespace Fb2.Document.UWP.Playground.Pages
             }
         }
 
+        private FileInfoViewModel fileInfo;
+        public FileInfoViewModel FileInfo
+        {
+            get { return fileInfo; }
+            set
+            {
+                if (fileInfo != value)
+                {
+                    OnPropertyChanging();
+                    fileInfo = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
     }
 
     /// <summary>
@@ -237,6 +272,13 @@ namespace Fb2.Document.UWP.Playground.Pages
 
                 return vm;
             })?.ToList();
+
+            BookInfoViewModel.FileInfo = new FileInfoViewModel
+            {
+                FileName = bookModel.FileName,
+                FilePath = bookModel.FilePath,
+                FileSizeInBytes = bookModel.FileSizeInBytes
+            };
         }
 
         private T GetFb2NodeOrDefault<T>(T instance) where T : Fb2Node

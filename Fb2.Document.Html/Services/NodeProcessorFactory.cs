@@ -5,9 +5,6 @@ using Fb2.Document.Html.NodeProcessors;
 using Fb2.Document.Html.NodeProcessors.Base;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
-using static System.Collections.Specialized.BitVector32;
-using Fb2Image = Fb2.Document.Models.Image;
-using Fb2Paragraph = Fb2.Document.Models.Paragraph;
 
 namespace Fb2.Document.Html.Services;
 
@@ -27,6 +24,7 @@ public class NodeProcessorFactory
         //{ typeof(Subscript), new SubscriptProcessor() },
         //{ typeof(TextLink), new HyperlinkProcessor() },
         //{ typeof(Author), new AuthorProcessor() },
+        { typeof(BookTitle), new TitleProcessor() }, // TODO : BookTitleProcessor
         { typeof(EmptyLine), new EmptyLineProcessor() },
         { typeof(Title), new TitleProcessor() },
         { typeof(Emphasis), new EmphasisProcessor() },
@@ -43,6 +41,8 @@ public class NodeProcessorFactory
         //    typeof(Poem),
         //    typeof(Epigraph),
         //    typeof(Quote),
+        typeof(SequenceInfo),
+        typeof(Author),
         typeof(TextAuthor),
         typeof(StanzaVerse)
         //    typeof(SubTitle),
