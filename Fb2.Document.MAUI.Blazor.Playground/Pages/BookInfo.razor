@@ -12,19 +12,8 @@
 @page "/bookInfo"
 
 <style>
-    .pageContainer {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        text-align: center;
-        justify-content: center;
-        /*overflow: hidden;*/
-        /*background-color: red;*/
-    }
-
     .infoCol {
-        /*overflow-y: scroll;*/
-        /*background-color: chartreuse;*/
+        overflow-y: scroll;
     }
 
     .btn[aria-expanded=false] .infoExpanded {
@@ -48,185 +37,183 @@
 
 @if (SelectedBook != null)
 {
-    <div class="pageContainer px-0 pt-0 pb-3">
-        <div class="row h-100 m-0 g-0" style="border: 1px solid green">
-            <!--coverpage-->
-            <div class="col-md-6 d-flex flex-wrap" style="border: 1px solid red">
-                <img class="img-fluid mx-auto my-auto d-block" src="@SelectedBook.CoverpageBase64Image" />
-            </div>
+    <div class="row h-100 m-0 g-0">
 
-            <div class="infoCol col-md-6 p-2" style="border: 1px solid blue">
-                @if (TitleInfo != null)
-                {
-                    <div class="card-body">
-                        <TitleInfoBaseRenderer TitleInfo="TitleInfo" />
+        <!--coverpage-->
+        <div class="col-md-6 h-100 flex-nowrap pt-2 pb-2">
+            <img class="mx-auto my-auto d-block h-100" src="@SelectedBook.CoverpageBase64Image" />
+        </div>
+
+        <div class="infoCol col-md-6 p-2 h-100">
+            @if (TitleInfo != null)
+            {
+                <div class="card-body">
+                    <TitleInfoBaseRenderer TitleInfo="TitleInfo" />
+                </div>
+            }
+
+            @if (SrcTitleInfo != null)
+            {
+                <div class="card my-2">
+                    <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
+                        <button class="btn float-start"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#srcTitleInfoCollapse"
+                                aria-expanded="false"
+                                aria-controls="srcTitleInfoCollapse">
+
+                            <span class="infoExpanded">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </span>
+                            <span class="infoCollapsed">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </span>
+
+                            <span>Source Title Info</span>
+                        </button>
                     </div>
-                }
 
-                @if (SrcTitleInfo != null)
-                {
-                    <div class="card my-2">
-                        <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
-                            <button class="btn float-start"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#srcTitleInfoCollapse"
-                                    aria-expanded="false"
-                                    aria-controls="srcTitleInfoCollapse">
-
-                                <span class="infoExpanded">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                </span>
-                                <span class="infoCollapsed">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                </span>
-
-                                <span>Source Title Info</span>
-                            </button>
-                        </div>
-
-                        <div class="card-body collapse" id="srcTitleInfoCollapse">
-                            <TitleInfoBaseRenderer TitleInfo="SrcTitleInfo" />
-                        </div>
+                    <div class="card-body collapse" id="srcTitleInfoCollapse">
+                        <TitleInfoBaseRenderer TitleInfo="SrcTitleInfo" />
                     </div>
-                }
+                </div>
+            }
 
-                @if (PublishInfo != null)
-                {
-                    <div class="card my-2">
-                        <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
-                            <button class="btn float-start"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#publishInfoCollapse"
-                                    aria-expanded="false"
-                                    aria-controls="publishInfoCollapse">
+            @if (PublishInfo != null)
+            {
+                <div class="card my-2">
+                    <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
+                        <button class="btn float-start"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#publishInfoCollapse"
+                                aria-expanded="false"
+                                aria-controls="publishInfoCollapse">
 
-                                <span class="infoExpanded">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                </span>
-                                <span class="infoCollapsed">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                </span>
+                            <span class="infoExpanded">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </span>
+                            <span class="infoCollapsed">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </span>
 
-                                <span>Publish Info</span>
-                            </button>
+                            <span>Publish Info</span>
+                        </button>
 
-                        </div>
-
-                        <div class="card-body collapse" id="publishInfoCollapse">
-                            <PublishInfoRenderer PublishInfo="PublishInfo" />
-                        </div>
                     </div>
-                }
 
-                @if (DocumentInfo != null)
-                {
-                    <div class="card my-2">
-                        <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
-                            <button class="btn float-start"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#documentInfoCollapse"
-                                    aria-expanded="false"
-                                    aria-controls="documentInfoCollapse">
-
-                                <span class="infoExpanded">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                </span>
-                                <span class="infoCollapsed">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                </span>
-
-                                <span>Document Info</span>
-                            </button>
-                        </div>
-
-                        <div class="card-body collapse" id="documentInfoCollapse">
-                            <DocumentInfoRenderer DocumentInfo="DocumentInfo" />
-                        </div>
+                    <div class="card-body collapse" id="publishInfoCollapse">
+                        <PublishInfoRenderer PublishInfo="PublishInfo" />
                     </div>
-                }
+                </div>
+            }
 
-                @if (CustomInfo != null)
-                {
-                    <div class="card my-2">
-                        <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
-                            <button class="btn float-start"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#customInfoCollapse"
-                                    aria-expanded="false"
-                                    aria-controls="customInfoCollapse">
+            @if (DocumentInfo != null)
+            {
+                <div class="card my-2">
+                    <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
+                        <button class="btn float-start"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#documentInfoCollapse"
+                                aria-expanded="false"
+                                aria-controls="documentInfoCollapse">
 
-                                <span class="infoExpanded">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                </span>
-                                <span class="infoCollapsed">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                </span>
+                            <span class="infoExpanded">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </span>
+                            <span class="infoCollapsed">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </span>
 
-                                <span>Custom Info</span>
-                            </button>
-                        </div>
-
-                        <div class="card-body collapse" id="customInfoCollapse">
-                            <CustomInfoRenderer CustomInfo="CustomInfo" />
-                        </div>
+                            <span>Document Info</span>
+                        </button>
                     </div>
-                }
 
-                @if (FileInfo != null)
-                {
-                    <div class="card my-2">
-                        <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
-                            <button class="btn float-start"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#fileInfoCollapse"
-                                    aria-expanded="false"
-                                    aria-controls="fileInfoCollapse">
-
-                                <span class="infoExpanded">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                </span>
-                                <span class="infoCollapsed">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                </span>
-
-                                <span>File Info</span>
-                            </button>
-                        </div>
-
-                        <div class="card-body collapse" id="fileInfoCollapse">
-                            @*<CustomInfoRenderer CustomInfo="CustomInfo" />*@
-                            <FileInfoRenderer FileInfo="FileInfo" />
-                        </div>
+                    <div class="card-body collapse" id="documentInfoCollapse">
+                        <DocumentInfoRenderer DocumentInfo="DocumentInfo" />
                     </div>
-                }
+                </div>
+            }
 
+            @if (CustomInfo != null)
+            {
+                <div class="card my-2">
+                    <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
+                        <button class="btn float-start"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#customInfoCollapse"
+                                aria-expanded="false"
+                                aria-controls="customInfoCollapse">
 
-            </div>
+                            <span class="infoExpanded">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </span>
+                            <span class="infoCollapsed">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </span>
+
+                            <span>Custom Info</span>
+                        </button>
+                    </div>
+
+                    <div class="card-body collapse" id="customInfoCollapse">
+                        <CustomInfoRenderer CustomInfo="CustomInfo" />
+                    </div>
+                </div>
+            }
+
+            @if (FileInfo != null)
+            {
+                <div class="card my-2">
+                    <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
+                        <button class="btn float-start"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#fileInfoCollapse"
+                                aria-expanded="false"
+                                aria-controls="fileInfoCollapse">
+
+                            <span class="infoExpanded">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </span>
+                            <span class="infoCollapsed">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </span>
+
+                            <span>File Info</span>
+                        </button>
+                    </div>
+
+                    <div class="card-body collapse" id="fileInfoCollapse">
+                        @*<CustomInfoRenderer CustomInfo="CustomInfo" />*@
+                        <FileInfoRenderer FileInfo="FileInfo" />
+                    </div>
+                </div>
+            }
+
         </div>
     </div>
 }
