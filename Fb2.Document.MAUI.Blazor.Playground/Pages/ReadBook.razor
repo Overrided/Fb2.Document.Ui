@@ -8,7 +8,13 @@
 
 @*<h3>ReadBook</h3>*@
 
-<div>@bookContents</div>
+<style>
+    .textContainer {
+        overflow-y: auto;
+    }
+</style>
+
+<div class="h-100 textContainer pt-3">@bookContents</div>
 
 @code {
     private MarkupString bookContents;
