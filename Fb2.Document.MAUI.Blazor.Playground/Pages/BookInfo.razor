@@ -43,6 +43,31 @@
         right: 20px;
     }
 
+    .bookImagePreview {
+        object-fit: contain;
+        max-height: 200px;
+        max-width: 190px;
+        width: 190px;
+    }
+
+    .bookModalImagePreview {
+        object-fit: contain;
+        max-width: 190px;
+        width: auto;
+    }
+
+    .modalContentWidth {
+        width: 50vw;
+    }
+
+    .classRed {
+        border: 2px solid red;
+    }
+
+    .classBlue {
+        border: 2px solid blue;
+    }
+
 </style>
 
 @if (SelectedBook != null)
@@ -50,7 +75,7 @@
     <div class="row h-100 m-0 g-0">
 
         <!--coverpage-->
-        <div class="col-md-6 d-flex h-100 flex-nowrap pt-2 pb-2">
+        <div class="col-md-6 d-flex h-100 flex-nowrap p-2">
             <img class="align-self-center mx-auto my-auto d-block mh-100 mw-100" src="@SelectedBook.CoverpageBase64Image" />
         </div>
 
@@ -90,6 +115,76 @@
 
                     <div class="card-body collapse" id="srcTitleInfoCollapse">
                         <TitleInfoBaseRenderer TitleInfo="SrcTitleInfo" />
+                    </div>
+                </div>
+            }
+
+            @if (BookImages != null && BookImages.Count > 0)
+            {
+                <ModalWindow @ref="modalRef" ContentClass="modalContentWidth">
+                    <Content>
+                        @if (SelectedBookImage != null)
+                        {
+                            <div style="height: 91.5vh" class="row">
+                                <div class="row flex-row flex-nowrap px-3 py-2 m-0 @(BookImages.Count > 1 ? "h-75" : "h-100")">
+                                    <img class="align-self-center mx-auto my-auto d-block mh-100 mw-100 w-auto"
+                                         src="@SelectedBookImage.ImageSource"
+                                         title="@SelectedBookImage.ImageId" />
+
+                                    <button @onclick="() => CloseImageModal()"
+                                            type="button"
+                                            class="btn close position-absolute w-auto"
+                                            style="right:0;top:0">
+                                        &times;
+                                    </button>
+                                </div>
+                                @if (BookImages.Count > 1)
+                                {
+                                    <div class="row flex-row flex-nowrap m-0 h-25 bg-opacity-10 bg-secondary py-1" style="overflow-x:auto">
+                                        @foreach (var image in BookImages)
+                                        {
+                                            <img src="@image.ImageSource"
+                                                 class="@(image == SelectedBookImage ? "bg-info" : "bg-transparent") bookModalImagePreview mx-1"
+                                                 title="@image.ImageId" @onclick="() => OnModalPreviewImageClick(image)" />
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </Content>
+                </ModalWindow>
+
+                <div class="card my-2">
+                    <div class="card-header shadow-none" style="padding-left: 0 !important; outline: none !important;">
+                        <button class="btn float-start"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#bookImagesCollapse"
+                                aria-expanded="false"
+                                aria-controls="bookImagesCollapse">
+
+                            <span class="infoExpanded">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </span>
+                            <span class="infoCollapsed">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </span>
+
+                            <span>Images (@(BookImages.Count))</span>
+                        </button>
+                    </div>
+
+                    <div class="card-body collapse p-0" id="bookImagesCollapse">
+                        <div class="row flex-row flex-nowrap p-3 m-0" style="overflow-x:auto">
+                            @foreach (var image in BookImages)
+                            {
+                                <img src="@image.ImageSource" class="bookImagePreview" @onclick="() => OnImageClick(image)" />
+                            }
+                        </div>
                     </div>
                 </div>
             }
@@ -254,14 +349,37 @@
         }
     }
 
+    public class BookImageViewModel
+    {
+        public string ImageSource { get; set; } = string.Empty;
+        public string ImageId { get; set; } = string.Empty;
+
+        public override bool Equals(object? obj)
+        {
+            return obj is BookImageViewModel model &&
+                   ImageSource == model.ImageSource &&
+                   ImageId == model.ImageId;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(ImageSource, ImageId);
+        }
+    }
+
+    private ModalWindow modalRef = new();
+
     private BookModel? SelectedBook = null;
 
     private TitleInfoBase? TitleInfo = null;
     private TitleInfoBase? SrcTitleInfo = null;
+    private List<BookImageViewModel>? BookImages = null;
     private PublishInfo? PublishInfo = null;
     private DocumentInfo? DocumentInfo = null;
     private CustomInfo? CustomInfo = null;
     private FileInfoViewModel? FileInfo = null;
+
+    private BookImageViewModel? SelectedBookImage = null;
 
     protected override void OnInitialized()
     {
@@ -275,6 +393,20 @@
 
         TitleInfo = doc.Title;
         SrcTitleInfo = doc.SourceTitle;
+        BookImages = doc.BinaryImages.Select(bi =>
+        {
+            var contentType = bi.TryGetAttribute(AttributeNames.ContentType, out var contentTypeAttr) ?
+                            contentTypeAttr!.Value : string.Empty;
+
+            var bookImageSource = $"data:{contentType};base64,{bi.Content}";
+            var bookImageId = bi.TryGetAttribute(AttributeNames.Id, out var idAttr) ?
+                            idAttr!.Value : string.Empty;
+            return new BookImageViewModel
+                {
+                    ImageId = bookImageId,
+                    ImageSource = bookImageSource
+                };
+        })?.ToList();
         PublishInfo = doc.PublishInfo;
         DocumentInfo = doc.DocumentInfo;
         CustomInfo = doc.CustomInfo;
@@ -284,6 +416,22 @@
                 FilePath = SelectedBook.FilePath,
                 FileSizeInBytes = SelectedBook.FileSizeInBytes
             };
+    }
+
+    public void OnImageClick(BookImageViewModel selectedImage)
+    {
+        this.SelectedBookImage = selectedImage;
+        modalRef.Open();
+    }
+
+    public void OnModalPreviewImageClick(BookImageViewModel selectedImage)
+    {
+        this.SelectedBookImage = selectedImage;
+    }
+
+    public void CloseImageModal()
+    {
+        modalRef.Close();
     }
 
     public void ReadBook()
