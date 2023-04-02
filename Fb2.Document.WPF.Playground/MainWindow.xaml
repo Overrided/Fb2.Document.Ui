@@ -1,0 +1,132 @@
+﻿<Window x:Class="Fb2.Document.WPF.Playground.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:Fb2.Document.WPF.Playground"
+		xmlns:models="clr-namespace:Fb2.Document.WPF.Playground.Models"
+		xmlns:converterss="clr-namespace:Fb2.Document.WPF.Playground.Converters"
+		mc:Ignorable="d"
+		Title="MainWindow"
+		Height="600"
+		Width="1000">
+	<Window.Resources>
+
+		<converterss:Base64StringToImageConverter x:Key="String64ToImageConverter" />
+
+		<DataTemplate x:Key="RecentBookTemplate"
+					  DataType="models:BookModel">
+
+			<Grid HorizontalAlignment="Stretch"
+				  VerticalAlignment="Stretch"
+				  Background="Transparent"
+				  IsHitTestVisible="True">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+
+				<Border Grid.Row="0"
+						Height="190"
+						HorizontalAlignment="Stretch"
+						Background="Transparent"
+						IsHitTestVisible="True">
+					<Grid x:Name="coverpageContainer"
+						  HorizontalAlignment="Center"
+						  VerticalAlignment="Stretch">
+
+						<Image x:Name="coverpageImage"
+							   Source="{Binding CoverPageBase64Image, Converter={StaticResource String64ToImageConverter}}"
+							   Stretch="Uniform"
+							   HorizontalAlignment="Stretch"
+							   VerticalAlignment="Stretch" />
+					</Grid>
+				</Border>
+				<Grid Grid.Row="1"
+					  HorizontalAlignment="Stretch"
+					  VerticalAlignment="Stretch">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+					<TextBlock Grid.Row="0"
+							   FontWeight="Bold"
+							   FontSize="18"
+							   Text="{Binding BookName}"
+							   TextTrimming="CharacterEllipsis"
+							   TextWrapping="NoWrap"
+							   VerticalAlignment="Center"
+							   HorizontalAlignment="Center" />
+					<TextBlock Grid.Row="1"
+							   Text="{Binding BookAuthor}"
+							   TextWrapping="NoWrap"
+							   TextTrimming="CharacterEllipsis"
+							   HorizontalAlignment="Center"
+							   Margin="6,0,6,0" />
+				</Grid>
+			</Grid>
+		</DataTemplate>
+
+		<Style x:Key="BookTemplateContainerStyle"
+			   TargetType="ContentPresenter">
+			<Setter Property="Height"
+					Value="250" />
+			<Setter Property="Width"
+					Value="220" />
+			<Setter Property="Margin"
+					Value="4" />
+		</Style>
+
+	</Window.Resources>
+	<Window.DataContext>
+		<Binding RelativeSource="{RelativeSource Mode=Self}" />
+	</Window.DataContext>
+	<Grid>
+
+		<DockPanel HorizontalAlignment="Stretch"
+				   VerticalAlignment="Stretch">
+			<Menu DockPanel.Dock="Top">
+				<MenuItem IsCheckable="False">
+					<MenuItem.Header>
+						Book Shelf
+					</MenuItem.Header>
+					<MenuItem IsCheckable="False"
+							  Click="Add_Books_MenuItem_CLick">
+						<MenuItem.Header>
+							Add Book(s)
+						</MenuItem.Header>
+					</MenuItem>
+					<MenuItem Header="_Exit"
+							  IsCheckable="False" />
+				</MenuItem>
+				<MenuItem IsCheckable="False"
+						  Header="_Settings">
+				</MenuItem>
+			</Menu>
+
+			<Grid>
+				<ScrollViewer HorizontalAlignment="Stretch"
+							  VerticalAlignment="Stretch"
+							  HorizontalContentAlignment="Stretch"
+							  VerticalContentAlignment="Stretch"
+							  Padding="0,12,0,0">
+					<ItemsControl ItemsSource="{Binding Books}"
+								  ItemTemplate="{StaticResource RecentBookTemplate}"
+								  ItemContainerStyle="{StaticResource BookTemplateContainerStyle}"
+								  ScrollViewer.CanContentScroll="True"
+								  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+								  ScrollViewer.VerticalScrollBarVisibility="Auto"
+								  PreviewMouseLeftButtonUp="OnBookClick">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<WrapPanel IsItemsHost="True" />
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+					</ItemsControl>
+				</ScrollViewer>
+
+			</Grid>
+		</DockPanel>
+
+	</Grid>
+</Window>

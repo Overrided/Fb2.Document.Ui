@@ -1,0 +1,10 @@
+﻿<Application x:Class="Fb2.Document.WPF.Playground.App"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:local="clr-namespace:Fb2.Document.WPF.Playground"
+			 StartupUri="MainWindow.xaml">
+	<Application.Resources>
+		<BitmapImage x:Key="DefaultBookImage"
+					 UriSource="Assets/Square150x150Logo.scale-200.png" />
+	</Application.Resources>
+</Application>
