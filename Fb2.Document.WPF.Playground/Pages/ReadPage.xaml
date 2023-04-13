@@ -9,7 +9,57 @@
 	  d:DesignWidth="800"
 	  Title="ReadPage">
 
-	<Grid>
-		<TextBlock Text="ReadPage Works" />
+	<Grid Background="White">
+
+		<FlowDocumentReader ViewingMode="Scroll">
+			<FlowDocument x:Name="doc">
+				<Table>
+					<Table.Columns>
+						<TableColumn Width="*" />
+						<TableColumn Width="*" />
+						<TableColumn Width="*" />
+					</Table.Columns>
+					<TableRowGroup>
+						<TableRow>
+							<TableCell>
+								<Paragraph>1</Paragraph>
+							</TableCell>
+							<TableCell>
+								<Paragraph>2</Paragraph>
+							</TableCell>
+							<TableCell>
+								<Paragraph>3</Paragraph>
+							</TableCell>
+						</TableRow>
+					</TableRowGroup>
+				</Table>
+				<!--<Paragraph>
+					<Span>span text</Span>
+					<Span BaselineAlignment="Superscript">super
+						<Span BaselineAlignment="Superscript">inner</Span> text
+					</Span>
+					<Span>span text</Span>
+					<Span BaselineAlignment="Subscript">subscript text</Span>
+				</Paragraph>-->
+				<!--<Paragraph>
+					<Span>
+						span text
+						<Hyperlink>
+							hyperlink
+							<InlineUIContainer>
+								<Grid Height="20"
+									  Width="20"
+									  Background="Red">
+									<Image Width="200"
+										   Height="200" />
+								</Grid>
+							</InlineUIContainer>
+						</Hyperlink>
+
+					</Span>
+				</Paragraph>-->
+			</FlowDocument>
+		</FlowDocumentReader>
+
 	</Grid>
 </Page>

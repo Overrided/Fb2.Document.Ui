@@ -1,4 +1,4 @@
-﻿<Page x:Class="Fb2.Document.WPF.Playground.Pages.BookShelf"
+﻿<Page x:Class="Fb2.Document.WPF.Playground.Pages.BookShelfPage"
 	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -13,7 +13,7 @@
 	<Page.Resources>
 		<converterss:Base64StringToImageConverter x:Key="String64ToImageConverter" />
 
-		<DataTemplate x:Key="RecentBookTemplate"
+		<DataTemplate x:Key="BookTemplate"
 					  DataType="models:BookModel">
 
 			<Grid HorizontalAlignment="Stretch"
@@ -77,9 +77,81 @@
 		</Style>
 
 	</Page.Resources>
+	<Page.DataContext>
+		<Binding RelativeSource="{RelativeSource Mode=Self}" />
+	</Page.DataContext>
 
 	<Grid>
-		<TextBlock Text="BookShelfWorks" />
+		<ScrollViewer HorizontalAlignment="Stretch"
+					  VerticalAlignment="Stretch"
+					  HorizontalContentAlignment="Stretch"
+					  VerticalContentAlignment="Stretch"
+					  Padding="0,12,0,0">
+			<ItemsControl ItemsSource="{Binding Books}"
+						  ItemTemplate="{StaticResource BookTemplate}"
+						  ItemContainerStyle="{StaticResource BookTemplateContainerStyle}"
+						  ScrollViewer.CanContentScroll="True"
+						  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+						  PreviewMouseLeftButtonUp="OnBookClick">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<WrapPanel IsItemsHost="True" />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
+		</ScrollViewer>
+
+		<Button VerticalAlignment="Bottom"
+				HorizontalAlignment="Right"
+				VerticalContentAlignment="Center"
+				HorizontalContentAlignment="Center"
+				Margin="30,25"
+				Padding="0"
+				Click="AddBooks_ButtonClick"
+				ToolTip="Add Book(s)">
+			<Button.Resources>
+				<Style TargetType="{x:Type Border}">
+					<Setter Property="CornerRadius"
+							Value="90" />
+					<Setter Property="Height"
+							Value="65" />
+					<Setter Property="Width"
+							Value="65" />
+				</Style>
+			</Button.Resources>
+			<!--<Button.Style>
+				<Style TargetType="Button"
+					   BasedOn="{StaticResource {x:Type Button}}">
+					<Setter Property="Height"
+							Value="60" />
+					<Setter Property="Width"
+							Value="60" />
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate>
+								<Border BorderThickness="1"
+										CornerRadius="30">
+									<TextBlock VerticalAlignment="Center"
+											   HorizontalAlignment="Center"
+											   Text="+" />
+								</Border>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</Button.Style>-->
+
+			<TextBlock VerticalAlignment="Center"
+					   LineHeight="76"
+					   ClipToBounds="True"
+					   HorizontalAlignment="Center"
+					   Margin="0"
+					   Padding="0"
+					   Text="+"
+					   FontSize="48" />
+
+		</Button>
+		<!--<TextBlock Text="BookShelfWorks" />-->
 		<!--<ScrollViewer HorizontalAlignment="Stretch"
 					  VerticalAlignment="Stretch"
 					  HorizontalContentAlignment="Stretch"
@@ -98,5 +170,33 @@
 				</ItemsControl.ItemsPanel>
 			</ItemsControl>
 		</ScrollViewer>-->
+
+		<!--<DockPanel HorizontalAlignment="Stretch"
+				   VerticalAlignment="Stretch">-->
+		<!--<Menu DockPanel.Dock="Top">
+				<MenuItem IsCheckable="False">
+					<MenuItem.Header>
+						Book Shelf
+					</MenuItem.Header>
+					<MenuItem IsCheckable="False"
+							  Click="Add_Books_MenuItem_CLick">
+						<MenuItem.Header>
+							Add Book(s)
+						</MenuItem.Header>
+					</MenuItem>
+					<MenuItem Header="_Exit"
+							  IsCheckable="False" />
+				</MenuItem>
+				<MenuItem IsCheckable="False"
+						  Header="_Settings">
+				</MenuItem>
+			</Menu>-->
+
+		<!--<Grid>-->
+		<!--<TextBlock Text="Bookshelf works" />-->
+		<!---->
+
+		<!--</Grid>-->
+		<!--</DockPanel>-->
 	</Grid>
 </Page>

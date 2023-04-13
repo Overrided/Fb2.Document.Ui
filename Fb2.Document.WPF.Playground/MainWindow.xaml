@@ -5,16 +5,74 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:Fb2.Document.WPF.Playground"
 		xmlns:models="clr-namespace:Fb2.Document.WPF.Playground.Models"
-		xmlns:converterss="clr-namespace:Fb2.Document.WPF.Playground.Converters"
+		xmlns:converters="clr-namespace:Fb2.Document.WPF.Playground.Converters"
 		mc:Ignorable="d"
-		Title="MainWindow"
+		x:Name="MainWindowName"
+		Title="Fb2 Browser"
 		Height="600"
 		Width="1000">
 	<Window.Resources>
 
-		<converterss:Base64StringToImageConverter x:Key="String64ToImageConverter" />
+		<ControlTemplate x:Key="DefaultFrameTemplate"
+						 TargetType="Frame">
+			<DockPanel Margin="7">
+				<StackPanel Margin="7"
+							Orientation="Horizontal"
+							DockPanel.Dock="Top">
+					<Button Margin="0, 0, 6, 0"
+							Padding="3,0,3,3"
+							Command="{x:Static NavigationCommands.BrowseBack}"
+							IsEnabled="{TemplateBinding CanGoBack}"
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center"
+							VerticalContentAlignment="Center"
+							HorizontalContentAlignment="Center">
+						<TextBlock Text="←"
+								   Padding="0"
+								   TextAlignment="Center"
+								   FontSize="16"
+								   VerticalAlignment="Center"
+								   HorizontalAlignment="Center" />
 
-		<DataTemplate x:Key="RecentBookTemplate"
+					</Button>
+					<Button Margin="0, 0, 6, 0"
+							Padding="3,0,3,3"
+							Command="{x:Static NavigationCommands.BrowseForward}"
+							IsEnabled="{TemplateBinding CanGoForward}">
+						<TextBlock Text="→"
+								   Padding="0"
+								   TextAlignment="Center"
+								   FontSize="16"
+								   VerticalAlignment="Center"
+								   HorizontalAlignment="Center" />
+					</Button>
+
+					<Menu Margin="6, 0, 6, 0"
+						  Padding="0,4"
+						  VerticalAlignment="Center"
+						  VerticalContentAlignment="Center">
+						<MenuItem x:Name="BookshelfMenuItem"
+								  Header="_Bookshelf"
+								  Margin="6, 0, 6, 0"
+								  Click="Bookshelf_MenuItem_Click" />
+						<MenuItem x:Name="SettingsMenuItem"
+								  Header="_Settings"
+								  Margin="6, 0, 6, 0"
+								  Click="Settings_MenuItem_Click" />
+					</Menu>
+				</StackPanel>
+
+				<Border BorderBrush="Green"
+						Padding="0"
+						BorderThickness="1">
+					<ContentPresenter />
+				</Border>
+			</DockPanel>
+		</ControlTemplate>
+
+		<!--<converters:Base64StringToImageConverter x:Key="String64ToImageConverter" />-->
+
+		<!--<DataTemplate x:Key="RecentBookTemplate"
 					  DataType="models:BookModel">
 
 			<Grid HorizontalAlignment="Stretch"
@@ -75,15 +133,20 @@
 					Value="220" />
 			<Setter Property="Margin"
 					Value="4" />
-		</Style>
+		</Style>-->
 
 	</Window.Resources>
 	<Window.DataContext>
 		<Binding RelativeSource="{RelativeSource Mode=Self}" />
 	</Window.DataContext>
 	<Grid>
+		<Frame x:Name="mainFrame"
+			   Template="{StaticResource DefaultFrameTemplate}"
+			   NavigationUIVisibility="Automatic">
+		</Frame>
+		<!--<CheckBox IsChecked="{Binding IsOnBookshelfPageProperty}"/>-->
 
-		<DockPanel HorizontalAlignment="Stretch"
+		<!--<DockPanel HorizontalAlignment="Stretch"
 				   VerticalAlignment="Stretch">
 			<Menu DockPanel.Dock="Top">
 				<MenuItem IsCheckable="False">
@@ -126,7 +189,7 @@
 				</ScrollViewer>
 
 			</Grid>
-		</DockPanel>
+		</DockPanel>-->
 
 	</Grid>
 </Window>

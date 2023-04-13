@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Fb2.Document.Models.Base;
+using System.Threading;
 using Fb2.Document.Models;
-using Fb2.Document.UWP.NodeProcessors.Base;
+using Fb2.Document.Models.Base;
 using Fb2.Document.UWP.NodeProcessors;
+using Fb2.Document.UWP.NodeProcessors.Base;
 using Fb2Image = Fb2.Document.Models.Image;
 using Fb2Paragraph = Fb2.Document.Models.Paragraph;
-using System.Threading;
 
 namespace Fb2.Document.UWP.Services
 {

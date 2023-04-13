@@ -12,17 +12,50 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Fb2.Document.Models;
+using Fb2.Document.WPF.Common;
+using Fb2.Document.WPF.Playground.Models;
 
-namespace Fb2.Document.WPF.Playground.Pages
+namespace Fb2.Document.WPF.Playground.Pages;
+
+/// <summary>
+/// Interaction logic for ReadPage.xaml
+/// </summary>
+public partial class ReadPage : Page
 {
-    /// <summary>
-    /// Interaction logic for ReadPage.xaml
-    /// </summary>
-    public partial class ReadPage : Page
+    private bool isContentRendered = false;
+    private BookModel BookModel = null;
+
+    public ReadPage(BookModel bookModel)
     {
-        public ReadPage()
+        InitializeComponent();
+        BookModel = bookModel;
+        this.Loaded += ReadPage_Loaded;
+    }
+
+    private void ReadPage_Loaded(object sender, RoutedEventArgs e)
+    {
+        doc.ColumnWidth = double.MaxValue; // overkill
+
+        if (!isContentRendered)
         {
-            InitializeComponent();
+            var uiContent = Fb2Mapper.Instance.MapDocument(BookModel.Fb2Document!);
+            var allTextElements = uiContent
+                .SelectMany(c => c)
+                .Where(c => c != null)
+                .ToList();
+
+            var blockTextElements = Utils.Instance.Paragraphize(allTextElements);
+
+            //foreach (var textElement in allTextElements)
+            //{
+            //    Block? blockTextElement = textElement as Block;
+            //    doc.Blocks.Add(blockTextElement);
+            //}
+
+            doc.Blocks.AddRange(blockTextElements);
+
+            isContentRendered = true;
         }
     }
 }

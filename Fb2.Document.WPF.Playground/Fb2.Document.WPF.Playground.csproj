@@ -19,4 +19,8 @@
     <PackageReference Include="Fb2.Document" Version="2.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Fb2.Document.WPF\Fb2.Document.WPF.csproj" />
+  </ItemGroup>
+
 </Project>

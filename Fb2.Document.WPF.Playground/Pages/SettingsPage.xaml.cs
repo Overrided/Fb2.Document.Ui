@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Fb2.Document.WPF.Playground.Pages
 {
     /// <summary>
-    /// Interaction logic for BookShelf.xaml
+    /// Interaction logic for SettingsPage.xaml
     /// </summary>
-    public partial class BookShelf : Page
+    public partial class SettingsPage : Page
     {
-        public BookShelf()
+        public SettingsPage()
         {
             InitializeComponent();
         }

@@ -6,6 +6,7 @@ using Windows.UI.Xaml.Documents;
 
 namespace Fb2.Document.UWP.NodeProcessors
 {
+    // TODO : inherit from NodeProcessorBase??
     public class SequenceProcessor : DefaultNodeProcessor
     {
         public override List<TextElement> Process(RenderingContext context)

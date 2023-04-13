@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using Fb2.Document.WinUI.Entities;
-using Fb2.Document.WinUI.NodeProcessors.Base;
-using Microsoft.UI.Xaml.Documents;
+using System.Windows.Documents;
+using Fb2.Document.WPF.Entities;
+using Fb2.Document.WPF.NodeProcessors.Base;
 
-namespace Fb2.Document.WinUI.NodeProcessors;
+namespace Fb2.Document.WPF.NodeProcessors;
 
 public class ParagraphProcessor : DefaultNodeProcessor
 {

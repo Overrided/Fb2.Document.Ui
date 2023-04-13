@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Documents;
 using Fb2.Document.Constants;
-using Fb2.Document.WinUI.Entities;
-using Fb2.Document.WinUI.NodeProcessors.Base;
-using Microsoft.UI.Xaml.Documents;
+using Fb2.Document.WPF.Entities;
+using Fb2.Document.WPF.NodeProcessors.Base;
 
-namespace Fb2.Document.WinUI.NodeProcessors;
+namespace Fb2.Document.WPF.NodeProcessors;
 
 // TODO : inherit from NodeProcessorBase??
 public class SequenceProcessor : DefaultNodeProcessor
