@@ -53,8 +53,6 @@ public class ImageProcessor : NodeProcessorBase
         if (imageNode.TryGetAttribute(AttributeNames.Alt, true, out var altAttribute))
             SetTooltip(image, altAttribute.Value);
 
-        var result = new InlineUIContainer();
-
         // hacky fix for b/w images with transparent background,
         // image itself can get lost on black background
 
@@ -75,43 +73,43 @@ public class ImageProcessor : NodeProcessorBase
         var isInlineImage = imageNode.IsInline;
 
         if (isInlineImage)
-            result.Child = backgroundPanel;
-        else
         {
-            TagElement(image, context.RenderingConfig.Image.NonInlineImageTag);
-
-            // TODO: make configurable - if user wants to see image titles at all, and if yes - title location? Top/Bottom/Left/Right etc.?
-            if (imageNode.TryGetAttribute(AttributeNames.Title, true, out var titleAttribute))
-            {
-                var imageTitleTextBlock = new TextBlock
-                {
-                    FontSize = Math.Max(context.RenderingConfig.BaseFontSize - 2, 10),
-                    FontWeight = FontWeights.Light,
-                    Foreground = new SolidColorBrush(Colors.Black),
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(0, 2, 0, 2),
-                    TextTrimming = TextTrimming.CharacterEllipsis,
-                    Text = titleAttribute.Value
-                };
-                SetTooltip(imageTitleTextBlock, titleAttribute.Value);
-
-                var imageTitleContainer = new Border
-                {
-                    Background = new SolidColorBrush(Colors.White),
-                    Child = imageTitleTextBlock,
-                    HorizontalAlignment = HorizontalAlignment.Stretch
-                };
-
-                backgroundPanel.Children.Add(imageTitleContainer);
-            }
-
-            var container = GetCenteringBorder();
-            container.Child = backgroundPanel;
-
-            result.Child = container;
+            var inlineResult = new InlineUIContainer();
+            inlineResult.Child = backgroundPanel;
+            return new List<TextElement>(1) { inlineResult };
         }
 
-        return new List<TextElement>(1) { result };
+        TagElement(image, context.RenderingConfig.Image.NonInlineImageTag);
+
+        // TODO: make configurable - if user wants to see image titles at all, and if yes - title location? Top/Bottom/Left/Right etc.?
+        if (imageNode.TryGetAttribute(AttributeNames.Title, true, out var titleAttribute))
+        {
+            var imageTitleTextBlock = new TextBlock
+            {
+                FontSize = Math.Max(context.RenderingConfig.BaseFontSize - 2, 10),
+                FontWeight = FontWeights.Light,
+                Foreground = new SolidColorBrush(Colors.Black),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, 2, 0, 2),
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                Text = titleAttribute.Value
+            };
+            SetTooltip(imageTitleTextBlock, titleAttribute.Value);
+
+            var imageTitleContainer = new Border
+            {
+                Background = new SolidColorBrush(Colors.White),
+                Child = imageTitleTextBlock,
+                HorizontalAlignment = HorizontalAlignment.Stretch
+            };
+
+            backgroundPanel.Children.Add(imageTitleContainer);
+        }
+
+        var notInlineResult = new BlockUIContainer();
+        notInlineResult.Child = backgroundPanel;
+
+        return new List<TextElement>(1) { notInlineResult };
     }
 
     private IEnumerable<BinaryImage> GetLinkedBinaries(RenderingContext context)
@@ -182,11 +180,5 @@ public class ImageProcessor : NodeProcessorBase
             return null;
         }
     }
-
-    private static Border GetCenteringBorder() =>
-        new Border
-        {
-            Margin = new Thickness(0, 8, 0, 8), // TODO: configurable?
-        };
 }
 
