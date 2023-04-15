@@ -30,14 +30,14 @@ public class Utils
 
         foreach (var element in elements)
         {
-            if (element is Paragraph paragElement)
+            if (element is Block blockElement)
             {
                 if (actualParagraph != null)
                 {
                     result.Add(actualParagraph);
                     actualParagraph = null;
                 }
-                result.Add(paragElement);
+                result.Add(blockElement);
             }
             else if (element is Inline inlineElem)
             {

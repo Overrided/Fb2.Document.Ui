@@ -13,7 +13,7 @@ namespace RichTextView.WinUI.Common
 
             foreach (var element in elements)
             {
-                if (element is Paragraph paragraphElement)
+                if (element is Block paragraphElement)
                 {
                     if (actualParagraph != null)
                     {

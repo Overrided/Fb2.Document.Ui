@@ -13,26 +13,29 @@
 
 		<FlowDocumentReader ViewingMode="Scroll">
 			<FlowDocument x:Name="doc">
-				<Table>
+				<!--<Table>
 					<Table.Columns>
-						<TableColumn Width="*" />
-						<TableColumn Width="*" />
-						<TableColumn Width="*" />
+						<TableColumn Width="Auto" />
+						<TableColumn Width="Auto" />
+						<TableColumn Width="Auto" />
 					</Table.Columns>
 					<TableRowGroup>
 						<TableRow>
-							<TableCell>
+							<TableCell BorderBrush="Red"
+									   BorderThickness="1">
 								<Paragraph>1</Paragraph>
 							</TableCell>
-							<TableCell>
+							<TableCell BorderBrush="Red"
+									   BorderThickness="1">
 								<Paragraph>2</Paragraph>
 							</TableCell>
-							<TableCell>
+							<TableCell BorderBrush="Red"
+									   BorderThickness="1">
 								<Paragraph>3</Paragraph>
 							</TableCell>
 						</TableRow>
 					</TableRowGroup>
-				</Table>
+				</Table>-->
 				<!--<Paragraph>
 					<Span>span text</Span>
 					<Span BaselineAlignment="Superscript">super

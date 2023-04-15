@@ -32,7 +32,7 @@ namespace Fb2.Document.UWP.Common
 
             foreach (var element in elements)
             {
-                if (element is Paragraph paragElement)
+                if (element is Block paragElement)
                 {
                     if (actualParagraph != null)
                     {
