@@ -6,7 +6,7 @@ using Fb2.Document.WPF.NodeProcessors.Base;
 
 namespace Fb2.Document.WPF.NodeProcessors;
 
-public class SubscriptProcessor : RewrapNodeProcessorBase
+public class SubscriptProcessor : DefaultNodeProcessor
 {
     public override List<TextElement> Process(RenderingContext context)
     {

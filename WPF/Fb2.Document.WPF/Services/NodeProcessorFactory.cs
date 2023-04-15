@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Fb2.Document.Models.Base;
 using Fb2.Document.Models;
+using Fb2.Document.Models.Base;
+using Fb2.Document.WPF.NodeProcessors;
+using Fb2.Document.WPF.NodeProcessors.Base;
 using Fb2Image = Fb2.Document.Models.Image;
 using Fb2Paragraph = Fb2.Document.Models.Paragraph;
-using Fb2.Document.WPF.NodeProcessors.Base;
-using Fb2.Document.WPF.NodeProcessors;
 
 namespace Fb2.Document.WPF.Services;
 
@@ -22,16 +19,12 @@ public class NodeProcessorFactory
     private readonly Dictionary<Type, NodeProcessorBase> nodeMap = new Dictionary<Type, NodeProcessorBase>
         {
             { typeof(Table), new TableProcessor() },
-            //{ typeof(Table), new ParagraphProcessor() },
             { typeof(Fb2Image), new ImageProcessor() },
             { typeof(Emphasis), new ItalicProcessor() },
             { typeof(Strong), new BoldProcessor() },
             { typeof(Superscript), new SupescriptProcessor() },
             { typeof(Subscript), new SubscriptProcessor() },
             { typeof(TextLink), new HyperlinkProcessor() },
-            //{ typeof(Superscript), new SpanProcessor() },
-            //{ typeof(Subscript), new SpanProcessor() },
-            //{ typeof(TextLink), new SpanProcessor() },
             { typeof(Author), new AuthorProcessor() },
             { typeof(EmptyLine), new EmptyLineProcessor() },
             { typeof(SequenceInfo), new SequenceProcessor() },
