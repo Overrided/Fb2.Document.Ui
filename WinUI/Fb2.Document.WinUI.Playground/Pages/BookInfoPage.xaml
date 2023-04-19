@@ -19,6 +19,9 @@
 		<converters:FileSizeInBytesToHumanReadableStringConverter x:Key="FsTHRS"
 																  x:Name="FsTHRS" />
 
+		<converters:MoreThanValueToVisibilityConverter x:Key="MTVTVC"
+													   x:Name="MTVTVC" />
+
 	</Page.Resources>
 
 	<Grid x:Name="OuterGrid"
@@ -115,7 +118,8 @@
 						  ScrollViewer.BringIntoViewOnFocusChange="True"
 						  ScrollViewer.IsDeferredScrollingEnabled="True"
 						  ScrollViewer.IsHorizontalScrollChainingEnabled="True"
-						  SelectionChanged="ImagesThumbnailContainer_SelectionChanged">
+						  SelectionChanged="ImagesThumbnailContainer_SelectionChanged"
+						  Visibility="{x:Bind BookInfoViewModel.BookImages.Count, Converter={StaticResource MTVTVC}, ConverterParameter=1, Mode=OneWay}">
 					<ListView.ItemsPanel>
 						<ItemsPanelTemplate>
 							<ItemsStackPanel Orientation="Horizontal"
@@ -270,7 +274,8 @@
 							  HorizontalContentAlignment="Stretch"
 							  VerticalAlignment="Top"
 							  VerticalContentAlignment="Stretch"
-							  Visibility="{x:Bind BookInfoViewModel.BookImages, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+							  Visibility="{x:Bind BookInfoViewModel.BookImages.Count, Mode=OneWay, Converter={StaticResource MTVTVC}, ConverterParameter=0}">
+						<!--Visibility="{x:Bind BookInfoViewModel.BookImages, Mode=OneWay, Converter={StaticResource VtvConterter}}"-->
 						<Expander.Header>
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Text="Images (" />

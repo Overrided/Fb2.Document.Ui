@@ -44,7 +44,6 @@ public sealed class CustomInfoRenderer : Control
         base.OnApplyTemplate();
     }
 
-
     public CustomInfo CustomInfo
     {
         get { return (CustomInfo)GetValue(CustomInfoProperty); }

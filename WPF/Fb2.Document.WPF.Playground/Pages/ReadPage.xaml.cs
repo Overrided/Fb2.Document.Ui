@@ -24,7 +24,7 @@ namespace Fb2.Document.WPF.Playground.Pages;
 public partial class ReadPage : Page
 {
     private bool isContentRendered = false;
-    private BookModel BookModel = null;
+    private readonly BookModel? BookModel = null;
 
     public ReadPage(BookModel bookModel)
     {
@@ -46,12 +46,6 @@ public partial class ReadPage : Page
                 .ToList();
 
             var blockTextElements = Utils.Instance.Paragraphize(allTextElements);
-
-            //foreach (var textElement in allTextElements)
-            //{
-            //    Block? blockTextElement = textElement as Block;
-            //    doc.Blocks.Add(blockTextElement);
-            //}
 
             doc.Blocks.AddRange(blockTextElements);
 

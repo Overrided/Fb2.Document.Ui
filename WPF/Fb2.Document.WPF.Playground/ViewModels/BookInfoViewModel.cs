@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;
-using Fb2.Document.WinUI.Playground.Common;
+using Fb2.Document.WPF.Playground.Common;
 
-namespace Fb2.Document.WinUI.Playground.ViewModels;
+namespace Fb2.Document.WPF.Playground.ViewModels;
 
 public class BinaryImageViewModel
 {

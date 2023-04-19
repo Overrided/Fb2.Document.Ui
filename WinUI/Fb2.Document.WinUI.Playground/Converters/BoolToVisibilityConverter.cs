@@ -2,91 +2,90 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 
-namespace Fb2.Document.WinUI.Playground.Converters
+namespace Fb2.Document.WinUI.Playground.Converters;
+
+public class BoolToVisibilityConverter : IValueConverter
 {
-    public class BoolToVisibilityConverter : IValueConverter
+    public object Convert(object value, Type targetType, object parameter, string language)
     {
-        public object Convert(object value, Type targetType, object parameter, string language)
+        if (value is bool boolValue)
         {
-            if (value is bool boolValue)
-            {
-                var result = boolValue ? Visibility.Visible : Visibility.Collapsed;
-                return result;
-            }
-
-            throw new ArgumentException(nameof(value));
+            var result = boolValue ? Visibility.Visible : Visibility.Collapsed;
+            return result;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
+        throw new ArgumentException(nameof(value));
     }
 
-    public class CountToVisibilityConverter : IValueConverter
+    public object ConvertBack(object value, Type targetType, object parameter, string language)
     {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            if (value is int intVal)
-            {
-                var result = intVal > 0 ? Visibility.Visible : Visibility.Collapsed;
-                return result;
-            }
-            else if (value is long longValue)
-            {
-                var result = longValue > 0 ? Visibility.Visible : Visibility.Collapsed;
-                return result;
-            }
+        throw new NotImplementedException();
+    }
+}
 
-            throw new ArgumentException(nameof(value));
+public class CountToVisibilityConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, string language)
+    {
+        if (value is int intVal)
+        {
+            var result = intVal > 0 ? Visibility.Visible : Visibility.Collapsed;
+            return result;
+        }
+        else if (value is long longValue)
+        {
+            var result = longValue > 0 ? Visibility.Visible : Visibility.Collapsed;
+            return result;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
+        throw new ArgumentException(nameof(value));
     }
 
-    public class CountToVisibilityInvertedConverter : IValueConverter
+    public object ConvertBack(object value, Type targetType, object parameter, string language)
     {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            if (value is int intValue)
-            {
-                var result = intValue == 0 ? Visibility.Visible : Visibility.Collapsed;
-                return result;
-            }
+        throw new NotImplementedException();
+    }
+}
 
-            throw new ArgumentException(nameof(value));
+public class CountToVisibilityInvertedConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, string language)
+    {
+        if (value is int intValue)
+        {
+            var result = intValue == 0 ? Visibility.Visible : Visibility.Collapsed;
+            return result;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
+        throw new ArgumentException(nameof(value));
     }
 
-    public class FileSizeInBytesToHumanReadableStringConverter : IValueConverter
+    public object ConvertBack(object value, Type targetType, object parameter, string language)
     {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            if (value is not long longValue)
-                throw new ArgumentException();
+        throw new NotImplementedException();
+    }
+}
 
-            var byteCount = longValue;
+public class FileSizeInBytesToHumanReadableStringConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, string language)
+    {
+        if (value is not long longValue)
+            throw new ArgumentException();
 
-            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
-            if (byteCount == 0)
-                return "0" + suf[0];
-            long bytes = Math.Abs(byteCount);
-            int place = System.Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
-            double num = Math.Round(bytes / Math.Pow(1024, place), 2);
-            return (Math.Sign(byteCount) * num).ToString() + suf[place];
-        }
+        var byteCount = longValue;
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
+        string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
+        if (byteCount == 0)
+            return "0" + suf[0];
+        long bytes = Math.Abs(byteCount);
+        int place = System.Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+        double num = Math.Round(bytes / Math.Pow(1024, place), 2);
+        return (Math.Sign(byteCount) * num).ToString() + suf[place];
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, string language)
+    {
+        throw new NotImplementedException();
     }
 }

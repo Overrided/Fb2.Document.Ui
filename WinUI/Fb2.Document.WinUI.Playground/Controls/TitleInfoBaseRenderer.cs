@@ -213,7 +213,7 @@ public sealed class TitleInfoBaseRenderer : Control
         var subTitle = titleInfo.GetFirstDescendant<SubTitle>();
         var annotation = titleInfo.GetFirstDescendant<Annotation>();
         //var sequences = titleInfo.GetDescendants<SequenceInfo>().Where(s => s != null && !s.IsEmpty && s.HasAttributes);
-        var sequences = titleInfo.GetDescendants<SequenceInfo>().Where(s => s != null && s.HasContent);
+        var sequences = titleInfo.GetDescendants<SequenceInfo>().Where(s => s != null && s.HasContent && s.HasAttributes);
         var keywords = titleInfo.GetDescendants<Keywords>().Where(k => k != null && k.HasContent);
 
         var nodes = new List<Fb2Node>();

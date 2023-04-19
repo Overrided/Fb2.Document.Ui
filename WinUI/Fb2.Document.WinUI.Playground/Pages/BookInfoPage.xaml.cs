@@ -48,6 +48,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
             base.OnNavigatedTo(e);
 
             var model = e.Parameter as BookModel;
+
             //if (model == null)
             //    return;
 
@@ -74,28 +75,33 @@ namespace Fb2.Document.WinUI.Playground.Pages
 
             BookInfoViewModel.TitleInfo = GetFb2NodeOrDefault(fb2Document?.Title);
             BookInfoViewModel.SrcTitleInfo = GetFb2NodeOrDefault(fb2Document?.SourceTitle);
-            BookInfoViewModel.CoverpageBase64Image = bookModel?.CoverpageBase64Image;
+            BookInfoViewModel.CoverpageBase64Image = bookModel.CoverpageBase64Image;
             BookInfoViewModel.PublishInfo = GetFb2NodeOrDefault(fb2Document?.PublishInfo);
             BookInfoViewModel.DocumentInfo = GetFb2NodeOrDefault(fb2Document?.DocumentInfo);
             BookInfoViewModel.CustomInfo = GetFb2NodeOrDefault(fb2Document?.CustomInfo);
 
-            BookInfoViewModel.BookImages = fb2Document?.BinaryImages?.Select(bi =>
+            var binaryImages = fb2Document?.BinaryImages;
+
+            if (binaryImages != null && !binaryImages.IsEmpty)
             {
-                var id = bi.TryGetAttribute(AttributeNames.Id, true, out var idAttr) ?
-                            idAttr!.Value : string.Empty;
-
-                var contentType = bi.TryGetAttribute(AttributeNames.ContentType, out var contentTypeAttr) ?
-                                contentTypeAttr!.Value : string.Empty;
-
-                var vm = new BinaryImageViewModel
+                BookInfoViewModel.BookImages = binaryImages.Select(bi =>
                 {
-                    Content = bi.Content,
-                    Id = id,
-                    ContentType = contentType
-                };
+                    var id = bi.TryGetAttribute(AttributeNames.Id, true, out var idAttr) ?
+                                idAttr!.Value : string.Empty;
 
-                return vm;
-            })?.ToList();
+                    var contentType = bi.TryGetAttribute(AttributeNames.ContentType, out var contentTypeAttr) ?
+                                    contentTypeAttr!.Value : string.Empty;
+
+                    var vm = new BinaryImageViewModel
+                    {
+                        Content = bi.Content,
+                        Id = id,
+                        ContentType = contentType
+                    };
+
+                    return vm;
+                }).ToList();
+            }
 
             BookInfoViewModel.FileInfo = new FileInfoViewModel
             {

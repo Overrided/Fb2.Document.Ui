@@ -6,58 +6,57 @@ using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.Storage.Streams;
 using DataConvert = System.Convert; // fucking method name collision lol
 
-namespace Fb2.Document.WinUI.Playground.Converters
+namespace Fb2.Document.WinUI.Playground.Converters;
+
+public class String64ToImageConverter : IValueConverter
 {
-    public class String64ToImageConverter : IValueConverter
+    private const string DefaultImageResourceNameString = "DefaultBookImage";
+
+    public object Convert(object value, Type targetType, object parameter, string language)
     {
-        private const string DefaultImageResoureNameString = "DefaultBookImage";
+        var defaultBitmap = (BitmapImage)Application.Current.Resources[DefaultImageResourceNameString];
 
-        public object Convert(object value, Type targetType, object parameter, string language)
+        if (value != null && !string.IsNullOrWhiteSpace(value.ToString()))
         {
-            var defaultBitmap = (BitmapImage)Application.Current.Resources[DefaultImageResoureNameString];
-
-            if (value != null && !string.IsNullOrWhiteSpace(value.ToString()))
-            {
-                var base64ImageContent = value.ToString();
-                return ConvertBase64StringToBitmapImage(base64ImageContent) ?? defaultBitmap;
-            }
-
-            return defaultBitmap;
+            var base64ImageContent = value.ToString();
+            return ConvertBase64StringToBitmapImage(base64ImageContent) ?? defaultBitmap;
         }
 
-        private BitmapImage? ConvertBase64StringToBitmapImage(string base64ImageContent)
+        return defaultBitmap;
+    }
+
+    private BitmapImage? ConvertBase64StringToBitmapImage(string base64ImageContent)
+    {
+        try
         {
-            try
+            var bitmap = new BitmapImage();
+
+            using (var stream = new MemoryStream())
             {
-                var bitmap = new BitmapImage();
+                byte[] imageBytes = DataConvert.FromBase64String(base64ImageContent);
+                stream.Write(imageBytes, 0, imageBytes.Length);
 
-                using (var stream = new MemoryStream())
-                {
-                    byte[] imageBytes = DataConvert.FromBase64String(base64ImageContent);
-                    stream.Write(imageBytes, 0, imageBytes.Length);
-
-                    var randomAccessStream = stream.AsRandomAccessStream();
-                    randomAccessStream.Seek(0);
-                    bitmap.SetSource(randomAccessStream);
-                }
-
-                if (bitmap.PixelHeight == 0 || bitmap.PixelWidth == 0)
-                    return null;
-
-                if (bitmap.IsAnimatedBitmap) // gifs and stuff
-                    bitmap.AutoPlay = true;
-
-                return bitmap;
+                var randomAccessStream = stream.AsRandomAccessStream();
+                randomAccessStream.Seek(0);
+                bitmap.SetSource(randomAccessStream);
             }
-            catch
-            {
+
+            if (bitmap.PixelHeight == 0 || bitmap.PixelWidth == 0)
                 return null;
-            }
-        }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
+            if (bitmap.IsAnimatedBitmap) // gifs and stuff
+                bitmap.AutoPlay = true;
+
+            return bitmap;
         }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, string language)
+    {
+        throw new NotImplementedException();
     }
 }

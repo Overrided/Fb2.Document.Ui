@@ -208,7 +208,20 @@ public partial class BookShelfPage : Page
 
     private void OnBookClick(object sender, MouseButtonEventArgs e)
     {
-        // wicked ways, why the hell not a "selectedItem" lol
+        e.Handled = true;
+        var originalSource = e.OriginalSource;
+        var bookModel = (originalSource as FrameworkElement)?.DataContext as BookModel;
+
+        if (bookModel == null)
+            return; // to hell with ya
+
+        Debug.WriteLine($"{bookModel.BookName}  --  {bookModel.FilePath}");
+
+        NavigationService.Navigate(new BookInfoPage(bookModel));
+    }
+
+    private void OverlayButtonClick(object sender, RoutedEventArgs e)
+    {
         e.Handled = true;
         var originalSource = e.OriginalSource;
         var bookModel = (originalSource as FrameworkElement)?.DataContext as BookModel;
@@ -219,9 +232,5 @@ public partial class BookShelfPage : Page
         Debug.WriteLine($"{bookModel.BookName}  --  {bookModel.FilePath}");
 
         NavigationService.Navigate(new ReadPage(bookModel));
-
-        //var frame = this.Parent as Frame;
-        //if (frame != null)
-        //    frame.Navigate(new ReadPage());
     }
 }
