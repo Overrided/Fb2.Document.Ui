@@ -20,6 +20,8 @@
 
 		<converters:FileSizeInBytesToHumanReadableStringConverter x:Key="FsTHRS"
 																  x:Name="FsTHRS" />
+		<converters:MoreThanValueToVisibilityConverter x:Key="MTVTVC"
+													   x:Name="MTVTVC" />
 	</Page.Resources>
 
 	<Grid x:Name="OuterGrid"
@@ -99,6 +101,7 @@
 
 				<ListView x:Name="ImagesThumbnailContainer"
 						  Grid.Row="1"
+						  Visibility="{x:Bind BookInfoViewModel.BookImages.Count, Mode=OneWay, Converter={StaticResource MTVTVC}, ConverterParameter=1}"
 						  ItemsSource="{x:Bind BookInfoViewModel.BookImages, Mode=OneWay}"
 						  SelectedItem="{Binding SelectedItem, ElementName=FullScreenImagesContainer, Mode=TwoWay}"
 						  HorizontalAlignment="Stretch"
@@ -271,7 +274,7 @@
 								   HorizontalContentAlignment="Stretch"
 								   VerticalAlignment="Top"
 								   VerticalContentAlignment="Stretch"
-								   Visibility="{x:Bind BookInfoViewModel.BookImages, Mode=OneWay, Converter={StaticResource VtvConterter}}">
+								   Visibility="{x:Bind BookInfoViewModel.BookImages.Count, Mode=OneWay, Converter={StaticResource MTVTVC}, ConverterParameter=0}">
 						<muxc:Expander.Header>
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Text="Images (" />

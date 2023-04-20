@@ -275,7 +275,6 @@
 							  VerticalAlignment="Top"
 							  VerticalContentAlignment="Stretch"
 							  Visibility="{x:Bind BookInfoViewModel.BookImages.Count, Mode=OneWay, Converter={StaticResource MTVTVC}, ConverterParameter=0}">
-						<!--Visibility="{x:Bind BookInfoViewModel.BookImages, Mode=OneWay, Converter={StaticResource VtvConterter}}"-->
 						<Expander.Header>
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Text="Images (" />

@@ -126,6 +126,7 @@
     <Compile Include="Controls\PublishInfoRenderer.cs" />
     <Compile Include="Controls\TitleInfoBaseRenderer.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\MoreThanValueToVisibilityConverter.cs" />
     <Compile Include="Converters\String64ToImageConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
