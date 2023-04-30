@@ -28,7 +28,8 @@
 	</Grid>-->
 
 	<Grid HorizontalOptions="FillAndExpand"
-		  VerticalOptions="FillAndExpand">
+		  VerticalOptions="FillAndExpand"
+		  Padding="8">
 		<WebView x:Name="HtmlWebView"
 				 HorizontalOptions="FillAndExpand"
 				 VerticalOptions="FillAndExpand">

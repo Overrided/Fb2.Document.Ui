@@ -6,18 +6,24 @@
 
 @inject AppStateService AppStateService
 
-@*<h3>ReadBook</h3>*@
-
 <style>
     .textContainer {
         overflow-y: auto;
     }
 </style>
 
-<div class="h-100 textContainer pt-3">@bookContents</div>
+@*<div class="h-100 textContainer p-3">@bookContents</div>*@
+
+<div class="h-100 textContainer">
+    @foreach (var sectionString in bookContents)
+    {
+        <div class="h-auto p-3">@sectionString</div>
+    }
+</div>
 
 @code {
-    private MarkupString bookContents;
+    //private MarkupString bookContents;
+    private List<MarkupString> bookContents;
     public BookModel BookModel { get; set; }
 
     protected override void OnInitialized()
@@ -27,9 +33,11 @@
         BookModel = AppStateService.CurrentBookModel;
         var sb = new StringBuilder();
         var mappedResult = Fb2HtmlMapper.MapDocument(BookModel.Fb2Document);
-        sb.AppendJoin(Environment.NewLine, mappedResult);
+        //sb.AppendJoin(Environment.NewLine, mappedResult);
 
-        var joinedStringContent = sb.ToString();
-        bookContents = new MarkupString(joinedStringContent);
+        bookContents = mappedResult.Select(r => new MarkupString(r)).ToList();
+
+        //var joinedStringContent = sb.ToString();
+        //bookContents = new MarkupString(joinedStringContent);
     }
 }

@@ -89,8 +89,9 @@ namespace Fb2.Document.WinUI.Playground.Pages
                     var id = bi.TryGetAttribute(AttributeNames.Id, true, out var idAttr) ?
                                 idAttr!.Value : string.Empty;
 
-                    var contentType = bi.TryGetAttribute(AttributeNames.ContentType, out var contentTypeAttr) ?
-                                    contentTypeAttr!.Value : string.Empty;
+                    var contentType = bi.TryGetAttribute(
+                        AttributeNames.ContentType,
+                        out var contentTypeAttr) ? contentTypeAttr!.Value : string.Empty;
 
                     var vm = new BinaryImageViewModel
                     {
@@ -160,7 +161,6 @@ namespace Fb2.Document.WinUI.Playground.Pages
             picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
             picker.FileTypeChoices.Add("Images", new List<string>() { normalizedFileExtension });
             picker.SuggestedFileName = suggestedFileName;
-            //picker.SettingsIdentifier = "settingsIdentifier";
             picker.DefaultFileExtension = normalizedFileExtension;
             PopupInitializerService.Instance.InitializePopup(picker);
 
@@ -171,16 +171,6 @@ namespace Fb2.Document.WinUI.Playground.Pages
                 // operation cancelled
                 return;
             }
-
-            //using (var sst = await saveFile.OpenStreamForWriteAsync())
-            //{
-            //    var writer = new StreamWriter(sst)
-            //    {
-            //        AutoFlush = true
-            //    };
-            //    await writer.WriteAsync(selectedItem.Content);
-            //    await writer.FlushAsync();
-            //}
 
             var bytes = Convert.FromBase64String(selectedItem.Content);
             await FileIO.WriteBytesAsync(saveFile, bytes);

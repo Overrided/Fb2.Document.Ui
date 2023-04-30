@@ -1,4 +1,6 @@
-﻿@using Fb2.Document.Constants;
+﻿@using CommunityToolkit.Maui.Alerts;
+@using CommunityToolkit.Maui.Storage;
+@using Fb2.Document.Constants;
 @using Fb2.Document.Html;
 @using Fb2.Document.MAUI.Blazor.Playground.Data;
 @using Fb2.Document.MAUI.Blazor.Playground.Services;
@@ -60,13 +62,13 @@
         width: 50vw;
     }
 
-    .classRed {
+/*    .classRed {
         border: 2px solid red;
     }
 
     .classBlue {
         border: 2px solid blue;
-    }
+    }*/
 
 </style>
 
@@ -133,9 +135,17 @@
 
                                     <button @onclick="() => CloseImageModal()"
                                             type="button"
-                                            class="btn close position-absolute w-auto"
+                                            class="btn btn-close position-absolute m-2"
                                             style="right:0;top:0">
-                                        &times;
+                                    </button>
+                                    <button @onclick="() => DownloadImage()"
+                                            type="button"
+                                            class="btn position-absolute w-auto"
+                                            style="right:0;bottom:25.5%">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                                        </svg>
                                     </button>
                                 </div>
                                 @if (BookImages.Count > 1)
@@ -352,18 +362,22 @@
     public class BookImageViewModel
     {
         public string ImageSource { get; set; } = string.Empty;
+        public string OriginalSource { get; set; } = string.Empty;
+        public string ContentType { get; set; } = string.Empty;
         public string ImageId { get; set; } = string.Empty;
 
         public override bool Equals(object? obj)
         {
             return obj is BookImageViewModel model &&
                    ImageSource == model.ImageSource &&
-                   ImageId == model.ImageId;
+                   OriginalSource == model.OriginalSource &&
+                   ImageId == model.ImageId &&
+                   ContentType == model.ContentType;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(ImageSource, ImageId);
+            return HashCode.Combine(ImageSource, ContentType, ImageId);
         }
     }
 
@@ -380,6 +394,17 @@
     private FileInfoViewModel? FileInfo = null;
 
     private BookImageViewModel? SelectedBookImage = null;
+
+    private Dictionary<string, string> imageSignatures = new()
+        {
+            ["R0lGODdh"] = "image/gif",
+            ["R0lGODlh"] = "image/gif",
+            ["iVBORw0KGgo"] = "image/png",
+            ["/9j/"] = "image/jpeg",
+            ["SUkqAA"] = "image/tiff",
+            ["TU0AKg"] = "image/tiff",
+            ["Qk0"] = "image/bmp"
+        };
 
     protected override void OnInitialized()
     {
@@ -404,7 +429,9 @@
             return new BookImageViewModel
                 {
                     ImageId = bookImageId,
-                    ImageSource = bookImageSource
+                    ContentType = contentType,
+                    ImageSource = bookImageSource,
+                    OriginalSource = bi.Content
                 };
         })?.ToList();
         PublishInfo = doc.PublishInfo;
@@ -437,5 +464,50 @@
     public void ReadBook()
     {
         NavManager.NavigateTo("/readBook", false, false);
+    }
+
+    public async void DownloadImage()
+    {
+        var bookImage = this.SelectedBookImage;
+        if (bookImage == null)
+            return;
+
+        var contentType = string.IsNullOrEmpty(bookImage.ContentType) ?
+            TryGetContentTypeFromBase64Content(bookImage.OriginalSource) :
+            bookImage.ContentType;
+
+        var fileExtension = contentType.Split('/').Last();
+        var normalizedFileExtension = $".{fileExtension}";
+
+        var suggestedFileName = bookImage.ImageId.EndsWith(normalizedFileExtension) ?
+            bookImage.ImageId :
+            $"{bookImage.ImageId}{normalizedFileExtension}";
+
+        using var stream = new MemoryStream(Convert.FromBase64String(bookImage.OriginalSource));
+        CancellationTokenSource source = new CancellationTokenSource();
+        CancellationToken token = source.Token;
+
+        var safeFileResult = await FileSaver.Default.SaveAsync(suggestedFileName, stream, token);
+
+        //if (safeFileResult.IsSuccessful)
+        //{
+        //    await Toast.Make($"The file was saved successfully to location: {safeFileResult.FilePath}").Show(token);
+        //}
+        //else
+        //{
+        //    await Toast.Make($"The file was not saved successfully with error: {safeFileResult.Exception.Message}").Show(token);
+        //}
+
+        if (!safeFileResult.IsSuccessful)
+            await Toast.Make($"The file was not saved successfully with error: {safeFileResult.Exception.Message}").Show(token);
+    }
+
+    private string TryGetContentTypeFromBase64Content(string base64Content)
+    {
+        var mime = imageSignatures.FirstOrDefault(k => base64Content.StartsWith(k.Key)).Value;
+        if (string.IsNullOrEmpty(mime))
+            mime = "application/octet-stream";
+
+        return mime;
     }
 }
