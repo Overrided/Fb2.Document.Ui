@@ -12,8 +12,6 @@
     }
 </style>
 
-@*<div class="h-100 textContainer p-3">@bookContents</div>*@
-
 <div class="h-100 textContainer">
     @foreach (var sectionString in bookContents)
     {
@@ -22,7 +20,6 @@
 </div>
 
 @code {
-    //private MarkupString bookContents;
     private List<MarkupString> bookContents;
     public BookModel BookModel { get; set; }
 
@@ -33,11 +30,7 @@
         BookModel = AppStateService.CurrentBookModel;
         var sb = new StringBuilder();
         var mappedResult = Fb2HtmlMapper.MapDocument(BookModel.Fb2Document);
-        //sb.AppendJoin(Environment.NewLine, mappedResult);
 
         bookContents = mappedResult.Select(r => new MarkupString(r)).ToList();
-
-        //var joinedStringContent = sb.ToString();
-        //bookContents = new MarkupString(joinedStringContent);
     }
 }

@@ -45,11 +45,30 @@
         right: 20px;
     }
 
+    .bookImagePreviewContainer {
+        position: relative;
+    }
+
     .bookImagePreview {
         object-fit: contain;
-        max-height: 200px;
-        max-width: 190px;
+        height: 190px;
         width: 190px;
+    }
+
+    .bookImagePreviewContainer:hover .hoverOverlay {
+        display: inline-block;
+    }
+
+    .hoverOverlay {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        text-align: center;
+        transition: .75s ease;
+        background-image: radial-gradient(white 15%, black 15%, black 18%, #ffffff44 100%);
     }
 
     .bookModalImagePreview {
@@ -62,14 +81,12 @@
         width: 50vw;
     }
 
-/*    .classRed {
-        border: 2px solid red;
+    .enlargeImageBtn {
+        border-radius: 90px;
+        height: 70px;
+        width: 70px;
+        margin-top: 70px;
     }
-
-    .classBlue {
-        border: 2px solid blue;
-    }*/
-
 </style>
 
 @if (SelectedBook != null)
@@ -150,10 +167,12 @@
                                 </div>
                                 @if (BookImages.Count > 1)
                                 {
-                                    <div class="row flex-row flex-nowrap m-0 h-25 bg-opacity-10 bg-secondary py-1" style="overflow-x:auto">
+                                    <div class="row flex-row flex-nowrap m-0 h-25 bg-opacity-10 bg-secondary py-1"
+                                         style="overflow-x:auto">
                                         @foreach (var image in BookImages)
                                         {
                                             <img src="@image.ImageSource"
+                                                 id="@image.ImageId"
                                                  class="@(image == SelectedBookImage ? "bg-info" : "bg-transparent") bookModalImagePreview mx-1"
                                                  title="@image.ImageId" @onclick="() => OnModalPreviewImageClick(image)" />
                                         }
@@ -189,10 +208,24 @@
                     </div>
 
                     <div class="card-body collapse p-0" id="bookImagesCollapse">
-                        <div class="row flex-row flex-nowrap p-3 m-0" style="overflow-x:auto">
+                        <div class="row m-0 p-0 flex-row flex-nowrap" style="overflow-x:auto">
                             @foreach (var image in BookImages)
                             {
-                                <img src="@image.ImageSource" class="bookImagePreview" @onclick="() => OnImageClick(image)" />
+                                <div class="w-auto bookImagePreviewContainer p-2"
+                                     id="@image.ImageId">
+                                    <img src="@image.ImageSource"
+                                         class="bookImagePreview" />
+
+                                    <div class="hoverOverlay">
+                                        <button class="enlargeImageBtn p-3"
+                                    @onclick:stopPropagation="true"
+                                    @onclick="() => OnImageClick(image)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-arrows-angle-expand" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
                             }
                         </div>
                     </div>
