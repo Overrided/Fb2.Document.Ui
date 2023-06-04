@@ -35,6 +35,13 @@
     public string ModalDisplay = "none;";
     public string ModalClass = "";
     public bool ShowBackdrop = false;
+    public bool IsOpen { get; private set; }
+
+    //[Parameter]
+    //public EventCallback<bool> OnAfterRender { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ModalOpenCloseChanged { get; set; }
 
     [Parameter]
     public RenderFragment? Header { get; set; }
@@ -48,19 +55,29 @@
     [Parameter]
     public string? ContentClass { get; set; }
 
-    public void Open()
+    public async Task Open()
     {
         ModalDisplay = "block;";
-        ModalClass = "Show";
+        ModalClass = "show";
         ShowBackdrop = true;
+        IsOpen = true;
         StateHasChanged();
+        await ModalOpenCloseChanged.InvokeAsync(true);
     }
 
-    public void Close()
+    public async Task Close()
     {
         ModalDisplay = "none";
         ModalClass = "";
         ShowBackdrop = false;
+        IsOpen = false;
         StateHasChanged();
+        await ModalOpenCloseChanged.InvokeAsync(false);
     }
+
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    await base.OnAfterRenderAsync(firstRender);
+    //    await OnAfterRender.InvokeAsync(firstRender);
+    //}
 }

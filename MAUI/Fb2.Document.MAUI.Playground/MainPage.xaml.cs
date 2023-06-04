@@ -1,14 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
-using CommunityToolkit.Maui.Behaviors;
 using Fb2.Document.Constants;
 using Fb2.Document.LoadingOptions;
-using Fb2.Document.MAUI.Playground.Pages;
 using Fb2.Document.Models;
-using Microsoft.Maui.Controls;
 using Fb2Image = Fb2.Document.Models.Image;
 
 namespace Fb2.Document.MAUI.Playground;
@@ -366,8 +361,20 @@ public partial class MainPage : ContentPage
         base.OnNavigatedTo(args);
     }
 
-    private void Border_Focused(object sender, FocusEventArgs e)
+    private async void MenuFlyoutItem_Clicked(object sender, EventArgs e)
     {
-        Debug.WriteLine("Border_Focused");
+        var bookModel = (sender as MenuFlyoutItem)?.BindingContext as BookModel;
+        if (bookModel == null)
+            return;
+
+        await Shell.Current.GoToAsync("BookInfo", true, new Dictionary<string, object>
+        {
+            ["Book"] = bookModel
+        });
+
+        //await Shell.Current.GoToAsync("Read", true, new Dictionary<string, object>
+        //{
+        //    ["Book"] = first
+        //});
     }
 }

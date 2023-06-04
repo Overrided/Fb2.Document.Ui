@@ -11,6 +11,7 @@
 
 @inject NavigationManager NavManager
 @inject AppStateService AppStateService
+@inject IJSRuntime JsRuntime
 
 @page "/bookInfo"
 
@@ -140,41 +141,75 @@
 
             @if (BookImages != null && BookImages.Count > 0)
             {
-                <ModalWindow @ref="modalRef" ContentClass="modalContentWidth">
+                <ModalWindow @ref="modalRef"
+                     ContentClass="modalContentWidth">
+                    @*OnAfterRender="@(async o => await OnModalRendered(o))"*@
+                    @*ModalOpenCloseChanged="@(o => ModalOpenCloseChanged(o))"*@
                     <Content>
                         @if (SelectedBookImage != null)
                         {
                             <div style="height: 91.5vh" class="row">
-                                <div class="row flex-row flex-nowrap px-3 py-2 m-0 @(BookImages.Count > 1 ? "h-75" : "h-100")">
-                                    <img class="align-self-center mx-auto my-auto d-block mh-100 mw-100 w-auto"
-                                         src="@SelectedBookImage.ImageSource"
-                                         title="@SelectedBookImage.ImageId" />
+                                <div class="row flex-row flex-nowrap p-2 m-0 @(BookImages.Count > 1 ? "h-75" : "h-100")">
 
-                                    <button @onclick="() => CloseImageModal()"
-                                            type="button"
-                                            class="btn btn-close position-absolute m-2"
-                                            style="right:0;top:0">
-                                    </button>
-                                    <button @onclick="() => DownloadImage()"
-                                            type="button"
-                                            class="btn position-absolute w-auto"
-                                            style="right:0;bottom:25.5%">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                                        </svg>
-                                    </button>
+                                    <div class="col-auto d-flex flex-column p-0">
+                                        @if (BookImages != null && BookImages.Count > 1)
+                                        {
+                                            <button type="button"
+                                                    class="@(BookImages.IndexOf(SelectedBookImage) > 0 ? "" : "disabled") btn my-auto align-self-center"
+                                    @onclick="SelectPreviosImage">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z" />
+                                                </svg>
+                                            </button>
+                                        }
+                                    </div>
+
+                                    <div class="col d-flex flex-column">
+                                        <img class="align-self-center d-block mw-100 mh-100 m-auto w-auto"
+                                             src="@SelectedBookImage.ImageSource"
+                                             title="@SelectedBookImage.ImageId" />
+                                    </div>
+
+                                    <div class="col-auto d-flex flex-column p-0">
+                                        <button type="button"
+                                                class="btn btn-close align-self-center"
+                                    @onclick="CloseImageModal">
+                                        </button>
+
+                                        @if (BookImages != null && BookImages.Count > 1)
+                                        {
+                                            <button type="button"
+                                                    class="@(BookImages.IndexOf(SelectedBookImage) < BookImages.Count - 1 ? "" : "disabled") btn my-auto align-self-center"
+                                    @onclick="SelectNextImage">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+                                                </svg>
+                                            </button>
+                                        }
+
+                                        <button type="button"
+                                                class="@(BookImages != null && BookImages.Count == 1 ? "mt-auto" : "") btn align-self-center"
+                                    @onclick="DownloadImage">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"></path>
+                                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"></path>
+                                            </svg>
+                                        </button>
+
+                                    </div>
                                 </div>
-                                @if (BookImages.Count > 1)
+                                @if (BookImages != null && BookImages.Count > 1)
                                 {
                                     <div class="row flex-row flex-nowrap m-0 h-25 bg-opacity-10 bg-secondary py-1"
                                          style="overflow-x:auto">
                                         @foreach (var image in BookImages)
                                         {
                                             <img src="@image.ImageSource"
+                             @ref="image.Element"
                                                  id="@image.ImageId"
-                                                 class="@(image == SelectedBookImage ? "bg-info" : "bg-transparent") bookModalImagePreview mx-1"
-                                                 title="@image.ImageId" @onclick="() => OnModalPreviewImageClick(image)" />
+                                                 class="@(image == SelectedBookImage ? "border-5 border-info border-start" : "") bookModalImagePreview mx-1"
+                                                 title="@image.ImageId"
+                             @onclick="() => OnModalPreviewImageClick(image)" />
                                         }
                                     </div>
                                 }
@@ -398,6 +433,7 @@
         public string OriginalSource { get; set; } = string.Empty;
         public string ContentType { get; set; } = string.Empty;
         public string ImageId { get; set; } = string.Empty;
+        public ElementReference? Element { get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -426,6 +462,8 @@
     private CustomInfo? CustomInfo = null;
     private FileInfoViewModel? FileInfo = null;
 
+    //private List<Func<Task>> actionsToRunAfterModalRender = new List<Func<Task>>();
+
     private BookImageViewModel? SelectedBookImage = null;
 
     private Dictionary<string, string> imageSignatures = new()
@@ -439,9 +477,12 @@
             ["Qk0"] = "image/bmp"
         };
 
+    private bool ModalIsOpened = false;
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
+
         SelectedBook = AppStateService.CurrentBookModel;
 
         if (SelectedBook == null)
@@ -476,22 +517,53 @@
                 FilePath = SelectedBook.FilePath,
                 FileSizeInBytes = SelectedBook.FileSizeInBytes
             };
+
+        modalRef.ShowBackdrop = true;
+
+        //actionsToRunAfterModalRender.Add(async () => await ScrollToSelectedImage());
     }
 
     public void OnImageClick(BookImageViewModel selectedImage)
     {
         this.SelectedBookImage = selectedImage;
-        modalRef.Open();
+        modalRef?.Open();
     }
 
-    public void OnModalPreviewImageClick(BookImageViewModel selectedImage)
+    public async Task OnModalPreviewImageClick(BookImageViewModel selectedImage)
     {
         this.SelectedBookImage = selectedImage;
+        await JsRuntime.InvokeVoidAsync("scrollElementIntoView", this.SelectedBookImage.Element);
     }
 
-    public void CloseImageModal()
+    public async Task SelectPreviosImage()
     {
-        modalRef.Close();
+        if (SelectedBookImage == null || BookImages == null || BookImages.Count == 0)
+            return;
+
+        var selectedIndex = BookImages.IndexOf(SelectedBookImage);
+        if (selectedIndex > 0)
+        {
+            this.SelectedBookImage = BookImages[selectedIndex - 1];
+            await JsRuntime.InvokeVoidAsync("scrollElementIntoView", this.SelectedBookImage.Element);
+        }
+    }
+
+    public async Task SelectNextImage()
+    {
+        if (SelectedBookImage == null || BookImages == null || BookImages.Count == 0)
+            return;
+
+        var selectedIndex = BookImages.IndexOf(SelectedBookImage);
+        if (selectedIndex < BookImages.Count - 1)
+        {
+            this.SelectedBookImage = BookImages[selectedIndex + 1];
+            await JsRuntime.InvokeVoidAsync("scrollElementIntoView", this.SelectedBookImage.Element);
+        }
+    }
+
+    public async Task CloseImageModal()
+    {
+        await modalRef.Close();
     }
 
     public void ReadBook()
@@ -534,6 +606,30 @@
         if (!safeFileResult.IsSuccessful)
             await Toast.Make($"The file was not saved successfully with error: {safeFileResult.Exception.Message}").Show(token);
     }
+
+    //private async Task OnModalRendered(bool isFirstRender)
+    //{
+    //    foreach (var action in actionsToRunAfterModalRender)
+    //    {
+    //        await action();
+    //    }
+
+    //    if (actionsToRunAfterModalRender.Count > 0)
+    //        actionsToRunAfterModalRender.Clear();
+
+    //    if (this.SelectedBookImage != null && this.SelectedBookImage.Element == null)
+    //    {
+    //        actionsToRunAfterModalRender.Add(async () => await ScrollToSelectedImage());
+    //    }
+    //}
+
+    //private async Task ScrollToSelectedImage()
+    //{
+    //    if (this.SelectedBookImage != null && this.SelectedBookImage.Element != null)
+    //    {
+    //        await JsRuntime.InvokeVoidAsync("scrollElementIntoView", this.SelectedBookImage.Element);
+    //    }
+    //}
 
     private string TryGetContentTypeFromBase64Content(string base64Content)
     {

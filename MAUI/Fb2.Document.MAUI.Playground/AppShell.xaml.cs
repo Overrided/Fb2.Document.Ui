@@ -9,6 +9,7 @@ namespace Fb2.Document.MAUI.Playground
             InitializeComponent();
 
             Routing.RegisterRoute("Read", typeof(ReadPage));
+            Routing.RegisterRoute("BookInfo", typeof(BookInfoPage));
         }
     }
 }

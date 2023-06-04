@@ -29,26 +29,19 @@
 								MaximumWidthRequest="250"
 								MaximumHeightRequest="300"
 								MinimumWidthRequest="180"
-								MinimumHeightRequest="200">
-							<!--<Border.Behaviors>-->
-							<!--<local:NumericValidationBehavior />-->
-							<!--<toolkit:EventToCommandBehavior EventName="Focused">
-
-								</toolkit:EventToCommandBehavior>-->
-							<!--</Border.Behaviors>-->
-							<!--<Border.Triggers>
-								<Trigger TargetType="Border"
-										 Property="Border.IsFocused"
-										 Value="True">
-									<Trigger.EnterActions>
-										<local:FadeTriggerAction StartsFrom="0" />
-									</Trigger.EnterActions>
-
-									<Trigger.ExitActions>
-										<local:FadeTriggerAction StartsFrom="1" />
-									</Trigger.ExitActions>
-								</Trigger>
-							</Border.Triggers>-->
+								MinimumHeightRequest="200"
+								IsEnabled="True"
+								IsVisible="True"
+								BackgroundColor="Transparent">
+							<FlyoutBase.ContextFlyout>
+								<MenuFlyout>
+									<MenuFlyoutItem Text="Book Info"
+													Clicked="MenuFlyoutItem_Clicked" />
+									<!--<MenuFlyoutItem Text="Go to engineering repo"
+													Clicked="OnWebViewGoToRepoClicked"
+													CommandParameter="eng" />-->
+								</MenuFlyout>
+							</FlyoutBase.ContextFlyout>
 							<Grid>
 								<Grid.RowDefinitions>
 									<RowDefinition Height="*" />

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 x:Class="Fb2.Document.MAUI.Playground.Pages.BookInfoPage"
+			 xmlns:localConverters="clr-namespace:Fb2.Document.MAUI.Playground.Converters"
+			 xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+			 xmlns:controls="clr-namespace:Fb2.Document.MAUI.Playground.Controls"
+			 Title="BookInfoPage">
+	<ContentPage.Resources>
+		<localConverters:Base64StringToImageConverter x:Key="SToImage"
+													  x:Name="SToImage" />
+
+		<localConverters:ValueToIsVisibleConverter x:Key="VtIV"
+												   x:Name="VtIV" />
+
+		<toolkit:InvertedBoolConverter x:Key="InvBoolConv"
+									   x:Name="InvBoolConv" />
+	</ContentPage.Resources>
+
+	<ContentPage.BindingContext>
+		<Binding Source="{RelativeSource Mode=Self}" />
+	</ContentPage.BindingContext>
+
+	<!--<VerticalStackLayout>
+		<Label Text="Welcome to .NET MAUI!"
+			   VerticalOptions="Center"
+			   HorizontalOptions="Center" />
+	</VerticalStackLayout>-->
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<Border Grid.Column="0"
+				VerticalOptions="FillAndExpand"
+				HorizontalOptions="FillAndExpand"
+				BackgroundColor="Red"
+				Padding="16">
+			<Image Source="{Binding BookInfoViewModel.CoverpageBase64Image, Converter={StaticResource SToImage}}"
+				   Aspect="AspectFit"
+				   VerticalOptions="FillAndExpand"
+				   HorizontalOptions="FillAndExpand"
+				   IsVisible="{Binding BookInfoViewModel.CoverpageBase64Image, Converter={StaticResource VtIV}}" />
+		</Border>
+
+		<!--<VerticalStackLayout Grid.Column="1"
+							 VerticalOptions="FillAndExpand"
+							 HorizontalOptions="FillAndExpand"
+							 BackgroundColor="Green">-->
+
+		<ScrollView VerticalScrollBarVisibility="Always"
+					Grid.Column="1"
+					Orientation="Vertical"
+					VerticalOptions="Fill"
+					HorizontalOptions="Fill">
+
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<WebView x:Name="TitleWebView"
+						 Grid.Row="0"
+						 VerticalOptions="FillAndExpand"
+						 HorizontalOptions="FillAndExpand"
+						 Source="{Binding BookInfoViewModel.TitleInfo}">
+				</WebView>
+
+				<toolkit:Expander Grid.Row="1">
+					<toolkit:Expander.Header>
+						<HorizontalStackLayout>
+							<Path Aspect="Uniform"
+								  Stroke="Yellow"
+								  Fill="Red"
+								  HorizontalOptions="Start"
+								  HeightRequest="20"
+								  WidthRequest="20"
+								  Margin="10, 0"
+								  Data="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+								  IsVisible="{Binding IsExpanded, Source={RelativeSource AncestorType={x:Type toolkit:Expander}}}">
+							</Path>
+
+							<Path Aspect="Uniform"
+								  Stroke="Red"
+								  Fill="Yellow"
+								  BackgroundColor="Transparent"
+								  HorizontalOptions="Start"
+								  HeightRequest="20"
+								  WidthRequest="20"
+								  Margin="10, 0"
+								  Data="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"
+								  IsVisible="{Binding IsExpanded, Converter={StaticResource InvBoolConv}, Source={RelativeSource AncestorType={x:Type toolkit:Expander}}}">
+							</Path>
+
+							<Label Text="Baboon"
+								   FontAttributes="Bold"
+								   FontSize="Medium" />
+						</HorizontalStackLayout>
+					</toolkit:Expander.Header>
+
+					<VerticalStackLayout>
+						<Label Text="Baboons are African and Arabian Old World monkeys belonging to the genus Papio, part of the subfamily Cercopithecinae."
+							   FontAttributes="Italic" />
+					</VerticalStackLayout>
+				</toolkit:Expander>
+
+			</Grid>
+
+		</ScrollView>
+		<!--</VerticalStackLayout>-->
+	</Grid>
+</ContentPage>

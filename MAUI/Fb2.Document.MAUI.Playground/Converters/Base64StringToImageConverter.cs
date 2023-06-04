@@ -6,6 +6,9 @@ public class Base64StringToImageConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
+        if (value == null)
+            return null;
+
         var base64ImageContent = value.ToString();
 
         byte[] bytes = System.Convert.FromBase64String(base64ImageContent);

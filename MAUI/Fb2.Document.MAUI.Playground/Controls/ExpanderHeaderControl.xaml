@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+			 x:Class="Fb2.Document.MAUI.Playground.Controls.ExpanderHeaderControl">
+
+	<!--<ContentView.BindingContext>
+		<Binding Source="{RelativeSource Mode=Self}" />
+	</ContentView.BindingContext>-->
+
+	<ContentView.ControlTemplate>
+		<ControlTemplate>
+			<HorizontalStackLayout>
+				<Path Aspect="Uniform"
+					  Stroke="Yellow"
+					  Fill="Red"
+					  HorizontalOptions="Start"
+					  HeightRequest="20"
+					  WidthRequest="20"
+					  Margin="10, 0"
+					  Data="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+					  IsVisible="{Binding IsExpanded, Source={RelativeSource AncestorType={x:Type toolkit:Expander}, Mode=FindAncestor, AncestorLevel=1}}">
+				</Path>
+
+				<Path Aspect="Uniform"
+					  Stroke="Red"
+					  Fill="Yellow"
+					  BackgroundColor="Transparent"
+					  HorizontalOptions="Start"
+					  HeightRequest="20"
+					  WidthRequest="20"
+					  Margin="10, 0"
+					  Data="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"
+					  IsVisible="{Binding IsExpanded, Converter={StaticResource InvBoolConv}, Source={RelativeSource AncestorType={x:Type toolkit:Expander}, Mode=FindAncestor, AncestorLevel=1}}">
+				</Path>
+
+				<ContentPresenter Content="{TemplateBinding HeaderContent}" />
+
+			</HorizontalStackLayout>
+		</ControlTemplate>
+	</ContentView.ControlTemplate>
+
+</ContentView>
