@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WPF", "WPF", "{C4AE229C-712
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fb2.Document.WPF.Playground", "WPF\Fb2.Document.WPF.Playground\Fb2.Document.WPF.Playground.csproj", "{C03FB592-EA94-4865-B60D-53DA878B89EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fb2.Document.WPF", "WPF\Fb2.Document.WPF\Fb2.Document.WPF.csproj", "{A508CF9E-0A0A-49AC-BA24-92B3F3C28034}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fb2.Document.WPF", "WPF\Fb2.Document.WPF\Fb2.Document.WPF.csproj", "{A508CF9E-0A0A-49AC-BA24-92B3F3C28034}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
