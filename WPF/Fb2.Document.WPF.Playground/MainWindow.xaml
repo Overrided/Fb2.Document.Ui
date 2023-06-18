@@ -62,8 +62,7 @@
 					</Menu>
 				</StackPanel>
 
-				<Border BorderBrush="Green"
-						Padding="0"
+				<Border Padding="0"
 						BorderThickness="1">
 					<ContentPresenter />
 				</Border>

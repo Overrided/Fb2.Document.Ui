@@ -16,54 +16,6 @@
 
 		<FlowDocumentReader ViewingMode="Scroll">
 			<FlowDocument x:Name="doc">
-				<!--<Table>
-					<Table.Columns>
-						<TableColumn Width="Auto" />
-						<TableColumn Width="Auto" />
-						<TableColumn Width="Auto" />
-					</Table.Columns>
-					<TableRowGroup>
-						<TableRow>
-							<TableCell BorderBrush="Red"
-									   BorderThickness="1">
-								<Paragraph>1</Paragraph>
-							</TableCell>
-							<TableCell BorderBrush="Red"
-									   BorderThickness="1">
-								<Paragraph>2</Paragraph>
-							</TableCell>
-							<TableCell BorderBrush="Red"
-									   BorderThickness="1">
-								<Paragraph>3</Paragraph>
-							</TableCell>
-						</TableRow>
-					</TableRowGroup>
-				</Table>-->
-				<!--<Paragraph>
-					<Span>span text</Span>
-					<Span BaselineAlignment="Superscript">super
-						<Span BaselineAlignment="Superscript">inner</Span> text
-					</Span>
-					<Span>span text</Span>
-					<Span BaselineAlignment="Subscript">subscript text</Span>
-				</Paragraph>-->
-				<!--<Paragraph>
-					<Span>
-						span text
-						<Hyperlink>
-							hyperlink
-							<InlineUIContainer>
-								<Grid Height="20"
-									  Width="20"
-									  Background="Red">
-									<Image Width="200"
-										   Height="200" />
-								</Grid>
-							</InlineUIContainer>
-						</Hyperlink>
-
-					</Span>
-				</Paragraph>-->
 			</FlowDocument>
 		</FlowDocumentReader>
 

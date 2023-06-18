@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Fb2.Document.Constants;
 using Fb2.Document.Models.Base;
-using Fb2.Document.WPF.Common;
 using Fb2.Document.WPF.Playground.Models;
 using Fb2.Document.WPF.Playground.ViewModels;
 
@@ -54,22 +43,6 @@ public partial class BookInfoPage : Page
 
     private void BookInfoPage_Loaded(object sender, RoutedEventArgs e)
     {
-        //CoverpageBase64Image = BookModel!.CoverPageBase64Image;
-
-        //var bookTitle = BookModel.Fb2Document?.Title;
-        //if (bookTitle != null)
-        //{
-        //    //var mappedTitle = Fb2Mapper.Instance.MapNode(bookTitle);
-        //    //var allTextElements = mappedTitle
-        //    //    .SelectMany(c => c)
-        //    //    .Where(c => c != null)
-        //    //    .ToList();
-
-        //    //var blockTextElements = Utils.Instance.Paragraphize(allTextElements);
-
-        //    //TitleDoc.Blocks.AddRange(blockTextElements);
-        //}
-
         var fb2Document = BookModel!.Fb2Document;
 
         BookInfoViewModel.TitleInfo = GetFb2NodeOrDefault(fb2Document?.Title);
@@ -119,5 +92,17 @@ public partial class BookInfoPage : Page
             return null;
 
         return instance;
+    }
+
+    private void ReadButton_Click(object sender, RoutedEventArgs e)
+    {
+        e.Handled = true;
+
+        if (BookModel == null)
+            return; // to hell with ya
+
+        Debug.WriteLine($"{BookModel.BookName}  --  {BookModel.FilePath}");
+
+        NavigationService.Navigate(new ReadPage(BookModel));
     }
 }

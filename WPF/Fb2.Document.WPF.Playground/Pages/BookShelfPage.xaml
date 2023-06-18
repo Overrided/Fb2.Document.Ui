@@ -119,12 +119,6 @@
 								</Storyboard>
 							</BeginStoryboard>
 						</EventTrigger>
-						<!--<Trigger Property="IsMouseOver"
-								 Value="True">
-							<Setter TargetName="BookOvelayContainer"
-									Property="Visibility"
-									Value="Visible" />
-						</Trigger>-->
 					</Grid.Triggers>
 
 				</Grid>
@@ -204,7 +198,6 @@
 						  ItemContainerStyle="{StaticResource BookTemplateContainerStyle}"
 						  ScrollViewer.CanContentScroll="True"
 						  ScrollViewer.HorizontalScrollBarVisibility="Hidden">
-				<!--PreviewMouseLeftButtonUp="OnBookClick"-->
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
 						<WrapPanel IsItemsHost="True" />
