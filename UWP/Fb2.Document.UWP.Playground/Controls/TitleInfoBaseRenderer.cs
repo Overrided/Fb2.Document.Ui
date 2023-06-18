@@ -201,11 +201,11 @@ namespace Fb2.Document.UWP.Playground.Controls
 
             var authors = titleInfo.GetDescendants<Author>().Where(a =>
             {
-                var result = a != null && !a.IsEmpty &&
-                    ((a.TryGetFirstDescendant(ElementNames.FirstName, out var fName) && !fName.IsEmpty) ||
-                     (a.TryGetFirstDescendant(ElementNames.MiddleName, out var mName) && !mName.IsEmpty) ||
-                     (a.TryGetFirstDescendant(ElementNames.LastName, out var lName) && !lName.IsEmpty) ||
-                     (a.TryGetFirstDescendant(ElementNames.NickName, out var nName) && !nName.IsEmpty));
+                var result = a != null && a.HasContent &&
+                    ((a.TryGetFirstDescendant(ElementNames.FirstName, out var fName) && fName.HasContent) ||
+                     (a.TryGetFirstDescendant(ElementNames.MiddleName, out var mName) && mName.HasContent) ||
+                     (a.TryGetFirstDescendant(ElementNames.LastName, out var lName) && lName.HasContent) ||
+                     (a.TryGetFirstDescendant(ElementNames.NickName, out var nName) && nName.HasContent));
                 return result;
             });
             var titleInfoBookName = titleInfo.GetFirstDescendant<BookTitle>();
@@ -213,7 +213,8 @@ namespace Fb2.Document.UWP.Playground.Controls
             var annotation = titleInfo.GetFirstDescendant<Annotation>();
             //var sequences = titleInfo.GetDescendants<SequenceInfo>().Where(s => s != null && !s.IsEmpty && s.HasAttributes);
             var sequences = titleInfo.GetDescendants<SequenceInfo>().Where(s => s != null && s.Attributes.Count != 0);
-            var keywords = titleInfo.GetDescendants<Keywords>().Where(k => k != null && !k.IsEmpty);
+            var keywords = titleInfo.GetDescendants<Keywords>()
+                .Where(k => k != null && k.HasContent);
 
             var nodes = new List<Fb2Node>();
 
@@ -229,7 +230,7 @@ namespace Fb2.Document.UWP.Playground.Controls
             if (annotation != null)
                 nodes.Add(annotation);
 
-            nodes.AddRange(keywords.Where(k => k != null && !k.IsEmpty));
+            nodes.AddRange(keywords.Where(k => k != null && k.HasContent));
 
             var mappedNodes = Fb2Mapper.Instance.MapNodes(nodes);
 
@@ -244,7 +245,7 @@ namespace Fb2.Document.UWP.Playground.Controls
             var genres = titleInfo.GetDescendants<BookGenre>()
                 .Where(bg =>
                 {
-                    if (bg.IsEmpty)
+                    if (!bg.HasContent)
                         return false;
 
                     var genreText = bg.Content;

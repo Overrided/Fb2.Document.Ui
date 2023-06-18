@@ -15,12 +15,6 @@
     <Nullable>enable</Nullable>
     <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="Pages\BookInfoPage.xaml" />
-    <None Remove="Pages\BookshelfPage.xaml" />
-    <None Remove="Pages\SettingsPage.xaml" />
-    <None Remove="ReadPage.xaml" />
-  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />

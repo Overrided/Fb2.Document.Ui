@@ -78,11 +78,11 @@ namespace Fb2.Document.UWP.Playground.Controls
                     return false;
 
                 var authorNode = (Author)n;
-                var hasSomeName = !authorNode.IsEmpty &&
-                    ((authorNode.TryGetFirstDescendant(ElementNames.FirstName, out var fName) && !fName.IsEmpty) ||
-                    (authorNode.TryGetFirstDescendant(ElementNames.MiddleName, out var mName) && !mName.IsEmpty) ||
-                    (authorNode.TryGetFirstDescendant(ElementNames.LastName, out var lName) && !lName.IsEmpty) ||
-                    (authorNode.TryGetFirstDescendant(ElementNames.NickName, out var nName) && !nName.IsEmpty));
+                var hasSomeName = authorNode.HasContent &&
+                    ((authorNode.TryGetFirstDescendant(ElementNames.FirstName, out var fName) && fName.HasContent) ||
+                    (authorNode.TryGetFirstDescendant(ElementNames.MiddleName, out var mName) && mName.HasContent) ||
+                    (authorNode.TryGetFirstDescendant(ElementNames.LastName, out var lName) && lName.HasContent) ||
+                    (authorNode.TryGetFirstDescendant(ElementNames.NickName, out var nName) && nName.HasContent));
 
                 return !hasSomeName;
             });

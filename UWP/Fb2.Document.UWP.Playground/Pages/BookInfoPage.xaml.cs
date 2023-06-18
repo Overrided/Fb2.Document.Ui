@@ -286,7 +286,7 @@ namespace Fb2.Document.UWP.Playground.Pages
             if (instance == null)
                 return null;
 
-            if (instance.IsEmpty && (instance.Attributes.IsEmpty || instance.Attributes.Count == 0))
+            if (!instance.HasContent && !instance.HasAttributes)
                 return null;
 
             return instance;
