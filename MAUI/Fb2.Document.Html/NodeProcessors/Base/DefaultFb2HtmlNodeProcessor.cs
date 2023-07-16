@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net;
 using System.Text;
-using Fb2.Document.Constants;
 using Fb2.Document.Html.Entities;
 using Fb2.Document.Models;
 using Fb2.Document.Models.Base;

@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Fb2.Document.Models.Base;
-using Fb2.Document.Models;
 using Fb2.Document.Html.Entities;
-using System.Drawing;
-using System.Xml.Linq;
+using Fb2.Document.Models;
+using Fb2.Document.Models.Base;
 
 namespace Fb2.Document.Html;
 

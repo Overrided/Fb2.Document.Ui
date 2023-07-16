@@ -1,0 +1,72 @@
+﻿.infoCol {
+    overflow-y: auto;
+}
+
+.btn[aria-expanded=false] .infoExpanded {
+    display: none;
+}
+
+.btn[aria-expanded=true] .infoCollapsed {
+    display: none;
+}
+
+.btn:focus {
+    outline: none !important;
+}
+
+    .btn:focus:not(:focus-visible) {
+        outline: 0;
+        box-shadow: none;
+    }
+
+.readBookBtn {
+    border-radius: 90px;
+    height: 60px;
+    width: 60px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.bookImagePreviewContainer {
+    position: relative;
+}
+
+.bookImagePreview {
+    object-fit: contain;
+    height: 190px;
+    width: 190px;
+}
+
+.bookImagePreviewContainer:hover .hoverOverlay {
+    display: inline-block;
+}
+
+.hoverOverlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+    transition: .75s ease;
+    background-image: radial-gradient(white 15%, black 15%, black 18%, #ffffff44 100%);
+}
+
+.bookModalImagePreview {
+    object-fit: contain;
+    max-width: 190px;
+    width: auto;
+}
+
+.modalContentWidth {
+    width: 50vw;
+}
+
+.enlargeImageBtn {
+    border-radius: 90px;
+    height: 70px;
+    width: 70px;
+    margin-top: 70px;
+}
