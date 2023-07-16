@@ -183,9 +183,9 @@ namespace Fb2.Document.UWP.Playground.Controls
                 nameof(TitleInfo),
                 typeof(TitleInfoBase),
                 typeof(TitleInfoBaseRenderer),
-                new PropertyMetadata(null, new PropertyChangedCallback(OnTitleInfoProperyChangedCallback)));
+                new PropertyMetadata(null, new PropertyChangedCallback(OnTitleInfoPropertyChangedCallback)));
 
-        private static void OnTitleInfoProperyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnTitleInfoPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var sender = d as TitleInfoBaseRenderer;
             if (sender == null)

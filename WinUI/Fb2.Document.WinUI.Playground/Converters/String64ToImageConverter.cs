@@ -4,7 +4,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.Storage.Streams;
-using DataConvert = System.Convert; // fucking method name collision lol
+using DataConvert = System.Convert; // method name collision
 
 namespace Fb2.Document.WinUI.Playground.Converters;
 

@@ -139,7 +139,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
             // we have 12 images, with same distances, so distinct instance.count wil be 1.
             // so if we have only 1 image at all it will still work
             if (distinctDistances.Count() == 1 && linkedBinaries.Count() != 1)
-                return null; // we are fucked up - all referenes are equally good or bad at same time
+                return null; // we are fucked up - all references are equally good or bad at same time
 
             var bestMatch = imageDistances
                 .OrderBy(t => t.Distance)

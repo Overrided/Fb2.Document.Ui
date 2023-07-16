@@ -7,16 +7,18 @@
 
 @inherits BookInfoRendererBase
 
-@*<h1>Counter</h1>
-
-<p>Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
-*@
-
-@*<div class="card-body">*@
 @renderedResult
-@*</div>*@
+
+@if (BookGenres.Count > 0)
+{
+    <div class="row flex-row flex-nowrap py-1"
+         style="overflow-x:auto">
+        @foreach (var genre in BookGenres)
+        {
+            <span class="w-auto border-info">@genre.Title</span>
+        }
+    </div>
+}
 
 @code {
 
@@ -146,6 +148,8 @@
     [Parameter]
     public TitleInfoBase? TitleInfo { get; set; } = null;
 
+    public List<BookGenreViewModel> BookGenres { get; set; } = new();
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -185,5 +189,23 @@
         nodes.AddRange(keywords.Where(k => k != null && k.HasContent));
 
         renderedResult = MapFb2Nodes(nodes);
+
+        var validGenreSet = validGenres.Value;
+
+        var genres = TitleInfo.GetDescendants<BookGenre>()
+            .Where(bg =>
+            {
+                if (!bg.HasContent)
+                    return false;
+
+                var genreText = bg.Content;
+                var isValidGenre = validGenreSet.ContainsKey(genreText);
+                return isValidGenre;
+            })
+            .Select(g => new BookGenreViewModel(g, validGenreSet[g.Content]));
+        foreach (var genre in genres)
+        {
+            BookGenres.Add(genre);
+        }
     }
 }

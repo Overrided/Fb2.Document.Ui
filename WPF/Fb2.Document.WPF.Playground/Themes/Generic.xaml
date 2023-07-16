@@ -7,20 +7,86 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type controls:TitleRendererControl}">
-					<!--<Border Background="{TemplateBinding Background}"
-							BorderBrush="{TemplateBinding BorderBrush}"
-							BorderThickness="{TemplateBinding BorderThickness}">-->
 
-					<FlowDocumentScrollViewer VerticalAlignment="Stretch"
-											  VerticalContentAlignment="Stretch"
-											  VerticalScrollBarVisibility="Disabled"
-											  HorizontalScrollBarVisibility="Disabled"
-											  IsHitTestVisible="False"
-											  x:Name="TitleViewer">
-						<FlowDocument x:Name="TitleDoc">
-						</FlowDocument>
-					</FlowDocumentScrollViewer>
-					<!--</Border>-->
+					<Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+						  Background="{TemplateBinding Background}">
+
+						<Grid.RowDefinitions>
+							<RowDefinition Height="*" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+
+						<FlowDocumentScrollViewer VerticalAlignment="Stretch"
+												  VerticalContentAlignment="Stretch"
+												  VerticalScrollBarVisibility="Disabled"
+												  HorizontalScrollBarVisibility="Disabled"
+												  IsHitTestVisible="False"
+												  x:Name="TitleViewer">
+							<FlowDocument x:Name="TitleDoc">
+							</FlowDocument>
+						</FlowDocumentScrollViewer>
+
+						<StackPanel Grid.Row="1"
+									Margin="0,12,0,0"
+									Orientation="Vertical"
+									x:Name="GenresPanel">
+
+							<TextBlock FontSize="18"
+									   FontWeight="SemiBold"
+									   Text="Genres"
+									   HorizontalAlignment="Left"
+									   TextAlignment="Center" />
+
+							<ListView ItemsSource="{Binding BookGenres, Mode=OneWay}"
+									  HorizontalAlignment="Stretch"
+									  HorizontalContentAlignment="Stretch"
+									  VerticalAlignment="Stretch"
+									  VerticalContentAlignment="Stretch"
+									  SelectionMode="Single"
+									  Padding="10"
+									  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+									  ScrollViewer.VerticalScrollBarVisibility="Hidden">
+								<ListView.ItemsPanel>
+									<ItemsPanelTemplate>
+										<StackPanel Orientation="Horizontal" />
+									</ItemsPanelTemplate>
+								</ListView.ItemsPanel>
+								<ListView.ItemContainerStyle>
+									<Style TargetType="ListViewItem">
+										<Setter Property="Margin"
+												Value="0" />
+										<Setter Property="Padding"
+												Value="0" />
+										<Setter Property="HorizontalAlignment"
+												Value="Stretch" />
+										<Setter Property="VerticalAlignment"
+												Value="Stretch" />
+										<Setter Property="VerticalContentAlignment"
+												Value="Stretch" />
+										<Setter Property="HorizontalContentAlignment"
+												Value="Stretch" />
+									</Style>
+								</ListView.ItemContainerStyle>
+								<ListView.ItemTemplate>
+									<DataTemplate>
+										<Border CornerRadius="0"
+												Padding="8,6,8,6"
+												Margin="0,2,6,6"
+												VerticalAlignment="Stretch"
+												HorizontalAlignment="Stretch">
+											<TextBlock HorizontalAlignment="Stretch"
+													   VerticalAlignment="Center"
+													   TextAlignment="Center"
+													   Text="{Binding Title}">
+											</TextBlock>
+										</Border>
+									</DataTemplate>
+								</ListView.ItemTemplate>
+							</ListView>
+
+						</StackPanel>
+
+					</Grid>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
@@ -30,10 +96,6 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type controls:PublishInfoRendererControl}">
-					<!--<Border Background="{TemplateBinding Background}"
-							BorderBrush="{TemplateBinding BorderBrush}"
-							BorderThickness="{TemplateBinding BorderThickness}">
-					</Border>-->
 					<FlowDocumentScrollViewer VerticalAlignment="Stretch"
 											  VerticalContentAlignment="Stretch"
 											  VerticalScrollBarVisibility="Disabled"
@@ -51,10 +113,6 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type controls:DocumentInfoRendererControl}">
-					<!--<Border Background="{TemplateBinding Background}"
-							BorderBrush="{TemplateBinding BorderBrush}"
-							BorderThickness="{TemplateBinding BorderThickness}">
-					</Border>-->
 					<FlowDocumentScrollViewer VerticalAlignment="Stretch"
 											  VerticalContentAlignment="Stretch"
 											  VerticalScrollBarVisibility="Disabled"
