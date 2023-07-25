@@ -27,7 +27,6 @@ namespace Fb2.Document.MAUI.Blazor.Playground
 #endif
 
             builder.Services
-                .AddSingleton<WeatherForecastService>()
                 .AddSingleton<AppStateService>();
 
             return builder.Build();

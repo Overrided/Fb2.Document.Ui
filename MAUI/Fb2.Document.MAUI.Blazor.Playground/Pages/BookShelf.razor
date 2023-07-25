@@ -23,7 +23,7 @@
     {
         @foreach (var book in allBooks)
         {
-            <div class="book float-start m-2 px-3 pt-2" @onclick="(e) => OnBookClick(book, e)">
+            <div class="book float-start m-2 p-2" @onclick="(e) => OnBookClick(book, e)">
                 <div class="coverpageContainer">
                     <img class="bookCoverpage" src="@book.CoverpageBase64Image" />
                     <div class="hoverOverlay">
@@ -58,9 +58,7 @@
     {
         base.OnInitialized();
         if (AppStateService.AllBooks.Any())
-        {
             allBooks = AppStateService.AllBooks.ToList();
-        }
     }
 
     private async Task AddBooks()
