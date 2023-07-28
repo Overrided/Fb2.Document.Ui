@@ -36,6 +36,10 @@ public class ElementStyler
                 return string.Empty;
 
             return "style=\"margin:auto;display:block;max-width:100%\"";
+        }},
+        { ElementNames.Table, (context, htmlTag) =>
+        {
+            return "class=\"table table-bordered\"";
         }}
     };
 

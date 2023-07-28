@@ -37,9 +37,6 @@
     public bool ShowBackdrop = false;
     public bool IsOpen { get; private set; }
 
-    //[Parameter]
-    //public EventCallback<bool> OnAfterRender { get; set; }
-
     [Parameter]
     public EventCallback<bool> ModalOpenCloseChanged { get; set; }
 
@@ -74,10 +71,4 @@
         StateHasChanged();
         await ModalOpenCloseChanged.InvokeAsync(false);
     }
-
-    //protected override async Task OnAfterRenderAsync(bool firstRender)
-    //{
-    //    await base.OnAfterRenderAsync(firstRender);
-    //    await OnAfterRender.InvokeAsync(firstRender);
-    //}
 }

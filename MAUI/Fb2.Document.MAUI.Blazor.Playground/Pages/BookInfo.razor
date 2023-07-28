@@ -69,14 +69,14 @@
                 <ModalWindow @ref="modalRef"
                              ContentClass="modalContentWidth">
                     @*OnAfterRender="@(async o => await OnModalRendered(o))"*@
-                    @*ModalOpenCloseChanged="@(o => ModalOpenCloseChanged(o))"*@
+
                     <Content>
                         @if (SelectedBookImage != null)
                         {
                             <div style="height: 91.5vh" class="row">
                                 <div class="row flex-row flex-nowrap p-2 m-0 @(BookImages.Count > 1 ? "h-75" : "h-100")">
 
-                                    <div class="col-auto d-flex flex-column p-0">
+                                    <div class="col-1 d-flex flex-column p-0">
                                         @if (BookImages != null && BookImages.Count > 1)
                                         {
                                             <button type="button"
@@ -89,13 +89,13 @@
                                         }
                                     </div>
 
-                                    <div class="col d-flex flex-column">
+                                    <div class="col-10 d-flex flex-column">
                                         <img class="align-self-center d-block mw-100 mh-100 m-auto w-auto"
                                              src="@SelectedBookImage.ImageSource"
                                              title="@SelectedBookImage.ImageId" />
                                     </div>
 
-                                    <div class="col-auto d-flex flex-column p-0">
+                                    <div class="col-1 d-flex flex-column p-0">
                                         <button type="button"
                                                 class="btn btn-close align-self-center"
                                         @onclick="CloseImageModal">
@@ -444,8 +444,6 @@
             };
 
         modalRef.ShowBackdrop = true;
-
-        //actionsToRunAfterModalRender.Add(async () => await ScrollToSelectedImage());
     }
 
     public void OnImageClick(BookImageViewModel selectedImage)
@@ -531,30 +529,6 @@
         if (!safeFileResult.IsSuccessful)
             await Toast.Make($"The file was not saved successfully with error: {safeFileResult.Exception.Message}").Show(token);
     }
-
-    //private async Task OnModalRendered(bool isFirstRender)
-    //{
-    //    foreach (var action in actionsToRunAfterModalRender)
-    //    {
-    //        await action();
-    //    }
-
-    //    if (actionsToRunAfterModalRender.Count > 0)
-    //        actionsToRunAfterModalRender.Clear();
-
-    //    if (this.SelectedBookImage != null && this.SelectedBookImage.Element == null)
-    //    {
-    //        actionsToRunAfterModalRender.Add(async () => await ScrollToSelectedImage());
-    //    }
-    //}
-
-    //private async Task ScrollToSelectedImage()
-    //{
-    //    if (this.SelectedBookImage != null && this.SelectedBookImage.Element != null)
-    //    {
-    //        await JsRuntime.InvokeVoidAsync("scrollElementIntoView", this.SelectedBookImage.Element);
-    //    }
-    //}
 
     private string TryGetContentTypeFromBase64Content(string base64Content)
     {
