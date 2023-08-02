@@ -16,7 +16,9 @@
          style="overflow-x:auto">
         @foreach (var genre in BookGenres)
         {
-            <span class="w-auto border-info">@genre.Title</span>
+            <div class="w-auto border mx-1 px-2">
+                <span>@genre.Title</span>
+            </div>
         }
     </div>
 }

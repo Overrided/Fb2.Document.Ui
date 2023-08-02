@@ -1,7 +1,7 @@
 ﻿@if (Content != null)
 {
-    <div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content @ContentClass">
                 @if (Header != null)
                 {
@@ -64,7 +64,7 @@
 
     public async Task Close()
     {
-        ModalDisplay = "none";
+        ModalDisplay = "none;";
         ModalClass = "";
         ShowBackdrop = false;
         IsOpen = false;
