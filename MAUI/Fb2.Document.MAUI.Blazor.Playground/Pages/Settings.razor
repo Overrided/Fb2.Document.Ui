@@ -1,7 +1,51 @@
-﻿@page "/settings"
+﻿@using Fb2.Document.MAUI.Blazor.Playground.Enums;
+@using Fb2.Document.MAUI.Blazor.Playground.Services;
+
+@inject AppStateService AppStateService
+@inject IJSRuntime JsRuntime
+
+@page "/settings"
 
 <h3 class="p-3">Settings</h3>
 
+<EditForm Model="selectedTheme"
+          class="ms-3">
+    <InputRadioGroup Value="@selectedTheme"
+                     ValueChanged="@((e) => OnSelectedApThemeChanged(e))"
+                     TValue="AppThemeEnum"
+                     ValueExpression="() => selectedTheme"
+                     Name="theme">
+        App Theme:
+        <br>
+        @foreach (var manufacturer in AvailableAppThemes)
+        {
+            <InputRadio Value="manufacturer"
+                        Name="theme"
+                        id="@manufacturer.ToString()"
+                        class="mx-2" />
+            <label for="@manufacturer.ToString()">@manufacturer</label>
+            <br>
+        }
+    </InputRadioGroup>
+</EditForm>
+
 @code {
 
+    HashSet<AppThemeEnum> AvailableAppThemes = new HashSet<AppThemeEnum> { AppThemeEnum.Light, AppThemeEnum.Dark };
+    AppThemeEnum selectedTheme = AppThemeEnum.Light;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        selectedTheme = AppStateService.AppTheme;
+    }
+
+    private async Task OnSelectedApThemeChanged(AppThemeEnum theme)
+    {
+        this.selectedTheme = theme;
+        StateHasChanged();
+        var method = theme == AppThemeEnum.Dark ? "setDarkTheme" : "setLightTheme";
+        await JsRuntime.InvokeVoidAsync(method);
+        AppStateService.AppTheme = this.selectedTheme;
+    }
 }

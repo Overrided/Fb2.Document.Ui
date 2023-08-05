@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Fb2.Document.MAUI.Blazor.Playground</title>
     <base href="/" />
-    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
-    <link href="css/app.css" rel="stylesheet" />
-    <link href="Fb2.Document.MAUI.Blazor.Playground.styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" id="theme" />
+    <!--<link rel="stylesheet" href="css/darkly/bootstrap.min.css" />-->
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="Fb2.Document.MAUI.Blazor.Playground.styles.css" />
 </head>
 
 <body class="appBody">
 
     <div class="status-bar-safe-area"></div>
 
-    <div id="app" class="h-100 w-100">
-        <div class="spinner-border mx-auto" role="status">
+    <div id="app" class="h-100 w-100 d-flex">
+        <div class="spinner-border mx-auto my-auto" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
@@ -32,6 +33,16 @@
 
     <script>
         scrollElementIntoView = (element) => element.scrollIntoView({ behavior: "smooth" });
+
+        setLightTheme = () => replaceCssHref("css/bootstrap/bootstrap.min.css");
+
+        setDarkTheme = () => replaceCssHref("css/darkly/bootstrap.min.css");
+
+        replaceCssHref = (cssHref) => {
+            var elem = document.getElementById("theme");
+            if (!!elem)
+                elem.href = cssHref;
+        }
     </script>
 
 </body>

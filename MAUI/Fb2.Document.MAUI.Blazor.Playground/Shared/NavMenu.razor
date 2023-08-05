@@ -1,20 +1,21 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
+﻿<div class="top-row navbar navbar-dark">
+    <div class="container-fluid flex-row flex-grow-1 justify-content-center">
         <a class="navbar-brand" href="">Fb2 Browser</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon" aria-hidden="true"></span>
         </button>
     </div>
+
 </div>
 
 <div class="@NavMenuCssClass d-flex flex-column flex-grow-1" @onclick="ToggleNavMenu">
     <nav class="d-flex flex-column flex-grow-1 justify-content-between">
-        <div class="nav-item px-3 mr-auto">
+        <div class="nav-item">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Bookshelf
             </NavLink>
         </div>
-        <div class="nav-item px-3">
+        <div class="nav-item">
             <NavLink class="nav-link" href="settings">
                 <span class="oi oi-cog" aria-hidden="true"></span> Settings
             </NavLink>

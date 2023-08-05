@@ -61,4 +61,8 @@
     <ProjectReference Include="..\Fb2.Document.Html\Fb2.Document.Html.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\css\darkly\" />
+  </ItemGroup>
+
 </Project>

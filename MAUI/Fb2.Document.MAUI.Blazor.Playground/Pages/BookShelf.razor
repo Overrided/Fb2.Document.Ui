@@ -23,7 +23,7 @@
     {
         @foreach (var book in allBooks)
         {
-            <div class="book float-start m-2 p-2" @onclick="(e) => OnBookClick(book, e)">
+            <div class="book bg-black bg-opacity-10 float-start m-2 p-2" @onclick="(e) => OnBookClick(book, e)">
                 <div class="coverpageContainer">
                     <img class="bookCoverpage" src="@book.CoverpageBase64Image" />
                     <div class="hoverOverlay">

@@ -102,3 +102,7 @@ a, .btn-link {
         padding-left: env(safe-area-inset-left);
     }
 }
+
+.h3, h3 {
+    font-size: calc(1.3rem + .6vw)
+}
