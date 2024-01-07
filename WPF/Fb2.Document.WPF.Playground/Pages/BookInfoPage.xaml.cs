@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Fb2.Document.Constants;
 using Fb2.Document.Models.Base;
+using Fb2.Document.WPF.Playground.Components.ImageViewModalDialog;
 using Fb2.Document.WPF.Playground.Models;
 using Fb2.Document.WPF.Playground.ViewModels;
 
@@ -104,5 +105,12 @@ public partial class BookInfoPage : Page
         Debug.WriteLine($"{BookModel.BookName}  --  {BookModel.FilePath}");
 
         NavigationService.Navigate(new ReadPage(BookModel));
+    }
+
+    private void ListViewImage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        Debug.WriteLine("Image list image selection changed event");
+
+        Window.GetWindow(new ImageViewModalDialog(this.BookInfoViewModel.BookImages)).ShowDialog();
     }
 }
