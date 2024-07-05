@@ -1,85 +1,96 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Fb2.Document.WinUI.Playground.Pages;
 using Fb2.Document.WinUI.Playground.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.UI.ApplicationSettings;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace Fb2.Document.WinUI.Playground
+namespace Fb2.Document.WinUI.Playground;
+
+/// <summary>
+/// An empty window that can be used on its own or navigated to within a Frame.
+/// </summary>
+public sealed partial class MainWindow : Window
 {
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
+        this.Activated += MainWindow_Activated;
+        this.InitializeComponent();
+    }
+
+    private void MainWindow_Activated(object sender, WindowActivatedEventArgs args)
+    {
+        if (!PopupInitializerService.Instance.IsServiceInitialized)
+            PopupInitializerService.Instance.Initialize(this);
+
+        if (!NavigationService.Instance.IsInitialized)
         {
-            this.Activated += MainWindow_Activated;
-            this.InitializeComponent();
+            NavView.BackRequested += NavView_BackRequested;
+            NavView.ItemInvoked += NavView_ItemInvoked;
+            NavigationService.Instance.Init(ContentFrame);
+            NavigationService.Instance.ContentFrameNavigated += OnContentFrameNavigated;
+            NavigationService.Instance.NavigateContentFrame(typeof(BookshelfPage));
         }
 
-        private void MainWindow_Activated(object sender, WindowActivatedEventArgs args)
+        if (!MainWindowsService.Instance.IsInitialized)
         {
-            if (!PopupInitializerService.Instance.IsServiceInitialized)
-                PopupInitializerService.Instance.Initialize(this);
+            MainWindowsService.Instance.Init(this, ContentFrame);
+        }
+    }
 
-            if (!NavigationService.Instance.IsInitialized)
-            {
-                NavView.BackRequested += NavView_BackRequested;
-                NavView.ItemInvoked += NavView_ItemInvoked;
-                NavigationService.Instance.Init(ContentFrame);
-                NavigationService.Instance.ContentFrameNavigated += OnContentFrameNavigated;
-                NavigationService.Instance.NavigateContentFrame(typeof(BookshelfPage));
-            }
+    private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+    {
+        if (args.InvokedItemContainer == null)
+            return;
 
-            if (!MainWindowsService.Instance.IsInitialized)
-            {
-                MainWindowsService.Instance.Init(this, ContentFrame);
-            }
+        if (args.IsSettingsInvoked)
+        {
+            if (ContentFrame.CurrentSourcePageType != typeof(SettingsPage))
+                NavigationService.Instance.NavigateContentFrame(typeof(SettingsPage), null, args.RecommendedNavigationTransitionInfo);
+
+            return;
         }
 
-        private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
-        {
-            if (args.InvokedItemContainer == null)
-                return;
+        var navItemTag = args.InvokedItemContainer.Tag.ToString();
 
-            if (args.IsSettingsInvoked)
-            {
-                if (ContentFrame.CurrentSourcePageType != typeof(SettingsPage))
-                    NavigationService.Instance.NavigateContentFrame(typeof(SettingsPage), null, args.RecommendedNavigationTransitionInfo);
+        Type pageType = null;
 
-                return;
-            }
+        if (navItemTag == "Bookshelf")
+            pageType = typeof(BookshelfPage);
+        else
+            throw new NotSupportedException($"Not supported page type : {pageType.FullName}");
 
-            var navItemTag = args.InvokedItemContainer.Tag.ToString();
+        if (ContentFrame.CurrentSourcePageType == pageType)
+            return;
 
-            Type pageType = null;
+        NavigationService.Instance.NavigateContentFrame(pageType, null, args.RecommendedNavigationTransitionInfo);
+    }
 
-            if (navItemTag == "Bookshelf")
-                pageType = typeof(BookshelfPage);
-            else
-                throw new NotSupportedException($"Not supported page type : {pageType.FullName}");
+    private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+    {
+        NavigationService.Instance.TryGoBack();
+    }
 
-            if (ContentFrame.CurrentSourcePageType == pageType)
-                return;
+    private void OnContentFrameNavigated(object? sender, bool e)
+    {
+        NavView.IsBackButtonVisible = e ? NavigationViewBackButtonVisible.Visible : NavigationViewBackButtonVisible.Collapsed;
+        NavView.IsBackEnabled = e;
 
-            NavigationService.Instance.NavigateContentFrame(pageType, null, args.RecommendedNavigationTransitionInfo);
-        }
-
-        private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
-        {
-            NavigationService.Instance.TryGoBack();
-        }
-
-        private void OnContentFrameNavigated(object? sender, bool e)
-        {
-            NavView.IsBackButtonVisible = e ? NavigationViewBackButtonVisible.Visible : NavigationViewBackButtonVisible.Collapsed;
-            NavView.IsBackEnabled = e;
-
-            if (ContentFrame.SourcePageType != typeof(SettingsPage))
-                BookshelfPageViewItem.IsSelected = true;
-        }
+        if (ContentFrame.SourcePageType != typeof(SettingsPage))
+            BookshelfPageViewItem.IsSelected = true;
     }
 }

@@ -37,12 +37,12 @@ namespace Fb2.Document.WinUI.Playground
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.Maximized;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
+
             this.InitializeComponent();
         }
 
         /// <summary>
-        /// Invoked when the application is launched normally by the end user.  Other entry points
-        /// will be used such as when the application is launched to open a specific file.
+        /// Invoked when the application is launched.
         /// </summary>
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)

@@ -2,14 +2,17 @@
 
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="6596bff8-dac4-4626-966d-ea3510fa8212"
+    Name="09bfaec7-4218-41c7-9ebd-d2cff1cb6396"
     Publisher="CN=den17"
     Version="1.0.0.0" />
+
+  <mp:PhoneIdentity PhoneProductId="09bfaec7-4218-41c7-9ebd-d2cff1cb6396" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Fb2.Document.WinUI.Playground</DisplayName>
@@ -44,8 +47,5 @@
 
   <Capabilities>
     <rescap:Capability Name="runFullTrust" />
-    <Capability Name="internetClient"/>
-    <Capability Name="internetClientServer"/>
-    <uap:Capability Name="removableStorage"/>
   </Capabilities>
 </Package>

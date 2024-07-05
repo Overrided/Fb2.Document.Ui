@@ -2,14 +2,10 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Assets\Square150x150Logo.scale-200.png" />
-  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\Square150x150Logo.scale-200.png">
@@ -18,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fb2.Document" Version="2.3.0" />
+    <PackageReference Include="Fb2.Document" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
