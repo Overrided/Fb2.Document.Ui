@@ -1,0 +1,22 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Fb2 Browser</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable d-flex flex-column flex-grow-1" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="d-flex flex-column flex-grow-1 justify-content-between">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-list-rich me-3" aria-hidden="true"></span> Bookshelf
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="settings">
+                <span class="oi oi-cog me-3" aria-hidden="true"></span> Settings
+            </NavLink>
+        </div>
+    </nav>
+</div>
