@@ -93,7 +93,8 @@
 						<Expander.Content>
 							<ListView ItemsSource="{Binding BookInfoViewModel.BookImages, Mode=OneWay}"
 									  Padding="6"
-									  SelectionChanged="ListViewImage_SelectionChanged">
+									  SelectionChanged="ListViewImage_SelectionChanged"
+									  SelectionMode="Single">
 								<ListView.ItemsPanel>
 									<ItemsPanelTemplate>
 										<StackPanel Orientation="Horizontal" />

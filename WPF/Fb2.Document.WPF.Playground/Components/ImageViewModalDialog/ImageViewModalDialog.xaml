@@ -20,17 +20,24 @@
 	</Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="2*" />
+			<RowDefinition Height="3*" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
 		<Image Grid.Row="0"
+			   Width="Auto"
+			   Height="Auto"
+			   HorizontalAlignment="Center"
+			   VerticalAlignment="Center"
 			   Source="{Binding SelectedImageProperty.Content, Converter={StaticResource String64ToImageConverter}}" />
 
 		<ListView Grid.Row="1"
+				  x:Name="BookImagesList"
 				  ItemsSource="{Binding ImagesProperty, Mode=OneWay}"
 				  Padding="0,5,0,5"
 				  SelectionChanged="ListViewImage_SelectionChanged"
+				  SelectedItem="{Binding SelectedImageProperty}"
+				  SelectionMode="Single"
 				  VerticalAlignment="Stretch"
 				  HorizontalAlignment="Stretch"
 				  VerticalContentAlignment="Center"
@@ -61,7 +68,7 @@
 							HorizontalAlignment="Stretch"
 							VerticalAlignment="Stretch"
 							ToolTip="{Binding Id}"
-							Height="230"
+							Height="210"
 							Width="200">
 						<Image Source="{Binding Content, Converter={StaticResource String64ToImageConverter}}"
 							   Stretch="Uniform"

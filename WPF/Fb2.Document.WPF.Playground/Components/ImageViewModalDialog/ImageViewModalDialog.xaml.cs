@@ -36,8 +36,6 @@ public partial class ImageViewModalDialog : Window
             typeof(ImageViewModalDialog),
             new PropertyMetadata(null));
 
-
-
     public BinaryImageViewModel SelectedImageProperty
     {
         get { return (BinaryImageViewModel)GetValue(SelectedImagePropertyProperty); }
@@ -53,16 +51,25 @@ public partial class ImageViewModalDialog : Window
             new PropertyMetadata(null));
 
 
-    public ImageViewModalDialog(List<BinaryImageViewModel> bookImages)
+    public ImageViewModalDialog(List<BinaryImageViewModel> bookImages, BinaryImageViewModel selectedImage)
     {
         InitializeComponent();
 
         ImagesProperty = new(bookImages);
-        SelectedImageProperty = ImagesProperty.First();
+        SelectedImageProperty = selectedImage ?? ImagesProperty.First();
+        this.BookImagesList.ScrollIntoView(SelectedImageProperty);
     }
 
     private void ListViewImage_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        Debug.WriteLine("ImageModal image_list selection changed event");
+        e.Handled = true;
+
+        var addedItems = e.AddedItems;
+        var hasItems = addedItems is { Count: > 0 };
+        if (hasItems)
+        {
+            var first = (BinaryImageViewModel)addedItems[0];
+            this.SelectedImageProperty = first;
+        }
     }
 }

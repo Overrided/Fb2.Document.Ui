@@ -111,6 +111,12 @@ public partial class BookInfoPage : Page
     {
         Debug.WriteLine("Image list image selection changed event");
 
-        Window.GetWindow(new ImageViewModalDialog(this.BookInfoViewModel.BookImages)).ShowDialog();
+        e.Handled = true;
+
+        var addedItems = e.AddedItems;
+        var hasItems = addedItems is { Count: > 0 };
+        var first = (BinaryImageViewModel)addedItems[0];
+
+        Window.GetWindow(new ImageViewModalDialog(this.BookInfoViewModel.BookImages, first)).ShowDialog();
     }
 }
