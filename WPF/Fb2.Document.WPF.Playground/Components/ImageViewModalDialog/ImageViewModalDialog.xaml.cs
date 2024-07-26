@@ -51,6 +51,30 @@ public partial class ImageViewModalDialog : Window
             new PropertyMetadata(null));
 
 
+
+    public bool IsPrevButtonEnabled
+    {
+        get { return (bool)GetValue(IsPrevButtonEnabledProperty); }
+        set { SetValue(IsPrevButtonEnabledProperty, value); }
+    }
+
+    // Using a DependencyProperty as the backing store for IsPrevButtonEnabled.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty IsPrevButtonEnabledProperty =
+        DependencyProperty.Register("IsPrevButtonEnabled", typeof(bool), typeof(ImageViewModalDialog), new PropertyMetadata(false));
+
+
+    public bool IsNextButtonEnabled
+    {
+        get { return (bool)GetValue(IsNextButtonEnabledProperty); }
+        set { SetValue(IsNextButtonEnabledProperty, value); }
+    }
+
+    // Using a DependencyProperty as the backing store for IsNextButtonEnabled.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty IsNextButtonEnabledProperty =
+        DependencyProperty.Register("IsNextButtonEnabled", typeof(bool), typeof(ImageViewModalDialog), new PropertyMetadata(false));
+
+
+
     public ImageViewModalDialog(List<BinaryImageViewModel> bookImages, BinaryImageViewModel selectedImage)
     {
         InitializeComponent();
@@ -58,6 +82,8 @@ public partial class ImageViewModalDialog : Window
         ImagesProperty = new(bookImages);
         SelectedImageProperty = selectedImage ?? ImagesProperty.First();
         this.BookImagesList.ScrollIntoView(SelectedImageProperty);
+        if (this.BookImagesList.Focusable)
+            this.BookImagesList.Focus();
     }
 
     private void ListViewImage_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -70,6 +96,32 @@ public partial class ImageViewModalDialog : Window
         {
             var first = (BinaryImageViewModel)addedItems[0];
             this.SelectedImageProperty = first;
+
+            var index = this.ImagesProperty.IndexOf(first);
+            this.IsPrevButtonEnabled = index > 0;
+            this.IsNextButtonEnabled = index < this.ImagesProperty.Count - 1;
         }
+    }
+
+    private void PrevImageBtn_Click(object sender, RoutedEventArgs e)
+    {
+        var index = BookImagesList.SelectedIndex;
+        if (index == 0)
+            return;
+
+        index--;
+        BookImagesList.SelectedIndex = index;
+        this.BookImagesList.ScrollIntoView(SelectedImageProperty);
+    }
+
+    private void NextImageBtn_Click(object sender, RoutedEventArgs e)
+    {
+        var index = BookImagesList.SelectedIndex;
+        if (index == this.ImagesProperty.Count - 1)
+            return;
+
+        index++;
+        BookImagesList.SelectedIndex = index;
+        this.BookImagesList.ScrollIntoView(SelectedImageProperty);
     }
 }

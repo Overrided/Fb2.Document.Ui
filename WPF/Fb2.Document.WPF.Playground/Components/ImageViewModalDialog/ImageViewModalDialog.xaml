@@ -7,8 +7,8 @@
 		xmlns:converterss="clr-namespace:Fb2.Document.WPF.Playground.Converters"
 		mc:Ignorable="d"
 		Title="ImageViewModalDialog"
-		Height="450"
-		Width="800"
+		Height="600"
+		Width="1000"
 		DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
 
 	<Window.Resources>
@@ -17,6 +17,7 @@
 		<converterss:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter" />
 		<converterss:MoreThanValueToVisibilityConverter x:Key="MoreThanValueToVisibilityConverter" />
 		<converterss:FileSizeInBytesToHumanReadableStringConverter x:Key="FileSizeConverter" />
+		<BooleanToVisibilityConverter x:Key="BtVC" />
 	</Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
@@ -24,12 +25,81 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<Image Grid.Row="0"
-			   Width="Auto"
-			   Height="Auto"
-			   HorizontalAlignment="Center"
-			   VerticalAlignment="Center"
-			   Source="{Binding SelectedImageProperty.Content, Converter={StaticResource String64ToImageConverter}}" />
+		<Grid Grid.Row="0"
+			  Width="Auto"
+			  Height="Auto"
+			  HorizontalAlignment="Stretch"
+			  VerticalAlignment="Stretch">
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="5*" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+
+			<Button Grid.Column="0"
+					HorizontalAlignment="Center"
+					VerticalAlignment="Center"
+					VerticalContentAlignment="Stretch"
+					HorizontalContentAlignment="Stretch"
+					Visibility="{Binding IsPrevButtonEnabled, Converter={StaticResource BtVC} }"
+					Click="PrevImageBtn_Click">
+				<Button.Resources>
+					<Style TargetType="{x:Type Border}">
+						<Setter Property="CornerRadius"
+								Value="90" />
+						<Setter Property="Height"
+								Value="65" />
+						<Setter Property="Width"
+								Value="65" />
+						<Setter Property="Padding"
+								Value="0" />
+					</Style>
+				</Button.Resources>
+
+				<TextBlock FontFamily="Segoe MDL2 Assets"
+						   Text="&#xE76B;"
+						   HorizontalAlignment="Center"
+						   VerticalAlignment="Center"
+						   FontSize="32" />
+			</Button>
+
+			<Image Grid.Column="1"
+				   Width="Auto"
+				   Height="Auto"
+				   Stretch="Uniform"
+				   HorizontalAlignment="Center"
+				   VerticalAlignment="Center"
+				   Source="{Binding SelectedImageProperty.Content, Converter={StaticResource String64ToImageConverter}}" />
+
+			<Button Grid.Column="2"
+					HorizontalAlignment="Center"
+					VerticalAlignment="Center"
+					VerticalContentAlignment="Stretch"
+					HorizontalContentAlignment="Stretch"
+					Visibility="{Binding IsNextButtonEnabled, Converter={StaticResource BtVC} }"
+					Click="NextImageBtn_Click">
+				<Button.Resources>
+					<Style TargetType="{x:Type Border}">
+						<Setter Property="CornerRadius"
+								Value="90" />
+						<Setter Property="Height"
+								Value="65" />
+						<Setter Property="Width"
+								Value="65" />
+						<Setter Property="Padding"
+								Value="0" />
+					</Style>
+				</Button.Resources>
+
+				<TextBlock FontFamily="Segoe MDL2 Assets"
+						   Text="&#xE76C;"
+						   HorizontalAlignment="Center"
+						   VerticalAlignment="Center"
+						   FontSize="32" />
+			</Button>
+
+		</Grid>
 
 		<ListView Grid.Row="1"
 				  x:Name="BookImagesList"
