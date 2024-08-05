@@ -3,27 +3,26 @@
 	   xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 	   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	   xmlns:local="clr-namespace:Fb2.Document.MAUI.Playground"
-	   xmlns:pages="clr-namespace:Fb2.Document.MAUI.Playground.Pages"
 	   Shell.FlyoutBehavior="Flyout"
-	   Shell.NavBarIsVisible="True">
+	   Shell.NavBarIsVisible="True"
+	   Title="Fb2.Document.MAUI.Playground">
 	<Shell.BackButtonBehavior>
 		<BackButtonBehavior IsEnabled="True"
 							IsVisible="True" />
 	</Shell.BackButtonBehavior>
 
 	<!--<ShellContent Title="Home"
-				  ContentTemplate="{DataTemplate local:MainPage}"
-				  Route="mainPage">
-		<ShellContent Title="Read Page"
-					  ContentTemplate="{DataTemplate pages:ReadPage}"
-					  Route="read" />
-	</ShellContent>-->
+			  ContentTemplate="{DataTemplate local:MainPage}"
+			  Route="mainPage">
+	<ShellContent Title="Read Page"
+				  ContentTemplate="{DataTemplate pages:ReadPage}"
+				  Route="read" />
+</ShellContent>-->
 
-	<FlyoutItem Title="Bookshelf">
-		<ShellContent ContentTemplate="{DataTemplate local:MainPage}"
-					  Title="Bookshelf"
-					  Route="MainPage" />
-	</FlyoutItem>
+	<ShellContent Title="Home"
+				  ContentTemplate="{DataTemplate local:MainPage}"
+				  Route="MainPage" />
+
 	<!--<FlyoutItem Title="Read Page">
 		<ShellContent ContentTemplate="{DataTemplate pages:ReadPage}"
 					  Title="Read Page"

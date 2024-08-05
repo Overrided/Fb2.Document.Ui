@@ -8,7 +8,7 @@ namespace Fb2.Document.MAUI.Playground.Pages;
 [QueryProperty(nameof(Book), "Book")]
 public partial class ReadPage : ContentPage
 {
-    public BookModel Book { get; set; }
+    public BookModel? Book { get; set; }
 
     //public ObservableCollection<string> MappedBookParts { get; private set; } = new();
 
@@ -67,7 +67,7 @@ public partial class ReadPage : ContentPage
             HtmlWebView.Source = new HtmlWebViewSource
             {
                 Html =
-@$"<document>
+        @$"<document>
             {htmlBookString}
             </document>"
             };

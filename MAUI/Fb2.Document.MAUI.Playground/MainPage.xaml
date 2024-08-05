@@ -1,11 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			 xmlns:localConverters="clr-namespace:Fb2.Document.MAUI.Playground.Converters"
-			 xmlns:local="clr-namespace:Fb2.Document.MAUI.Playground"
 			 x:Class="Fb2.Document.MAUI.Playground.MainPage"
-			 xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-			 Title="Bookshelf">
+			 xmlns:localConverters="clr-namespace:Fb2.Document.MAUI.Playground.Converters">
+
 	<ContentPage.Resources>
 		<localConverters:Base64StringToImageConverter x:Key="SToImage"
 													  x:Name="SToImage" />
@@ -37,9 +35,6 @@
 								<MenuFlyout>
 									<MenuFlyoutItem Text="Book Info"
 													Clicked="MenuFlyoutItem_Clicked" />
-									<!--<MenuFlyoutItem Text="Go to engineering repo"
-													Clicked="OnWebViewGoToRepoClicked"
-													CommandParameter="eng" />-->
 								</MenuFlyout>
 							</FlyoutBase.ContextFlyout>
 							<Grid>
@@ -102,4 +97,3 @@
 	</Grid>
 
 </ContentPage>
-

@@ -180,7 +180,7 @@ public class BookInfoViewModel : ObservableObject
 [QueryProperty(nameof(Book), "Book")]
 public partial class BookInfoPage : ContentPage
 {
-    public BookModel Book { get; set; }
+    public BookModel? Book { get; set; }
 
     public BookInfoViewModel BookInfoViewModel { get; set; } = new BookInfoViewModel();
 

@@ -72,20 +72,6 @@ public class BookModel
     public string BookAuthor { get; set; }
     public Fb2Document Fb2Document { get; set; }
 
-    //public static BookModel AddBookModel;
-
-    //static BookModel()
-    //{
-    //    AddBookModel = new BookModel
-    //    {
-    //        FileName = system,
-    //        FilePath = system,
-    //        FileSizeInBytes = -1,
-    //        BookName = system,
-    //        BookAuthor = system
-    //    };
-    //}
-
     public override bool Equals(object? obj)
     {
         return obj is BookModel model &&
@@ -104,10 +90,9 @@ public class BookModel
     }
 }
 
+
 public partial class MainPage : ContentPage
 {
-    //int count = 0;
-
     private const int EditingDistanceThreshold = 3;
     private bool isAddingBooks = false;
 
@@ -347,7 +332,12 @@ public partial class MainPage : ContentPage
         if (first == null)
             return;
 
-        await Shell.Current.GoToAsync("Read", true, new Dictionary<string, object>
+        //await Shell.Current.GoToAsync("Read", true, new Dictionary<string, object>
+        //{
+        //    ["Book"] = first
+        //});
+
+        await Shell.Current.GoToAsync("Read", new Dictionary<string, object>
         {
             ["Book"] = first
         });

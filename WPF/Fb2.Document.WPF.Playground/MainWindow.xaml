@@ -9,8 +9,8 @@
 		mc:Ignorable="d"
 		x:Name="MainWindowName"
 		Title="Fb2 Browser"
-		Height="600"
-		Width="1000">
+		Height="800"
+		Width="1200">
 	<Window.Resources>
 
 		<ControlTemplate x:Key="DefaultFrameTemplate"

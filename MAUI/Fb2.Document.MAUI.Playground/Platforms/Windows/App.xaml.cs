@@ -21,4 +21,5 @@ namespace Fb2.Document.MAUI.Playground.WinUI
 
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     }
+
 }

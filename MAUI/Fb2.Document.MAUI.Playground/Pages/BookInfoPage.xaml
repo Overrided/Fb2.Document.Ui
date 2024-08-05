@@ -21,11 +21,6 @@
 		<Binding Source="{RelativeSource Mode=Self}" />
 	</ContentPage.BindingContext>
 
-	<!--<VerticalStackLayout>
-		<Label Text="Welcome to .NET MAUI!"
-			   VerticalOptions="Center"
-			   HorizontalOptions="Center" />
-	</VerticalStackLayout>-->
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
