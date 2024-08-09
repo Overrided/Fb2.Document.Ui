@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -74,16 +75,22 @@ public partial class ImageViewModalDialog : Window
         DependencyProperty.Register("IsNextButtonEnabled", typeof(bool), typeof(ImageViewModalDialog), new PropertyMetadata(false));
 
 
-
     public ImageViewModalDialog(List<BinaryImageViewModel> bookImages, BinaryImageViewModel selectedImage)
     {
         InitializeComponent();
 
         ImagesProperty = new(bookImages);
         SelectedImageProperty = selectedImage ?? ImagesProperty.First();
+
         this.BookImagesList.ScrollIntoView(SelectedImageProperty);
         if (this.BookImagesList.Focusable)
             this.BookImagesList.Focus();
+
+        if (ImagesProperty.Count == 1)
+        {
+            this.IsPrevButtonEnabled = false;
+            this.IsNextButtonEnabled = false;
+        }
     }
 
     private void ListViewImage_SelectionChanged(object sender, SelectionChangedEventArgs e)
