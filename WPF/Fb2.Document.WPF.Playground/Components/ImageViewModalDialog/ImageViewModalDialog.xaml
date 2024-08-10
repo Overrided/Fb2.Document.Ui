@@ -33,9 +33,9 @@
 			  VerticalAlignment="Stretch">
 
 			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="90" />
 				<ColumnDefinition Width="*" />
-				<ColumnDefinition Width="5*" />
-				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="90" />
 			</Grid.ColumnDefinitions>
 
 			<Button Grid.Column="0"
@@ -43,6 +43,7 @@
 					VerticalAlignment="Center"
 					VerticalContentAlignment="Stretch"
 					HorizontalContentAlignment="Stretch"
+					Margin="24,0,0,0"
 					Visibility="{Binding IsPrevButtonEnabled, Converter={StaticResource BtVC} }"
 					Click="PrevImageBtn_Click">
 				<Button.Resources>
@@ -65,20 +66,38 @@
 						   FontSize="32" />
 			</Button>
 
-			<Image Grid.Column="1"
-				   Width="Auto"
-				   Height="Auto"
-				   Margin="6"
-				   Stretch="Uniform"
-				   HorizontalAlignment="Center"
-				   VerticalAlignment="Center"
-				   Source="{Binding SelectedImageProperty.Content, Converter={StaticResource String64ToImageConverter}}" />
+			<Grid Grid.Column="1"
+				  HorizontalAlignment="Stretch"
+				  VerticalAlignment="Stretch">
+				<Image Margin="6"
+					   HorizontalAlignment="Center"
+					   VerticalAlignment="Center"
+					   Source="{Binding SelectedImageProperty.Content, Converter={StaticResource String64ToImageConverter}}" />
+
+				<Button HorizontalAlignment="Right"
+						VerticalAlignment="Bottom"
+						VerticalContentAlignment="Stretch"
+						HorizontalContentAlignment="Stretch"
+						Margin="0,0,0,6"
+						Width="30"
+						Height="30"
+						Padding="0"
+						Click="DownloadImageButton_Click">
+					<TextBlock FontFamily="Segoe MDL2 Assets"
+							   Text="&#xE74E;"
+							   HorizontalAlignment="Center"
+							   VerticalAlignment="Center"
+							   FontSize="16" />
+				</Button>
+
+			</Grid>
 
 			<Button Grid.Column="2"
 					HorizontalAlignment="Center"
 					VerticalAlignment="Center"
 					VerticalContentAlignment="Stretch"
 					HorizontalContentAlignment="Stretch"
+					Margin="0,0,24,0"
 					Visibility="{Binding IsNextButtonEnabled, Converter={StaticResource BtVC} }"
 					Click="NextImageBtn_Click">
 				<Button.Resources>

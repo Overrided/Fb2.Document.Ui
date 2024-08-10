@@ -526,7 +526,7 @@
         //}
 
         if (!safeFileResult.IsSuccessful)
-            await Toast.Make($"The file was not saved successfully with error: {safeFileResult.Exception.Message}").Show(token);
+            await Toast.Make($"The file was not saved due to error: {safeFileResult.Exception.Message}").Show(token);
     }
 
     private string TryGetContentTypeFromBase64Content(string base64Content)

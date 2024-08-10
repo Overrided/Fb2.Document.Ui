@@ -1,20 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Fb2.Document.WPF.Playground.ViewModels;
+using Microsoft.Win32;
 
 namespace Fb2.Document.WPF.Playground.Components.ImageViewModalDialog;
 
@@ -130,5 +120,60 @@ public partial class ImageViewModalDialog : Window
         index++;
         BookImagesList.SelectedIndex = index;
         this.BookImagesList.ScrollIntoView(SelectedImageProperty);
+    }
+
+    private Dictionary<string, string> imageSignatures = new()
+    {
+        ["R0lGODdh"] = "image/gif",
+        ["R0lGODlh"] = "image/gif",
+        ["iVBORw0KGgo"] = "image/png",
+        ["/9j/"] = "image/jpeg",
+        ["SUkqAA"] = "image/tiff",
+        ["TU0AKg"] = "image/tiff",
+        ["Qk0"] = "image/bmp"
+    };
+
+    private async void DownloadImageButton_Click(object sender, RoutedEventArgs e)
+    {
+        var selectedImage = this.SelectedImageProperty;
+
+        if (selectedImage is null)
+            return;
+
+        var content = selectedImage.Content;
+
+        var contentType = string.IsNullOrEmpty(selectedImage.ContentType) ?
+            TryGetContentTypeFromBase64Content(selectedImage.Content) :
+            selectedImage.ContentType;
+
+        var fileExtension = contentType.Split('/').Last();
+        var normalizedFileExtension = $".{fileExtension}";
+
+        var suggestedFileName = selectedImage.Id.EndsWith(normalizedFileExtension) ?
+            selectedImage.Id :
+            $"{selectedImage.Id}{normalizedFileExtension}";
+
+        var fileSaverDialog = new SaveFileDialog();
+        fileSaverDialog.Title = "Export image";
+        fileSaverDialog.AddExtension = true;
+        fileSaverDialog.CheckPathExists = true;
+        fileSaverDialog.FileName = suggestedFileName;
+
+        var save = fileSaverDialog.ShowDialog();
+        if (!save.HasValue || (save.HasValue && !save.Value))
+            return;
+
+        using var stream = fileSaverDialog.OpenFile();
+        var bytes = Convert.FromBase64String(content);
+        await stream.WriteAsync(bytes);
+    }
+
+    private string TryGetContentTypeFromBase64Content(string base64Content)
+    {
+        var mime = imageSignatures.FirstOrDefault(k => base64Content.StartsWith(k.Key)).Value;
+        if (string.IsNullOrEmpty(mime))
+            mime = "application/octet-stream";
+
+        return mime;
     }
 }
