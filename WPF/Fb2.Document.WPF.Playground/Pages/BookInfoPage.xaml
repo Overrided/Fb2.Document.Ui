@@ -94,10 +94,12 @@
 							<ListView ItemsSource="{Binding BookInfoViewModel.BookImages, Mode=OneWay}"
 									  Padding="6"
 									  SelectionChanged="ListViewImage_SelectionChanged"
-									  SelectionMode="Single">
+									  SelectionMode="Single"
+									  VerticalContentAlignment="Center">
 								<ListView.ItemsPanel>
 									<ItemsPanelTemplate>
-										<StackPanel Orientation="Horizontal" />
+										<StackPanel Orientation="Horizontal"
+													CanVerticallyScroll="False" />
 									</ItemsPanelTemplate>
 								</ListView.ItemsPanel>
 								<ListView.ItemContainerStyle>

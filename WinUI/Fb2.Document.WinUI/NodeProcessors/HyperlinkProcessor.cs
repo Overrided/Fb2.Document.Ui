@@ -30,7 +30,7 @@ namespace Fb2.Document.WinUI.NodeProcessors
             {
                 var linkValue = xHrefAttr.Value;
                 SetTooltip(hyperlinkButton, linkValue);
-                hyperlinkButton.Tag = linkValue;
+                TagElement(hyperlinkButton, linkValue);
             }
 
             var inlineContainer = AddContainer(hyperlinkButton);
