@@ -10,6 +10,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using RichTextView.WinUI.Common;
 using RichTextView.WinUI.DTOs;
 using RichTextView.WinUI.EventArguments;
@@ -239,30 +240,32 @@ namespace RichTextView.WinUI
                     page.SizeChanged -= RichTextBlock_SizeChanged;
                     page.ClearValue(ContextFlyoutProperty);
                     page.ClearValue(MarginProperty);
+
+                    VisualTreeHelper.DisconnectChildrenRecursive(page);
                 }
 
                 Pages.Clear();
                 Pages = null;
             }
 
-            //bookProgressBar.ValueChanged -= BookProgressBar_ValueChanged;
-            //bookProgressBar = null;
             if (scrollHost != null)
             {
                 scrollHost.ViewChanged -= ScrollHost_ViewChanged;
+                VisualTreeHelper.DisconnectChildrenRecursive(scrollHost);
                 scrollHost = null;
             }
 
-            //viewPortContainer.SizeChanged -= ItemsHost_SizeChanged;
+            VisualTreeHelper.DisconnectChildrenRecursive(viewPortContainer);
             viewPortContainer = null;
 
+            VisualTreeHelper.DisconnectChildrenRecursive(this);
             Unloaded -= RichTextView_Unloaded;
 
-            //var uiThreadBytes = GC.GetAllocatedBytesForCurrentThread();
-            //var allAllocatedBytes = GC.GetTotalMemory(true);
-            //var totalMemotyAllocation = uiThreadBytes + allAllocatedBytes;
+            var uiThreadBytes = GC.GetAllocatedBytesForCurrentThread();
+            var allAllocatedBytes = GC.GetTotalMemory(true);
+            var totalMemotyAllocation = uiThreadBytes + allAllocatedBytes;
 
-            //GC.AddMemoryPressure(totalMemotyAllocation);
+            GC.AddMemoryPressure(totalMemotyAllocation);
             //GC.Collect();
         }
 
@@ -317,7 +320,7 @@ namespace RichTextView.WinUI
         {
             var richTextBlock = ContainerBuilder.BuildRichTextBlock(FontSize, viewHostSize);
 
-            if (content.Any(te => !(te is Block)))
+            if (content.Any(te => te is not Block))
             {
                 content = PaginationUtils.Paragraphize(content);
             }
@@ -356,13 +359,15 @@ namespace RichTextView.WinUI
         private void RichTextBlock_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
         {
             var q = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
-
-            q.TryEnqueue(() =>
+            var richTextBlock = (RichTextBlock)sender;
+            if (args.BringIntoViewDistanceY < richTextBlock.ActualHeight && richTextBlock.IsLoaded)
             {
-                var richTextBlock = (RichTextBlock)sender;
-                if (args.BringIntoViewDistanceY < richTextBlock.ActualHeight && richTextBlock.IsLoaded)
+                q.TryEnqueue(() =>
+                {
+
                     UpdateVisiblePage(richTextBlock, false, true, true);
-            });
+                });
+            }
         }
 
         private void RichTextBlock_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -439,7 +444,7 @@ namespace RichTextView.WinUI
             {
                 var uiElementsToHandle = richTextBlock
                     .FindVisualChildren<DependencyObject>()
-                    .Where(el => !(el is Panel))
+                    .Where(el => el is not Panel)
                     .Distinct();
 
                 // overkill

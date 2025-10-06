@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Fb2.Document.WinUI.Entities;
@@ -9,6 +8,7 @@ using Fb2.Document.WinUI.Playground.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using RichTextView.WinUI.DTOs;
 using RichTextView.WinUI.EventArguments;
@@ -33,12 +33,24 @@ namespace Fb2.Document.WinUI.Playground.Pages
         {
             this.InitializeComponent();
             this.Loaded += ReadPage_Loaded;
+            this.Unloaded += ReadPage_Unloaded;
 
             ReadViewModel = new ReadViewModel
             {
                 ShowBookProgress = true,
                 PageMargin = new Thickness(20, 40, 20, 40)
             };
+        }
+
+        private void ReadPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            VisualTreeHelper.DisconnectChildrenRecursive(viewPort);
+            UnloadObject(viewPort);
+
+            this.Loaded -= ReadPage_Loaded;
+            this.Unloaded -= ReadPage_Unloaded;
+
+            UnloadObject(this);
         }
 
         private void ReadPage_Loaded(object sender, RoutedEventArgs e)
@@ -50,7 +62,7 @@ namespace Fb2.Document.WinUI.Playground.Pages
                 .Select(rp => new RichContentPage(rp))
                 .ToList();
 
-            var content = new RichContent(resplitContent, new HashSet<string> { defaultMappingConfig.Image.NonInlineImageTag });
+            var content = new RichContent(resplitContent, [defaultMappingConfig.Image.NonInlineImageTag]);
 
             ReadViewModel.ChaptersContent = content;
         }

@@ -14,7 +14,8 @@
 
 	<Grid Background="White">
 
-		<FlowDocumentReader ViewingMode="Scroll">
+		<FlowDocumentReader x:Name="docReader"
+							ViewingMode="Scroll">
 			<FlowDocument x:Name="doc">
 			</FlowDocument>
 		</FlowDocumentReader>

@@ -82,7 +82,7 @@
 						<DataTemplate x:DataType="viewModels:BinaryImageViewModel">
 							<Border HorizontalAlignment="Stretch"
 									VerticalAlignment="Stretch">
-								<ScrollViewer ZoomMode="Enabled"
+								<ScrollViewer ZoomMode="Disabled"
 											  Margin="0"
 											  Padding="0"
 											  HorizontalAlignment="Stretch"
